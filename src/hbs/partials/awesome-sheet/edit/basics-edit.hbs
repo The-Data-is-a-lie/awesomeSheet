@@ -568,6 +568,26 @@
     </div>
     <div class="m-edit-box-body">
       <div class="m-edit-box-content m-edit-box-content-margin-large">
+
+      <div class="m-edit-box-item-12">
+        <div class="m-input-block js-input-block" data-input-block-options="path:basics.character_generator.region">
+          <label class="m-input-block-label js-input-block-label" for="basics-character_generator-region">Region</label>
+          <select class="m-input-block-dropdown u-full-width js-input-block-field" id="basics-character_generator-region" tabindex="1">
+          <option value=0></option>
+          <option value=0>Random</option>
+          <option value=1>Tal-falko</option>
+          <option value=2>Dolestan</option>
+          <option value=3>Sojoria</option>
+          <option value=4>Ieso</option>
+          <option value=5>Spire</option>
+          <option value=6>Feyador</option>
+          <option value=7>Esterdragon</option>
+          <option value=8>Grundykin Damplands</option>
+          <option value=9>Dust Cairn</option>
+          <option value=10>Kaeru no Tochi</option>
+            </select>
+          </div>              
+      </div>        
         <div class="m-edit-box-item-12">
           <div class="m-select-block js-select-block" data-select-block-options="path:basics.character.race_generator">
             <label class="m-select-block-label js-select-block-label" for="basics-character-race_generator">Race</label>
@@ -624,7 +644,7 @@
             <option value="Yaddithian">Yaddithian</option>
             </select>
           </div>              
-        </div>
+        </div>      
       <div class="m-edit-box-item-12">
         <div class="m-input-block js-input-block" data-input-block-options="path:basics.character_generator.class">
           <label class="m-input-block-label js-input-block-label" for="basics-character_generator-class">Class</label>
@@ -655,6 +675,7 @@
             <option value="vigilante">Vigilante</option>
             <option value="warpriest">Warpriest</option>
             <option value="witch">Witch</option>
+            <option value="wizard">Wizard</option>
             </select>
           </div>              
       </div>
@@ -668,18 +689,35 @@
         </div>
     <div class="m-edit-box-body">
       <div class="m-edit-box-content m-edit-box-content-margin-large">
+      <div class="m-edit-box-item-12">
+        <div class="m-input-block js-input-block" data-input-block-options="path:basics.character_generator.alignment">
+          <label class="m-input-block-label js-input-block-label" for="basics-character_generator-alignment">Alignment</label>
+          <select class="m-input-block-dropdown u-full-width js-input-block-field" id="basics-character_generator-alignment" tabindex="1">
+              <option></option>
+              <option value="LG">Lawful Good</option>
+              <option value="LN">Lawful Neutral</option>
+              <option value="LE">Lawful Evil</option>
+              <option value="NG">Neutral Good</option>
+              <option value="N">Neutral</option>
+              <option value="NE">Neutral Evil</option>
+              <option value="CG">Chaotic Good</option>
+              <option value="CN">Chaotic Neutral</option>
+              <option value="CE">Chaotic Evil</option>
+            </select>
+          </div>        
+        </div>          
         <div class="m-edit-box-item-12">
           <div class="m-input-block js-input-block" data-input-block-options="path:basics.character_generator.number-of-dice">
             <label class="m-input-block-label js-input-block-label" for="basics-character_generator-number-of-dice">Number of Dice</label>
             <input class="m-input-block-field u-full-width js-input-block-field" id="basics-character_generator-number-of-dice" type="number" tabindex="1">
-          </div>        
-        </div>          
+            </div>            
+          </div>
         <div class="m-edit-box-item-12">
           <div class="m-input-block js-input-block" data-input-block-options="path:basics.character_generator.dice-size">
             <label class="m-input-block-label js-input-block-label" for="basics-character_generator-dice-size">Dice Size</label>
             <input class="m-input-block-field u-full-width js-input-block-field" id="basics-character_generator-dice-size" type="number" tabindex="1">
             </div>            
-          </div>
+          </div>          
         <div class="m-edit-box-item-12">
           <div class="m-input-block js-input-block" data-input-block-options="path:basics.character_generator.highest-level-possible">
             <label class="m-input-block-label js-input-block-label" for="basics-character_generator-highest-level-possible">Highest Level Possible</label>

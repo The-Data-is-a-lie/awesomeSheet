@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
+
+    
   // Dynamic import inside the DOMContentLoaded event listener
   const variableMappings = [
       { elementId: 'basics-character-name', dataKey: 'character_full_name' },
