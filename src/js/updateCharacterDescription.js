@@ -174,11 +174,11 @@ function updateCharacterDescription() {
         }
     });
 
-    // characterDescriptionElement.innerHTML = `<pre>${JSON.stringify(characterData, null, 2)}</pre>`;
+    characterDescriptionElement.innerHTML = `<pre>${JSON.stringify(characterData, null, 2)}</pre>`;
 })
 .catch(error => {
     console.error('Error fetching or parsing character data:', error);
-    // characterDescriptionElement.innerHTML = `<pre>Error: ${error.message}</pre>`;
+    characterDescriptionElement.innerHTML = `<pre>Error: ${error.message}</pre>`;
 });
 }
 
