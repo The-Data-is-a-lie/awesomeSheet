@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Dynamic import inside the DOMContentLoaded event listener
   const variableMappings = [
       { elementId: 'basics-character-name', dataKey: 'character_full_name' },
-      { elementId: 'basics-character-description', dataKey: 'professions' },
+    //   { elementId: 'basics-character-description', dataKey: 'professions' },
   
   
   // physical appearance varialbes
@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Spiritual variables
     { elementId: 'basics-character-alignment', dataKey: 'alignment' },
     { elementId: 'basics-character-deity', dataKey:'deity_name' },
+    { elementId: 'basics-character-hero-points', dataKey: 'hero_points' },
   
   
     // Stat variables
@@ -124,6 +125,9 @@ function updateCharacterDescription() {
       languagesList = characterData.language_text;
       console.log('languages List:', languagesList);
 
+      const characterDescriptionElement = document.getElementById('basics-character-description');
+
+
     // console.log("featsList",featsList);
     // console.log(spellLists)
     const skillRanksString = characterData.skill_ranks;
@@ -174,11 +178,29 @@ function updateCharacterDescription() {
         }
     });
 
-    characterDescriptionElement.innerHTML = `<pre>${JSON.stringify(characterData, null, 2)}</pre>`;
+    professions = characterData.professions
+    background_traits = characterData.background_traits
+    mannerisms = characterData.mannerisms
+    flaws = characterData.flaws
+
+    characterDescriptionElement.innerHTML = `
+    <pre>
+        Professions: ${JSON.stringify(professions).replace(/["\[\]]/g, '')}
+        Background Traits: ${JSON.stringify(background_traits).replace(/["\[\]]/g, '')}
+        Mannerisms: ${JSON.stringify(mannerisms).replace(/["\[\]]/g, '')}
+        Flaws: ${JSON.stringify(flaws).replace(/["\[\]]/g, '')}
+    </pre>
+`;
+
+
 })
 .catch(error => {
     console.error('Error fetching or parsing character data:', error);
-    characterDescriptionElement.innerHTML = `<pre>Error: ${error.message}</pre>`;
+    // In case of an error, update characterDescriptionElement with the error message
+    const characterDescriptionElement = document.getElementById('basics-character-description');
+    if (characterDescriptionElement) {
+        characterDescriptionElement.innerHTML = `<pre>Error: ${error.message}</pre>`;
+    }
 });
 }
 
