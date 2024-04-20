@@ -18,6 +18,9 @@ document.addEventListener('DOMContentLoaded', function () {
     { elementId: 'basics-character-alignment', dataKey: 'alignment' },
     { elementId: 'basics-character-deity', dataKey:'deity_name' },
     { elementId: 'basics-character-hero-points', dataKey: 'hero_points' },
+    { elementId: 'basics-character-gender', dataKey: 'gender' },
+
+    
   
   
     // Stat variables
