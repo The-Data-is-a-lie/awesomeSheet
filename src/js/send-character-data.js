@@ -8,11 +8,12 @@ document.getElementById('updateDescriptionButton').addEventListener('click', fun
         input5: document.getElementById('basics-character_generator-multi-class').value,
         input6: document.getElementById('basics-character_generator-alignment').value,
         input7: document.getElementById('basics-character_generator-gender').value,
-        input8: document.getElementById('basics-character_generator-number-of-dice').value,
-        input9: document.getElementById('basics-character_generator-dice-size').value,
-        input10: document.getElementById('basics-character_generator-highest-level-possible').value,
-        input11: document.getElementById('basics-character_generator-lowest-level-possible').value,
-        input12: document.getElementById('basics-character_generator-starting-gold').value
+        input8: document.getElementById('basics-character_generator-truly-random-feats').value,
+        input9: document.getElementById('basics-character_generator-number-of-dice').value,
+        input10: document.getElementById('basics-character_generator-dice-size').value,
+        input11: document.getElementById('basics-character_generator-highest-level-possible').value,
+        input12: document.getElementById('basics-character_generator-lowest-level-possible').value,
+        input13: document.getElementById('basics-character_generator-starting-gold').value
         // Add more properties as needed for other form fields
     };
     
