@@ -86,6 +86,9 @@ document.addEventListener('DOMContentLoaded', function () {
   { elementId: 'spells-stats-domains', dataKey:'full_domain' },
   { elementId: 'spells-stats-bloodline', dataKey:'bloodline' },
 
+  { elementId: 'statistics-abilities-all', dataKey:'class_ability_desc' },
+
+
       
       // Add more mappings for additional variables as needed
   ];
@@ -185,6 +188,9 @@ function updateCharacterDescription() {
     background_traits = characterData.background_traits
     mannerisms = characterData.mannerisms
     flaws = characterData.flaws
+    class_ability_desc = characterData.class_ability_desc
+
+    console.log("class_ability_desc",class_ability_desc)
 
     characterDescriptionElement.innerHTML = `
     <pre>
@@ -192,6 +198,7 @@ function updateCharacterDescription() {
         Background Traits: ${JSON.stringify(background_traits).replace(/["\[\]]/g, '')}
         Mannerisms: ${JSON.stringify(mannerisms).replace(/["\[\]]/g, '')}
         Flaws: ${JSON.stringify(flaws).replace(/["\[\]]/g, '')}
+        class_ability_desc: ${JSON.stringify(class_ability_desc).replace(/["\[\]]/g, '')}
     </pre>
 `;
 
