@@ -348,7 +348,7 @@ var pill = (function() {
         path: pillBlockOptions.path + "[" + options.index + "]"
       })));
       var snackMessage = {
-        abilities: "Ability " + helper.truncate(pillObject.name, 40, true) + " removed.",
+        abilities: "Abilities " + helper.truncate(pillObject.name, 40, true) + " removed.",
         feats: "Feat " + helper.truncate(pillObject.name, 40, true) + " removed.",
         traits: "Trait " + helper.truncate(pillObject.name, 40, true) + " removed.",
         languages: "Language " + helper.truncate(pillObject.name, 40, true) + " removed."
@@ -779,12 +779,28 @@ var pill = (function() {
           };
         };
 
+        var _abilitiesData = function() {
+        if (dataObject.type != "") {
+          var para = document.createElement("p");
+          para.textContent = dataObject.type;
+          pillControl.appendChild(_create_editBox({
+            title: "Description",
+            textOnly: true,
+            guides: true,
+            content: [para],
+            boxSize: "m-edit-box-item-100"
+          }));
+        };
+      };        
+
         if (pillBlockOptions.type == "feats") {
           _featsData();
         } else if (pillBlockOptions.type == "traits") {
           _traitsData();
         } else if (pillBlockOptions.type == "languages") {
           _languagesData();
+        } else if (pillBlockOptions.type == "abilities") {
+          _abilitiesData();          
         };
 
       };

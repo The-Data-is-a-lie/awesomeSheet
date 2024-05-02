@@ -86,8 +86,6 @@ document.addEventListener('DOMContentLoaded', function () {
   { elementId: 'spells-stats-domains', dataKey:'full_domain' },
   { elementId: 'spells-stats-bloodline', dataKey:'bloodline' },
 
-  { elementId: 'statistics-abilities-all', dataKey:'class_ability_desc' },
-
 
       
       // Add more mappings for additional variables as needed
@@ -95,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-let spellLists, featsList, day_list, known_list, traitsList, languageList;
+let spellLists, featsList, day_list, known_list, traitsList, languageList, class_abilityList;
 function updateCharacterDescription() {
   fetch('http://localhost:5000/get_character_data', {
       method: 'GET',
@@ -130,6 +128,9 @@ function updateCharacterDescription() {
 
       languagesList = characterData.language_text;
       console.log('languages List:', languagesList);
+
+      class_abilityList = characterData.class_ability;
+      console.log('class_ability List:', class_abilityList);
 
       const characterDescriptionElement = document.getElementById('basics-character-description');
 
@@ -188,9 +189,9 @@ function updateCharacterDescription() {
     background_traits = characterData.background_traits
     mannerisms = characterData.mannerisms
     flaws = characterData.flaws
-    class_ability_desc = characterData.class_ability_desc
+    // abilities = characterData.abilities
 
-    console.log("class_ability_desc",class_ability_desc)
+    // console.log("abilities",abilities)
 
     characterDescriptionElement.innerHTML = `
     <pre>
@@ -198,7 +199,6 @@ function updateCharacterDescription() {
         Background Traits: ${JSON.stringify(background_traits).replace(/["\[\]]/g, '')}
         Mannerisms: ${JSON.stringify(mannerisms).replace(/["\[\]]/g, '')}
         Flaws: ${JSON.stringify(flaws).replace(/["\[\]]/g, '')}
-        class_ability_desc: ${JSON.stringify(class_ability_desc).replace(/["\[\]]/g, '')}
     </pre>
 `;
 
@@ -281,12 +281,21 @@ if (updateDescriptionButton) {
           await addtraitWithDelay(traitName); // Wait for each trait to be added with a delay
       }      
       
+      // Process class_ability
+      for (let i = 0; i < class_abilityList.length; i++) {
+        const class_abilityName = class_abilityList[i];
+        console.log(`class_ability Name: ${class_abilityName}`);
+        await addclass_abilityWithDelay(class_abilityName); // Wait for each class_ability to be added with a delay
+    }           
+
       // Process languages
       for (let i = 0; i < languagesList.length; i++) {
           const languageName = languagesList[i];
           console.log(`language Name: ${languageName}`);
           await addlanguageWithDelay(languageName); // Wait for each language to be added with a delay
-      }               
+      }      
+      
+  
       clickApplyButton();
   }
 
@@ -451,6 +460,29 @@ function addlanguageWithDelay(languageName) {
   });
 }
 
+
+function addclass_abilityWithDelay(class_abilityName) {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            const class_abilityInput = document.getElementById('statistics-abilities-all');
+            const addButton = document.querySelector('.js-pill-block-add');
+            console.log(class_abilityInput, addButton, class_abilityName);
+            if (class_abilityInput && addButton && class_abilityName) {
+                // Set the value of the input field to the desired class_abilityName
+                class_abilityInput.value = class_abilityName;
+                // Emulate typing in the class_ability input field
+                class_abilityInput.dispatchEvent(new Event('input'));
+                // Click on the add button to add the class_ability
+                addButton.click();
+                // Resolve the promise immediately
+                resolve();
+            } else {
+                console.log('Invalid input or elements not found');
+                resolve();
+            }
+        }, 200); // Adjust delay as needed
+    });
+}
 
 
 

@@ -348,7 +348,7 @@ var pill = (function() {
         path: pillBlockOptions.path + "[" + options.index + "]"
       })));
       var snackMessage = {
-        abilities: "Ability " + helper.truncate(pillObject.name, 40, true) + " removed.",
+        abilities: "abilities " + helper.truncate(pillObject.name, 40, true) + " removed.",
         feats: "Feat " + helper.truncate(pillObject.name, 40, true) + " removed.",
         traits: "Trait " + helper.truncate(pillObject.name, 40, true) + " removed.",
         languages: "Language " + helper.truncate(pillObject.name, 40, true) + " removed."
@@ -544,7 +544,7 @@ var pill = (function() {
         }));
 
         var snackTitle = {
-          abilities: "Abilities notes",
+          abilities: "abilities notes",
           feats: "Feats notes",
           traits: "Traits notes",
           languages: "Languages notes"

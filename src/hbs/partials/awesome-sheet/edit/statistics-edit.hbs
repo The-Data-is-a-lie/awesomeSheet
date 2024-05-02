@@ -356,6 +356,54 @@
     <div class="m-edit-box-head">
       <div class="m-edit-box-content m-edit-box-content-nowrap m-edit-box-content-margin-large">
         <div class="m-edit-box-item-shrink">
+          <h2 class="m-edit-box-title">abilities</h2>
+        </div>
+      </div>
+    </div>
+    <div class="m-edit-box-body">
+
+      <div class="m-edit-box-content m-edit-box-content-margin-large">
+        <div class="m-edit-box-item-100 m-edit-box-group">
+          <div class="m-edit-box-item">
+            <div class="m-auto-suggest js-auto-suggest" data-auto-suggest-options="type:abilities">
+              <label class="m-auto-suggest-label" for="statistics-abilities-all">Add abilities</label>
+              <input id="statistics-abilities-all" class="m-auto-suggest-field u-full-width js-auto-suggest-field js-pill-block-field js-tip" data-tip-options="message:Ability description will automatically be added by selected a match in the dropdown.,state:focus" type="text" tabindex="1" placeholder="abilities search">
+            </div>
+          </div>
+          <div class="m-edit-box-item-button-sm">
+            <a href="javascript:void(0)" class="u-inline-with-input u-no-margin button button-secondary button-large button-icon button-thin js-pill-block-add" tabindex="1"><span class="icon-add"></span></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="m-edit-box-content m-edit-box-content-margin-large">
+        <div class="m-edit-box-item-100">
+          <div class="button-group button-group">
+            <button type="button" class="button button-medium button-icon js-pill-control" data-pill-control-options="action:sort,type:abilities" tabindex="1"><span class="icon-sort-az"></span><span class="button-text">Sort</span></button>
+            <button type="button" class="button button-medium button-icon js-pill-control" data-pill-control-options="action:changeState,state:remove,type:abilities" tabindex="1"><span class="hidden-xs hidden-sm hidden-md icon-close"></span><span class="button-text">Remove</span></button>
+          </div>
+          <div class="m-pill-block-area js-pill-block-area js-pill-block-area-abilities"></div>
+          <div class="m-placeholder js-pill-block-placeholder-abilities">
+            <p class="m-placeholder-description u-muted-text">Add abilities using <strong class="m-placeholder-key">abilities search</strong>.</p>
+          </div>
+        </div>
+        <div class="m-edit-box-item-100">
+          <div class="m-textarea-block js-textarea-block" data-textarea-block-options="path:statistics.abilities.notes">
+            <label class="m-textarea-block-label js-textarea-block-label" for="statistics-abilities-notes">abilities Notes</label>
+            <div id="statistics-abilities-notes" class="m-textarea-block-field textarea textarea-large u-full-width js-textarea-block-field" contentEditable="true" tabindex="1"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+{{!-- <div class="m-tab-panel js-tab-panel js-tab-panel-abilities is-hidden">
+
+  <div class="m-edit-box m-edit-box-indent m-edit-box-labels m-edit-box-head-small js-pill-block js-pill-block-abilities" data-pill-block-options="path:statistics.abilities.all,type:abilities">
+    <div class="m-edit-box-head">
+      <div class="m-edit-box-content m-edit-box-content-nowrap m-edit-box-content-margin-large">
+        <div class="m-edit-box-item-shrink">
           <h2 class="m-edit-box-title">Abilities</h2>
         </div>
       </div>
@@ -384,7 +432,7 @@
           </div>
           <div class="m-pill-block-area js-pill-block-area js-pill-block-area-abilities"></div>
           <div class="m-placeholder js-pill-block-placeholder-abilities">
-            <p class="m-placeholder-description u-muted-text">Add Abilities using <strong class="m-placeholder-key">Add Abilities</strong>.</p>
+            <p class="m-placeholder-description u-muted-text">Add Abilities using <strong class="m-placeholder-key">Abilities search</strong>.</p>
           </div>
         </div>
         <div class="m-edit-box-item-100">
@@ -396,7 +444,7 @@
       </div>
 
     </div>
-  </div>
+  </div>   --}}
 
 </div>
 

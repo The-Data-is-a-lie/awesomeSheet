@@ -1008,7 +1008,7 @@ var repair = (function() {
         feats: _checkForValue(tempCharacterObject, "statistics.feats", ""),
         traits: _checkForValue(tempCharacterObject, "statistics.traits", ""),
         languages: _checkForValue(tempCharacterObject, "statistics.languages", ""),
-        special: _checkForValue(tempCharacterObject, "statistics.special_abilities", "")
+        special: _checkForValue(tempCharacterObject, "statistics.abilities", "")
       },
       power: {
         all: _checkForValue(tempCharacterObject, "statistics.power", [])
@@ -2536,7 +2536,7 @@ var repair = (function() {
     _report._510.push("update: awesome version");
     characterObject.awesomeSheet.version = 5.1;
     // abilities
-    if (!("feats" in characterObject.statistics) || !("traits" in characterObject.statistics) || !("languages" in characterObject.statistics)) {
+    if (!("feats" in characterObject.statistics) || !("traits" in characterObject.statistics) || !("languages" in characterObject.statistics) || !("abilities" in characterObject.statistics)) {
       _report._510.push("update: feats");
       var oldFeats = characterObject.statistics.abilities.feats;
       var oldTraits = characterObject.statistics.abilities.traits;

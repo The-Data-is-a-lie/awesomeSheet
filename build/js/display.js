@@ -185,7 +185,7 @@ var display = (function() {
         }]
       },
       abilities: {
-        head: "Abilities",
+        head: "abilities",
         content: [{
           type: "list",
           element: {
@@ -205,7 +205,7 @@ var display = (function() {
           },
           contentItems: [{
             path: "statistics.abilities.notes",
-            prefix: "Abilities Notes"
+            prefix: "abilities Notes"
           }],
         }]
       },
