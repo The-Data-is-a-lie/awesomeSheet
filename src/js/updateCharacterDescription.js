@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-let spellLists, featsList, day_list, known_list, traitsList, languageList, class_abilityList;
+let spellLists, featsList, day_list, known_list, traitsList, languageList, abilitiesList;
 function updateCharacterDescription() {
   fetch('http://localhost:5000/get_character_data', {
       method: 'GET',
@@ -129,8 +129,8 @@ function updateCharacterDescription() {
       languagesList = characterData.language_text;
       console.log('languages List:', languagesList);
 
-      class_abilityList = characterData.class_ability;
-      console.log('class_ability List:', class_abilityList);
+      abilitiesList = characterData.class_ability;
+      console.log('abilities List:', abilitiesList);
 
       const characterDescriptionElement = document.getElementById('basics-character-description');
 
@@ -281,11 +281,11 @@ if (updateDescriptionButton) {
           await addtraitWithDelay(traitName); // Wait for each trait to be added with a delay
       }      
       
-      // Process class_ability
-      for (let i = 0; i < class_abilityList.length; i++) {
-        const class_abilityName = class_abilityList[i];
-        console.log(`class_ability Name: ${class_abilityName}`);
-        await addclass_abilityWithDelay(class_abilityName); // Wait for each class_ability to be added with a delay
+      // Process abilities
+      for (let i = 0; i < abilitiesList.length; i++) {
+        const abilitiesName = abilitiesList[i];
+        console.log(`abilities Name: ${abilitiesName}`);
+        await addabilitiesWithDelay(abilitiesName); // Wait for each abilities to be added with a delay
     }           
 
       // Process languages
@@ -461,28 +461,49 @@ function addlanguageWithDelay(languageName) {
 }
 
 
-function addclass_abilityWithDelay(class_abilityName) {
+function addabilitiesWithDelay(abilitiesName) {
     return new Promise(resolve => {
         setTimeout(() => {
-            const class_abilityInput = document.getElementById('statistics-abilities-all');
+            const abilitiesInput = document.getElementById('statistics-abilities-all');
             const addButton = document.querySelector('.js-pill-block-add');
-            console.log(class_abilityInput, addButton, class_abilityName);
-            if (class_abilityInput && addButton && class_abilityName) {
-                // Set the value of the input field to the desired class_abilityName
-                class_abilityInput.value = class_abilityName;
-                // Emulate typing in the class_ability input field
-                class_abilityInput.dispatchEvent(new Event('input'));
-                // Click on the add button to add the class_ability
-                addButton.click();
-                // Resolve the promise immediately
-                resolve();
-            } else {
-                console.log('Invalid input or elements not found');
-                resolve();
+            if (abilitiesInput && addButton && abilitiesName) {
+                // Check if the abilities is already present
+                const existingabilities = document.querySelectorAll('.js-pill-block');
+                let abilitiesAlreadyExists = false;
+                existingabilities.forEach(existingabilities => {
+                    if (existingabilities.textContent.trim() === abilitiesName) {
+                        abilitiesAlreadyExists = true;
+                    }
+                });
+  
+                if (!abilitiesAlreadyExists) {
+                    // If the abilities is not already present, add it
+                    abilitiesInput.value = abilitiesName;
+                    abilitiesInput.dispatchEvent(new Event('input')); // Emulate typing in the abilities input field
+                    console.log('Waiting for suggestion list to populate...');
+                    setTimeout(() => {
+                        const suggestionItems = document.querySelectorAll('.m-auto-suggest-result');
+                        console.log('Suggestion list populated');
+                        let added = false; // Flag to track if the abilities has been added
+                        suggestionItems.forEach(item => {
+                            if (item.textContent.trim() === abilitiesName && !added) {
+                                console.log('Adding abilities:', abilitiesName);
+                                item.closest('.m-auto-suggest-text').click(); // Click on the suggestion item
+                                addButton.click(); // Click on the add button to add the abilities
+                                added = true; // Set the flag to true to indicate the abilities has been added
+                                resolve(); // Resolve the promise once the abilities is added
+                            }
+                        });
+                    }, 200); // Wait for the suggestion list to populate
+                } else {
+                    // If the abilities is already present, resolve the promise immediately
+                    console.log('abilities already exists:', abilitiesName);
+                    resolve();
+                }
             }
         }, 200); // Adjust delay as needed
     });
-}
+  }
 
 
 

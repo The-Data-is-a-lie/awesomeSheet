@@ -742,7 +742,7 @@ var data = (function() {
 
   var _all_languagesObject = null;
   var _all_languagesName = [
-    "Abyssal", "Aklo", "Aquan", "Auran", "Celestial", "Common", "Draconic", "Druidic", "Dwarven", "Drow Sign Lanugage", "Elven", "Giant", "Gnome", "Goblin", "Gnoll", "Halfling", "Ignan", "Infernal", "Orc", "Sylvan", "Terran", "Undercommon"
+    "Abyssal", "Aklo", "Aquan", "Auran", "Celestial", "Common", "Cyclops", "Draconic", "Druidic", "Drow Sign Lanugage", "Dwarven",  "Elven", "Giant", "Gnome", "Goblin", "Gnoll", "Grippli", "Halfling", "Ignan", "Infernal", "Orc", "Protean", "Sphinx", "Sylvan", "Tengu", "Terran", "Undercommon", "Wayang"
   ];
 
   function get(options) {

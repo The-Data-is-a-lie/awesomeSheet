@@ -243,6 +243,7 @@ var autoSuggest = (function() {
             };
           };
 
+          // to add abilities to the auto search, we need to add it to (data, auto-suggest, + auto suggest html (usually in statstics-edit.hbs) confirm the code is correct otherwise could lead to issues)
           anchor.appendChild(text);
 
           if (autoSuggestOptions.type == "spells") {
