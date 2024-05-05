@@ -199,6 +199,44 @@ function updateCharacterDescription() {
     </pre>
 `;
 
+//   Setting up archetype info
+// Get the element where archetype information will be displayed
+const archetypeDescriptionElement = document.getElementById('statistics-archetypes-notes');
+
+// Extract archetype info from character data
+const archetypeInfo = characterData.archetype_info;
+
+// Create a function to format and display archetype info
+function displayArchetypeInfo(info) {
+    // Initialize an empty string to hold the formatted info
+    let formattedInfo = '';
+
+    // Loop through each key-value pair in the archetype info
+    for (const [archetypeName, abilities] of Object.entries(info)) {
+        // Add the archetype name as a heading
+        formattedInfo += `<h3>${archetypeName}</h3>`;
+
+        // Loop through each ability in the archetype
+        for (const [abilityName, abilityDescription] of Object.entries(abilities)) {
+            // Add the ability name as a heading
+            formattedInfo += `<h4>${abilityName}</h4>`;
+            // Add the ability description
+            formattedInfo += `<p>${abilityDescription}</p>`;
+        }
+
+        // Add a line break after each archetype
+        formattedInfo += '<br>';
+    }
+
+    // Set the inner HTML of the element to display the formatted info
+    archetypeDescriptionElement.innerHTML = formattedInfo;
+}
+
+// Call the function to display archetype info
+displayArchetypeInfo(archetypeInfo);
+
+
+
 // Setting up abilities notes to get autofilled
 const abilitiesDescriptionElement = document.getElementById('statistics-abilities-notes');
 class_features = characterData['class features'];
@@ -207,7 +245,7 @@ const characterClass = characterData.class; // Assuming 'class' is a property in
 let classFeaturesHTML = '';
 
 // List of classes where the first method will be used
-const method1Classes = ["barbarian", "rogue", "skald"].map(cls => cls.toLowerCase());
+const method1Classes = ["barbarian", "investigator", "rogue", "skald", "slayer", "stalker", "vigilante"].map(cls => cls.toLowerCase());
 
 
 if (method1Classes.includes(characterClass)) {
