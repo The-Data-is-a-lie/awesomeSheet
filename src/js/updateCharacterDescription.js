@@ -231,9 +231,40 @@ function displayArchetypeInfo(info) {
     // Set the inner HTML of the element to display the formatted info
     archetypeDescriptionElement.innerHTML = formattedInfo;
 }
-
 // Call the function to display archetype info
 displayArchetypeInfo(archetypeInfo);
+
+
+const bodyslotsDescriptionElement = document.getElementById('equipment-body-slots-notes');
+
+// Extract archetype info from character data
+const bodyslotsInfo = characterData.equip_descrip;
+console.log('bodyslotsInfo', bodyslotsInfo);
+
+// Create a function to format and display bodyslots info
+function displaybodyslotsInfo(info) {
+    // Initialize an empty string to hold the formatted info
+    let formattedInfo = '';
+
+    // Loop through each key-value pair in the bodyslots info
+    for (const [bodyslotsName, bodyslotsData] of Object.entries(info)) {
+        // Add the bodyslots name as a heading
+        formattedInfo += `<h3>${bodyslotsName}:</h3>`;
+
+        // Add item_name and description for each bodyslot
+        formattedInfo += `<h4>${bodyslotsData.item_name}</h4>`;
+        formattedInfo += `<p>${bodyslotsData.description}</p>`;
+
+        // Add a line break after each bodyslots
+        formattedInfo += '<br>';
+    }
+
+    // Set the inner HTML of the element to display the formatted info
+    bodyslotsDescriptionElement.innerHTML = formattedInfo;
+}
+
+// Call the function to display bodyslots info
+displaybodyslotsInfo(bodyslotsInfo);
 
 
 

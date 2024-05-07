@@ -521,9 +521,13 @@ var display = (function() {
           }, {
             path: "equipment.body_slots.feet",
             prefix: "Feet"
-          }]
+          },
+          {
+            path: "equipment.body_slots.descriptions",
+            prefix: "Descriptions"
+          }        ]
         }]
-      },
+      },   
       item: {
         head: "Items",
         content: [{

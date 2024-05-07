@@ -1006,7 +1006,6 @@ var repair = (function() {
       },
       abilities: {
         feats: _checkForValue(tempCharacterObject, "statistics.feats", ""),
-        archetypes: _checkForValue(tempCharacterObject, "statistics.archetypes", ""),
         traits: _checkForValue(tempCharacterObject, "statistics.traits", ""),
         languages: _checkForValue(tempCharacterObject, "statistics.languages", ""),
         special: _checkForValue(tempCharacterObject, "statistics.abilities", "")
@@ -1034,6 +1033,7 @@ var repair = (function() {
         belts: _checkForValue(tempCharacterObject, "equipment.body_slots.belts", ""),
         body: _checkForValue(tempCharacterObject, "equipment.body_slots.body", ""),
         chest: _checkForValue(tempCharacterObject, "equipment.body_slots.chest", ""),
+        descriptions: _checkForValue(tempCharacterObject, "equipment.body_slots.descriptions", ""),
         eyes: _checkForValue(tempCharacterObject, "equipment.body_slots.eyes", ""),
         feet: _checkForValue(tempCharacterObject, "equipment.body_slots.feet", ""),
         hands: _checkForValue(tempCharacterObject, "equipment.body_slots.hands", ""),
@@ -2540,7 +2540,6 @@ var repair = (function() {
     if (!("feats" in characterObject.statistics) || !("traits" in characterObject.statistics) || !("languages" in characterObject.statistics) || !("abilities" in characterObject.statistics)) {
       _report._510.push("update: feats");
       var oldFeats = characterObject.statistics.abilities.feats;
-      var oldarchetypes = characterObject.statistics.abilities.archetypes;
       var oldTraits = characterObject.statistics.abilities.traits;
       var oldLanguages = characterObject.statistics.abilities.languages;
       var oldAbilities = characterObject.statistics.abilities.special;
@@ -2548,10 +2547,7 @@ var repair = (function() {
         all: [],
         notes: oldFeats
       };
-      characterObject.statistics.archetypes = {
-        all: [],
-        notes: oldarchetypes
-      };      _report._510.push("update: traits");
+      _report._510.push("update: traits");
       characterObject.statistics.traits = {
         all: [],
         notes: oldTraits
