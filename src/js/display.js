@@ -234,31 +234,6 @@ var display = (function() {
           }],
         }]
       },
-      archetypes: {
-        head: "archetypes",
-        content: [{
-          type: "list",
-          element: {
-            node: "ul",
-            classname: ["u-list-unstyled", "m-display-list-dash"]
-          },
-          contentItems: [{
-            path: "statistics.archetypes.all",
-            listItemKey: "name",
-            pillLink: true,
-            pillType: "archetypes"
-          }],
-        }, {
-          type: "block",
-          element: {
-            node: "div"
-          },
-          contentItems: [{
-            path: "statistics.archetypes.notes",
-            prefix: "Archetypes Notes"
-          }],
-        }]
-      },      
       traits: {
         head: "Traits",
         content: [{
@@ -521,13 +496,9 @@ var display = (function() {
           }, {
             path: "equipment.body_slots.feet",
             prefix: "Feet"
-          },
-          {
-            path: "equipment.body_slots.descriptions",
-            prefix: "Descriptions"
-          }        ]
+          }]
         }]
-      },   
+      },
       item: {
         head: "Items",
         content: [{

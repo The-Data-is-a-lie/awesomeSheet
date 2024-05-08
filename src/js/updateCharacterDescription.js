@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Class name section
   { elementId: 'basics-classes-all-0-name', dataKey:'c_class' },
   { elementId: 'basics-classes-all-0-level', dataKey:'level' },
-  { elementId: 'basics-classes-all-0-hp-base', dataKey:'sheet_health' },
+  { elementId: 'basics-classes-all-0-hp-base', dataKey:'total_hp_rolls' },
   { elementId: 'basics-classes-all-0-saves-fortitude', dataKey:'fort_saving_throw' },
   { elementId: 'basics-classes-all-0-saves-reflex', dataKey:'reflex_saving_throw' },
   { elementId: 'basics-classes-all-0-saves-will', dataKey:'wisdom_saving_throw' },
@@ -87,6 +87,8 @@ document.addEventListener('DOMContentLoaded', function () {
   { elementId: 'spells-stats-bloodline', dataKey:'bloodline' },
 
 
+      
+      // Add more mappings for additional variables as needed
   ];
 
 
@@ -130,7 +132,7 @@ function updateCharacterDescription() {
       abilitiesList = characterData.class_ability;
       console.log('abilities List:', abilitiesList);
 
-
+      const characterDescriptionElement = document.getElementById('basics-character-description');
 
 
     // console.log("featsList",featsList);
@@ -183,13 +185,14 @@ function updateCharacterDescription() {
         }
     });
 
-
-    //   Setting up character description 
-    const characterDescriptionElement = document.getElementById('basics-character-description');
     professions = characterData.professions
     background_traits = characterData.background_traits
     mannerisms = characterData.mannerisms
     flaws = characterData.flaws
+    // abilities = characterData.abilities
+
+    // console.log("abilities",abilities)
+
     characterDescriptionElement.innerHTML = `
     <pre>
         Professions: ${JSON.stringify(professions).replace(/["\[\]]/g, '')}
@@ -199,126 +202,6 @@ function updateCharacterDescription() {
     </pre>
 `;
 
-//   Setting up archetype info
-// Get the element where archetype information will be displayed
-const archetypeDescriptionElement = document.getElementById('statistics-archetypes-notes');
-
-// Extract archetype info from character data
-const archetypeInfo = characterData.archetype_info;
-
-// Create a function to format and display archetype info
-function displayArchetypeInfo(info) {
-    // Initialize an empty string to hold the formatted info
-    let formattedInfo = '';
-
-    // Loop through each key-value pair in the archetype info
-    for (const [archetypeName, abilities] of Object.entries(info)) {
-        // Add the archetype name as a heading
-        formattedInfo += `<h3>${archetypeName}</h3>`;
-
-        // Loop through each ability in the archetype
-        for (const [abilityName, abilityDescription] of Object.entries(abilities)) {
-            // Add the ability name as a heading
-            formattedInfo += `<h4>${abilityName}</h4>`;
-            // Add the ability description
-            formattedInfo += `<p>${abilityDescription}</p>`;
-        }
-
-        // Add a line break after each archetype
-        formattedInfo += '<br>';
-    }
-
-    // Set the inner HTML of the element to display the formatted info
-    archetypeDescriptionElement.innerHTML = formattedInfo;
-}
-// Call the function to display archetype info
-displayArchetypeInfo(archetypeInfo);
-
-
-const bodyslotsDescriptionElement = document.getElementById('equipment-body-slots-notes');
-
-// Extract archetype info from character data
-const bodyslotsInfo = characterData.equip_descrip;
-console.log('bodyslotsInfo', bodyslotsInfo);
-
-// Create a function to format and display bodyslots info
-function displaybodyslotsInfo(info) {
-    // Initialize an empty string to hold the formatted info
-    let formattedInfo = '';
-
-    // Loop through each key-value pair in the bodyslots info
-    for (const [bodyslotsName, bodyslotsData] of Object.entries(info)) {
-        // Add the bodyslots name as a heading
-        formattedInfo += `<h3>${bodyslotsName}:</h3>`;
-
-        // Add item_name and description for each bodyslot
-        formattedInfo += `<h4>${bodyslotsData.item_name}</h4>`;
-        formattedInfo += `<p>${bodyslotsData.description}</p>`;
-
-        // Add a line break after each bodyslots
-        formattedInfo += '<br>';
-    }
-
-    // Set the inner HTML of the element to display the formatted info
-    bodyslotsDescriptionElement.innerHTML = formattedInfo;
-}
-
-// Call the function to display bodyslots info
-displaybodyslotsInfo(bodyslotsInfo);
-
-
-
-// Setting up abilities notes to get autofilled
-const abilitiesDescriptionElement = document.getElementById('statistics-abilities-notes');
-class_features = characterData['class features'];
-const characterClass = characterData.class; // Assuming 'class' is a property in characterData
-
-let classFeaturesHTML = '';
-
-// List of classes where the first method will be used
-const method1Classes = ["barbarian", "investigator", "rogue", "skald", "slayer", "stalker", "vigilante"].map(cls => cls.toLowerCase());
-
-
-if (method1Classes.includes(characterClass)) {
-    for (const feature in class_features) {
-        if (class_features.hasOwnProperty(feature)) {
-            const benefits = class_features[feature].benefits;
-            const prerequisites = class_features[feature].prerequisites;
-            
-            classFeaturesHTML += `
-                <div class="ability">
-                    <h3>Ability: ${feature}</h3>
-                    <p><span class="label">Benefits:</span> ${benefits}</p>
-                    <p><span class="label">Prerequisites:</span> ${prerequisites}</p>
-                </div>
-            `;
-        }
-    }
-} else {
-    for (const feature in class_features) {
-        if (class_features.hasOwnProperty(feature)) {
-            classFeaturesHTML += `
-                <div class="ability">
-                    <h3>Ability: ${feature}</h3>
-            `;
-            
-            for (const key in class_features[feature]) {
-                if (class_features[feature].hasOwnProperty(key)) {
-                    const value = class_features[feature][key];
-                    classFeaturesHTML += `
-                        <p><span class="label">${key[0].toUpperCase() + key.slice(1)}:</span> ${value}</p>
-                    `;
-                }
-            }
-            
-            classFeaturesHTML += `</div>`;
-        }
-    }
-}
-
-abilitiesDescriptionElement.innerHTML = classFeaturesHTML;
-
-    
 
 })
 .catch(error => {
@@ -330,7 +213,6 @@ abilitiesDescriptionElement.innerHTML = classFeaturesHTML;
     }
 });
 }
-
 
 
 

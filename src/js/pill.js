@@ -87,7 +87,6 @@ var pill = (function() {
   function _get_pillCount(type) {
     var paths = {
       abilities: "statistics.abilities.all",
-      archetypes: "statistics.archetypes.all",
       feats: "statistics.feats.all",
       traits: "statistics.traits.all",
       languages: "statistics.languages.all"
@@ -351,7 +350,6 @@ var pill = (function() {
       var snackMessage = {
         abilities: "Abilities " + helper.truncate(pillObject.name, 40, true) + " removed.",
         feats: "Feat " + helper.truncate(pillObject.name, 40, true) + " removed.",
-        archetypes: "archetypes " + helper.truncate(pillObject.name, 40, true) + " removed.",
         traits: "Trait " + helper.truncate(pillObject.name, 40, true) + " removed.",
         languages: "Language " + helper.truncate(pillObject.name, 40, true) + " removed."
       };
@@ -548,7 +546,6 @@ var pill = (function() {
         var snackTitle = {
           abilities: "Abilities notes",
           feats: "Feats notes",
-          archetypes: "archetypes notes",
           traits: "Traits notes",
           languages: "Languages notes"
         };

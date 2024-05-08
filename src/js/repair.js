@@ -1033,7 +1033,6 @@ var repair = (function() {
         belts: _checkForValue(tempCharacterObject, "equipment.body_slots.belts", ""),
         body: _checkForValue(tempCharacterObject, "equipment.body_slots.body", ""),
         chest: _checkForValue(tempCharacterObject, "equipment.body_slots.chest", ""),
-        descriptions: _checkForValue(tempCharacterObject, "equipment.body_slots.descriptions", ""),
         eyes: _checkForValue(tempCharacterObject, "equipment.body_slots.eyes", ""),
         feet: _checkForValue(tempCharacterObject, "equipment.body_slots.feet", ""),
         hands: _checkForValue(tempCharacterObject, "equipment.body_slots.hands", ""),
