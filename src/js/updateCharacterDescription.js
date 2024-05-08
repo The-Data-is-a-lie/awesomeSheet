@@ -190,12 +190,23 @@ function updateCharacterDescription() {
     background_traits = characterData.background_traits
     mannerisms = characterData.mannerisms
     flaws = characterData.flaws
+    parents = characterData.parents
+    older_brothers = characterData.older_brothers
+    younger_brothers = characterData.younger_brothers
+    older_sisters = characterData.older_sisters
+    younger_sisters = characterData.younger_sisters
     characterDescriptionElement.innerHTML = `
     <pre>
         Professions: ${JSON.stringify(professions).replace(/["\[\]]/g, '')}
         Background Traits: ${JSON.stringify(background_traits).replace(/["\[\]]/g, '')}
         Mannerisms: ${JSON.stringify(mannerisms).replace(/["\[\]]/g, '')}
         Flaws: ${JSON.stringify(flaws).replace(/["\[\]]/g, '')}
+        Parents: ${JSON.stringify(parents).replace(/["\[\]]/g, '')}
+        Siblings: 
+        ${JSON.stringify(older_brothers).replace(/["\[\]]/g, '')}
+        ${JSON.stringify(younger_brothers).replace(/["\[\]]/g, '')}
+        ${JSON.stringify(older_sisters).replace(/["\[\]]/g, '')}
+        ${JSON.stringify(younger_sisters).replace(/["\[\]]/g, '')}
     </pre>
 `;
 
