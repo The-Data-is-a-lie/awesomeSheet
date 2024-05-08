@@ -15,6 +15,7 @@ var tabs = (function() {
         stats: true,
         abilities: false,
         feats: false,
+        archetypes: false,
         traits: false,
         languages: false,
         power: false
@@ -153,7 +154,7 @@ var tabs = (function() {
   function _singleStepChangeState(arrow) {
     var tabOrder = {
       basics: ["character", "experience", "classes", "senses", "initiative", "speed", "image"],
-      statistics: ["stats", "abilities", "feats", "traits", "languages", "power"],
+      statistics: ["stats", "abilities", "archetypes" , "feats", "traits", "languages", "power"],
       equipment: ["possessions", "armor", "body_slots", "item", "encumbrance", "consumable", "wealth"],
       defense: ["hp", "ac", "cmd", "saves", "dr", "sr", "resistance"],
       offense: ["stats", "cmb", "attack"],
