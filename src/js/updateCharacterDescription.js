@@ -141,28 +141,50 @@ function updateCharacterDescription() {
 
 
   //   Need to add a fix for Perform + knowledge martial + Profession portions + remove skills that don't belong in the list
-    for (const skillName in skillRanksObject) {
-      if (skillRanksObject.hasOwnProperty(skillName)) {
-          const skillRank = skillRanksObject[skillName];
-          const elementId = `skills-default-${skillName.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}-ranks`;
-          const element = document.getElementById(elementId);
+
+
   
-          console.log('Skill Name:', skillName);
-          console.log('Element ID:', elementId);
-          console.log('Element:', element);
+  for (const skillName in skillRanksObject) {
+    if (skillRanksObject.hasOwnProperty(skillName)) {
+      const skillRank = skillRanksObject[skillName];
+      const elementId = `skills-default-${skillName.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}-ranks`;
+      const element = document.getElementById(elementId);
   
-          if (element) {
-            // Check if the element is an <input> element
-            if (element.tagName.toLowerCase() === 'input') {
-                // Update the value property for <input> elements
-                element.value = skillRank;
-            } else {
-                // Update the text content for other types of elements
-                element.textContent = skillRank;
-            }
+      console.log('Skill Name:', skillName);
+      console.log('Element ID:', elementId);
+      console.log('Element:', element);
+  
+      if (element) {
+        element.focus(); // Focus the element (optional)
+  
+        // Update the value/text content as before
+        if (element.tagName.toLowerCase() === 'input') {
+          element.value = skillRank;
+        } else {
+          element.textContent = skillRank;
+        }
+  
+        // Check if the element is inside a form
+        const parentForm = element.closest('form'); // Use `closest` to find the nearest form element
+  
+        if (parentForm) {
+          parentForm.submit(); // Trigger submit if inside a form
+        }
       }
+    }
   }
-}
+  
+  // Click the checkbox after processing other inputs
+  const includeCustomCheckbox = document.getElementById('skills-ranks-include-custom');
+  
+  if (includeCustomCheckbox) {
+    includeCustomCheckbox.click(); // Simulate clicking the checkbox
+  }
+  
+
+  
+  
+  
 
     // End of Auto Replace Skills Function
     
