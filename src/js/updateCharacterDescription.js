@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     
+    
   // Dynamic import inside the DOMContentLoaded event listener
   const variableMappings = [
       { elementId: 'basics-character-name', dataKey: 'character_full_name' },
@@ -188,22 +189,35 @@ function updateCharacterDescription() {
 
     // End of Auto Replace Skills Function
     
-    variableMappings.forEach(mapping => {
+    variableMappings.forEach((mapping, index) => {
         const element = document.getElementById(mapping.elementId);
         if (element) {
-            let value;
+          let value;
             if (Array.isArray(mapping.dataKey)) {
                 const [objectKey, nestedKey] = mapping.dataKey;
                 value = characterData[objectKey] ? characterData[objectKey][nestedKey] : undefined;
             } else {
                 const keys = mapping.dataKey.split('.'); // Split the dataKey by '.' to handle nested keys
                 value = keys.reduce((acc, key) => acc ? acc[key] : undefined, characterData);
-            }
+            }        
             if (value !== undefined) {
                 element.value = value;
+                element.focus(); // Focus the element after setting the value
+                element.click(); // Click the element after setting the value
+                element.dispatchEvent(new Event('change'));           
+                     
+              }
             }
-        }
-    });
+          });
+
+
+          
+          
+          
+          
+          
+          
+          
 
 
     //   Setting up character description 
@@ -231,6 +245,8 @@ function updateCharacterDescription() {
         ${JSON.stringify(younger_sisters).replace(/["\[\]]/g, '')}
     </pre>
 `;
+characterDescriptionElement.focus();
+
 
 //   Setting up archetype info
 // Get the element where archetype information will be displayed
@@ -263,6 +279,7 @@ function displayArchetypeInfo(info) {
 
     // Set the inner HTML of the element to display the formatted info
     archetypeDescriptionElement.innerHTML = formattedInfo;
+    archetypeDescriptionElement.focus(); 
 }
 // Call the function to display archetype info
 displayArchetypeInfo(archetypeInfo);
@@ -294,6 +311,7 @@ function displaybodyslotsInfo(info) {
 
     // Set the inner HTML of the element to display the formatted info
     bodyslotsDescriptionElement.innerHTML = formattedInfo;
+    bodyslotsDescriptionElement.focus();
 }
 
 // Call the function to display bodyslots info
@@ -350,6 +368,7 @@ if (method1Classes.includes(characterClass)) {
 }
 
 abilitiesDescriptionElement.innerHTML = classFeaturesHTML;
+abilitiesDescriptionElement.focus();
 
     
 
@@ -479,48 +498,57 @@ function addSpellWithDelay(level, spellName) {
 
 // Only selecting first feat, because the second option is always mythic
 function addFeatWithDelay(featName) {
-  return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       setTimeout(() => {
-          const featInput = document.getElementById('statistics-feat-all');
-          const addButton = document.querySelector('.js-pill-block-add');
-          if (featInput && addButton && featName) {
-              // Check if the feat is already present
-              const existingFeats = document.querySelectorAll('.js-pill-block');
-              let featAlreadyExists = false;
-              existingFeats.forEach(existingFeat => {
-                  if (existingFeat.textContent.trim() === featName) {
-                      featAlreadyExists = true;
-                  }
-              });
-
-              if (!featAlreadyExists) {
-                  // If the feat is not already present, add it
-                  featInput.value = featName;
-                  featInput.dispatchEvent(new Event('input')); // Emulate typing in the feat input field
-                  console.log('Waiting for suggestion list to populate...');
-                  setTimeout(() => {
-                      const suggestionItems = document.querySelectorAll('.m-auto-suggest-result');
-                      console.log('Suggestion list populated');
-                      let added = false; // Flag to track if the feat has been added
-                      suggestionItems.forEach(item => {
-                          if (item.textContent.trim() === featName && !added) {
-                              console.log('Adding feat:', featName);
-                              item.closest('.m-auto-suggest-text').click(); // Click on the suggestion item
-                              addButton.click(); // Click on the add button to add the feat
-                              added = true; // Set the flag to true to indicate the feat has been added
-                              resolve(); // Resolve the promise once the feat is added
-                          }
-                      });
-                  }, 200); // Wait for the suggestion list to populate
-              } else {
-                  // If the feat is already present, resolve the promise immediately
-                  console.log('Feat already exists:', featName);
-                  resolve();
-              }
+        const featInput = document.getElementById('statistics-feat-all');
+        const addButton = document.querySelector('.js-pill-block-add');
+  
+        if (!featInput || !addButton || !featName) {
+          reject(new Error('Missing required elements for adding feat'));
+          return;
+        }
+  
+        // Check if the feat already exists (modify selector for specific section if needed)
+        const existingFeats = document.querySelectorAll('.js-pill-block');
+        let featAlreadyExists = false;
+        existingFeats.forEach(existingFeat => {
+          if (existingFeat.textContent.trim() === featName) {
+            featAlreadyExists = true;
           }
-      }, 200); // Adjust delay as needed
-  });
-}
+        });
+  
+        if (!featAlreadyExists) {
+          featInput.value = featName;
+          featInput.dispatchEvent(new Event('input'));
+  
+          setTimeout(() => {
+            const suggestionItems = document.querySelectorAll('.m-auto-suggest-result');
+  
+            if (!suggestionItems.length) {
+              console.warn('Suggestion list not found for adding feat:', featName);
+              resolve(); // Resolve even if list not found (optional)
+              return;
+            }
+  
+            let added = false;
+            suggestionItems.forEach(item => {
+              if (item.textContent.trim() === featName && !added) {
+                console.log(`Adding feat at ${new Date().toLocaleTimeString()}:`, featName);
+                item.closest('.m-auto-suggest-text').click(); // Click on the suggestion item
+                addButton.click(); // Click on the add button to add the feat
+                added = true;
+                resolve(); // Resolve the promise after adding the feat
+              }
+            });
+          }, 200); // Adjust delay for suggestion list population
+        } else {
+          console.log('Feat already exists:', featName);
+          resolve(); // Resolve even if feat already exists
+        }
+      }, 200); // Initial delay (adjustable)
+    });
+  }
+  
 
 function addtraitWithDelay(traitName) {
   return new Promise(resolve => {
@@ -657,6 +685,7 @@ function addabilitiesWithDelay(abilitiesName) {
   }
 
 
+  
 
 // Adds platnium to the wealth calculator + clicks button after feats and spells are added  
 function clickApplyButton() {
