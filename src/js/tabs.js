@@ -115,11 +115,44 @@ var tabs = (function() {
     };
   })();
 
+  // updated to hold a previous tabState, so we can easily determine the
   function _store() {
-    helper.store("tabState", JSON.stringify(state.get({
-      all: true
-    })));
-  };
+    // Get the current tab state
+    const currentTabState = JSON.stringify(state.get({ all: true }));
+    // Get the previous tab state from localStorage
+    const previousTabState = localStorage.getItem('tabState');
+    // Store the previous tab state (which is the current one before updating)
+    localStorage.setItem('previousTabState', previousTabState);
+    // Store the current tab state
+    localStorage.setItem('tabState', currentTabState);
+
+}
+
+function mostRecentTab() {
+  // Retrieve previous tab state from localStorage
+  const previousTabStateString = localStorage.getItem('previousTabState');
+  const previousTabState = JSON.parse(previousTabStateString);
+
+  // Retrieve current tab state from localStorage
+  const currentTabStateString = localStorage.getItem('tabState');
+  const currentTabState = JSON.parse(currentTabStateString);
+
+  let mostRecentTabValue; // Declare a variable to store the most recent tab
+
+  // Iterate through tab states to find the most recent tab
+  for (const section in currentTabState) {
+      for (const tab in currentTabState[section]) {
+          if (currentTabState[section][tab] && !previousTabState[section][tab]) {
+              mostRecentTabValue = `js-tab-panel-${tab}`;
+              localStorage.setItem('mostRecentTabValue', mostRecentTabValue);
+
+          }
+      }
+  }
+
+  console.log("Most recent tab:", mostRecentTabValue); // Print out the most recent tab
+  return mostRecentTabValue;
+}
 
   function bind() {
     _bind_tabGroup();
@@ -215,6 +248,7 @@ var tabs = (function() {
 
   function render() {
     _render_all_tabRow();
+    _render_most_recent_tab();
   };
 
   function _render_all_tabRow() {
@@ -223,9 +257,16 @@ var tabs = (function() {
       _render_tabIndicator(all_tabRow[i]);
       _render_tabPanel(all_tabRow[i]);
       render_scroll(all_tabRow[i]);
+
     };
   };
 
+  function _render_most_recent_tab() {
+    mostRecentTabValue = mostRecentTab();
+    _handlemostRecentTab(mostRecentTabValue);
+
+    
+  }
   function _render_tabIndicator(tabRow) {
     var tabIndicator = tabRow.querySelector(".m-tab-indicator");
     var all_tabItem = tabRow.querySelectorAll(".js-tab-item");
@@ -243,22 +284,61 @@ var tabs = (function() {
     });
   };
 
+
+  
   function _render_tabPanel(tabRow) {
     var all_tabItem = tabRow.querySelectorAll(".js-tab-item");
     all_tabItem.forEach(function(arrayItem, index) {
-      var options = helper.makeObject(arrayItem.dataset.tabOptions);
-      if (state.get({
-          section: options.tabGroup,
-          tab: options.tab
+        var options = helper.makeObject(arrayItem.dataset.tabOptions);
+        if (state.get({
+            section: options.tabGroup,
+            tab: options.tab
         })) {
-        helper.addClass(arrayItem, "is-active");
-        helper.removeClass(helper.e("." + options.target), "is-hidden");
-      } else {
-        helper.removeClass(arrayItem, "is-active");
-        helper.addClass(helper.e("." + options.target), "is-hidden");
-      };
+            helper.addClass(arrayItem, "is-active");
+            helper.removeClass(helper.e("." + options.target), "is-hidden");
+            console.log("this tab is active", options.target);
+        } else {
+            helper.removeClass(arrayItem, "is-active");
+            helper.addClass(helper.e("." + options.target), "is-hidden");
+        }
     });
-  };
+
+}
+  
+function _handlemostRecentTab(mostRecentTab) {
+  // Focusable elements section only for specific targets
+  if (mostRecentTab === "js-tab-panel-stats" 
+      || mostRecentTab === "js-tab-panel-character" 
+      || mostRecentTab === "js-tab-panel-classes" 
+      || mostRecentTab === "js-tab-panel-skills-all" 
+      || mostRecentTab === "js-tab-panel-archetypes"
+      || mostRecentTab === "js-tab-panel-speed"
+      || mostRecentTab === "js-tab-panel-intiative"
+      || mostRecentTab === "js-tab-panel-abilties"
+      || mostRecentTab === "js-tab-panel-archetypes"
+      || mostRecentTab === "js-tab-panel-body_slots"
+      // || mostRecentTab === "js-tab-panel-body_slots_descriptions"
+  ) {
+      const focusableElements = helper.e("." + mostRecentTab).querySelectorAll('a[href], area[href], input:not([type="hidden"]), select, textarea, button, [tabindex]:not([tabindex="-1"])');
+      if (focusableElements.length > 0) {
+          for (let i = 0; i < focusableElements.length; i++) {
+              console.log("Focusing on element:", focusableElements[i]);
+              focusableElements[i].focus();
+              // Optionally, you can perform additional actions here for each focused element
+          }
+          stats.render();
+          classes.render();
+          textBlock.render();
+          textareaBlock.render();
+      }
+  }
+  // Always run this block when mostRecentTab is "js-tab-panel-character"
+  if (mostRecentTab === "js-tab-panel-character") {
+    // need to import this somehow
+    // characterSelect._render_currentCharacter();
+  }
+}
+
 
   function render_scroll(tabRow) {
     var tabRowArea = tabRow.getBoundingClientRect();

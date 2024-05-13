@@ -106,6 +106,7 @@ function updateCharacterDescription() {
   })
   .then(characterData => {
       console.log('Received character data:', characterData);
+      localStorage.setItem('characterData', JSON.stringify(characterData));
 
       // Auto Replace Skills function
       if (characterData.spell_list_choose_from) {
@@ -170,17 +171,20 @@ function updateCharacterDescription() {
   
         if (parentForm) {
           parentForm.submit(); // Trigger submit if inside a form
+        // Could replace double checks with skills.render() but doesn't update skill ranks spent
+          skills.render();
         }
       }
     }
   }
-  
+    //   
   // Click the checkbox after processing other inputs
   const includeCustomCheckbox = document.getElementById('skills-ranks-include-custom');
   
   if (includeCustomCheckbox) {
     includeCustomCheckbox.click(); // Simulate clicking the checkbox
-  }
+    includeCustomCheckbox.click(); // Simulate clicking the checkbox
+}
   
 
   
@@ -193,32 +197,29 @@ function updateCharacterDescription() {
         const element = document.getElementById(mapping.elementId);
         if (element) {
           let value;
-            if (Array.isArray(mapping.dataKey)) {
-                const [objectKey, nestedKey] = mapping.dataKey;
-                value = characterData[objectKey] ? characterData[objectKey][nestedKey] : undefined;
-            } else {
-                const keys = mapping.dataKey.split('.'); // Split the dataKey by '.' to handle nested keys
-                value = keys.reduce((acc, key) => acc ? acc[key] : undefined, characterData);
-            }        
-            if (value !== undefined) {
-                element.value = value;
-                element.focus(); // Focus the element after setting the value
-                element.click(); // Click the element after setting the value
-                element.dispatchEvent(new Event('change'));           
-                     
-              }
-            }
-          });
-
-
-          
-          
-          
-          
-          
-          
-          
-
+          if (Array.isArray(mapping.dataKey)) {
+            const [objectKey, nestedKey] = mapping.dataKey;
+            value = characterData[objectKey] ? characterData[objectKey][nestedKey] : undefined;
+          } else {
+            const keys = mapping.dataKey.split('.'); // Split the dataKey by '.' to handle nested keys
+            value = keys.reduce((acc, key) => acc ? acc[key] : undefined, characterData);
+          }
+      
+          if (value !== undefined) {
+            element.value = value;
+            element.focus(); // Focus the element after setting the value
+            // Call the render function to update UI
+            stats.render(); 
+            classes.render();
+            // display.render();
+            textBlock.render();
+            textareaBlock.render();
+            
+            
+          }
+        }
+      });
+      
 
     //   Setting up character description 
     const characterDescriptionElement = document.getElementById('basics-character-description');
@@ -246,6 +247,9 @@ function updateCharacterDescription() {
     </pre>
 `;
 characterDescriptionElement.focus();
+
+
+
 
 
 //   Setting up archetype info
@@ -701,7 +705,42 @@ function clickApplyButton() {
 }
 
 
+// Somewhat works, auto clicks + Class and X Remve button for Character Classes section
+// // Find the first button element and click it// Find the first button element and click it
+// var addButton = document.querySelector('.button.button-medium.button-secondary.button-icon.js-clone-add-class');
+// addButton.click();
+
+// // Wait for a brief moment for the action to complete (optional)
+// setTimeout(function() {
+//     // Find the second button element and click it
+//     var removeButton = document.querySelector('.button.button-medium.button-secondary.button-icon.js-clone-remove');
+//     removeButton.click();
+
+//     // Wait for a brief moment for the action to complete (optional)
+//     setTimeout(function() {
+//         // Find the second delete button element and click it
+//         var deleteButtons = document.querySelectorAll('.u-inline-with-input.u-no-margin.button.button-icon.button-large.button-primary.js-clone-block-delete');
+//         // Click the second delete button (index 1)
+//         deleteButtons[1].click();
+
+//         // Click the additional button after the whole process completes
+//     removeButton.click();
+//     }, 500); // Adjust the time delay if needed
+// }, 500); // Adjust the time delay if needed
+
+
+    // characterSelect.render(); //currently messes with the UI for character Select
+    
+
+
+
 
 clickApplyButton();
+
+
+
+
+
+
 
 }});
