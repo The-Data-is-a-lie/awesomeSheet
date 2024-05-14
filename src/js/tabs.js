@@ -330,6 +330,7 @@ function _handlemostRecentTab(mostRecentTab) {
           classes.render();
           textBlock.render();
           textareaBlock.render();
+          // archetypeStats.render();
       }
   }
   // Always run this block when mostRecentTab is "js-tab-panel-character"

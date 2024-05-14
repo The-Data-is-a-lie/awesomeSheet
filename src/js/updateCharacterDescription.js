@@ -94,6 +94,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
 let spellLists, featsList, day_list, known_list, traitsList, languageList, abilitiesList;
 function updateCharacterDescription() {
+
+    let updateMostRecentTabValue = localStorage.getItem("mostRecentTabValue");
+    // Check if updateMostRecentTabValue is empty or null
+    if (!updateMostRecentTabValue) {
+      updateMostRecentTabValue = "js-tab-panel-character";
+    }
+    localStorage.setItem("updateMostRecentTabValue", updateMostRecentTabValue);
+
+
   fetch('http://localhost:5000/get_character_data', {
       method: 'GET',
       credentials: 'omit'
@@ -263,6 +272,15 @@ const archetypeInfo = characterData.archetype_info;
 function displayArchetypeInfo(info) {
     // Initialize an empty string to hold the formatted info
     let formattedInfo = '';
+    
+    // Trigger a click event on a specific button with a data attribute
+    const buttonElement = document.querySelector("button[data-tab-options='tabGroup:statistics,tab:archetypes,target:js-tab-panel-archetypes']");
+    if (buttonElement) {
+        buttonElement.click();
+        console.log("Button clicked successfully!");
+    } else {
+        console.error("Button not found. Check your selector.");
+    }
 
     // Loop through each key-value pair in the archetype info
     for (const [archetypeName, abilities] of Object.entries(info)) {
@@ -285,9 +303,13 @@ function displayArchetypeInfo(info) {
     archetypeDescriptionElement.innerHTML = formattedInfo;
     archetypeDescriptionElement.focus(); 
 }
+
 // Call the function to display archetype info
 displayArchetypeInfo(archetypeInfo);
 
+
+// Clicking on most recent tab:
+clickMostRecentTab();
 
 const bodyslotsDescriptionElement = document.getElementById('equipment-body-slots-notes');
 
@@ -441,8 +463,16 @@ if (updateDescriptionButton) {
           console.log('spellLists is not populated');
           // Handle the case where spellLists is not populated
       }
-      // Process feats
+
+    // Click the feats button
+
+
+
+
+    // Process feats
       for (let i = 0; i < featsList.length; i++) {
+
+        
           const featName = featsList[i];
           console.log(`Feat Name: ${featName}`);
           await addFeatWithDelay(featName); // Wait for each feat to be added with a delay
@@ -493,9 +523,9 @@ function addSpellWithDelay(level, spellName) {
                           resolve(); // Resolve the promise once the spell is added
                       }
                   });
-              }, 200); // Wait for the suggestion list to populate
+              }, 250); // Wait for the suggestion list to populate
           }
-      }, 200); // Adjust delay as needed
+      }, 250); // Adjust delay as needed
   });
 }
 
@@ -503,6 +533,7 @@ function addSpellWithDelay(level, spellName) {
 // Only selecting first feat, because the second option is always mythic
 function addFeatWithDelay(featName) {
     return new Promise((resolve, reject) => {
+
       setTimeout(() => {
         const featInput = document.getElementById('statistics-feat-all');
         const addButton = document.querySelector('.js-pill-block-add');
@@ -544,15 +575,17 @@ function addFeatWithDelay(featName) {
                 resolve(); // Resolve the promise after adding the feat
               }
             });
-          }, 200); // Adjust delay for suggestion list population
+          }, 250); // Adjust delay for suggestion list population
         } else {
           console.log('Feat already exists:', featName);
           resolve(); // Resolve even if feat already exists
         }
-      }, 200); // Initial delay (adjustable)
+      }, 250); // Initial delay (adjustable)
     });
   }
-  
+
+
+
 
 function addtraitWithDelay(traitName) {
   return new Promise(resolve => {
@@ -587,14 +620,14 @@ function addtraitWithDelay(traitName) {
                               resolve(); // Resolve the promise once the trait is added
                           }
                       });
-                  }, 200); // Wait for the suggestion list to populate
+                  }, 250); // Wait for the suggestion list to populate
               } else {
                   // If the trait is already present, resolve the promise immediately
                   console.log('trait already exists:', traitName);
                   resolve();
               }
           }
-      }, 200); // Adjust delay as needed
+      }, 250); // Adjust delay as needed
   });
 }
 
@@ -632,14 +665,14 @@ function addlanguageWithDelay(languageName) {
                               resolve(); // Resolve the promise once the language is added
                           }
                       });
-                  }, 200); // Wait for the suggestion list to populate
+                  }, 250); // Wait for the suggestion list to populate
               } else {
                   // If the language is already present, resolve the promise immediately
                   console.log('language already exists:', languageName);
                   resolve();
               }
           }
-      }, 200); // Adjust delay as needed
+      }, 250); // Adjust delay as needed
   });
 }
 
@@ -677,14 +710,14 @@ function addabilitiesWithDelay(abilitiesName) {
                                 resolve(); // Resolve the promise once the abilities is added
                             }
                         });
-                    }, 200); // Wait for the suggestion list to populate
+                    }, 250); // Wait for the suggestion list to populate
                 } else {
                     // If the abilities is already present, resolve the promise immediately
                     console.log('abilities already exists:', abilitiesName);
                     resolve();
                 }
             }
-        }, 200); // Adjust delay as needed
+        }, 250); // Adjust delay as needed
     });
   }
 
@@ -698,7 +731,7 @@ function clickApplyButton() {
       setTimeout(() => {
           applyButton.click();
           console.log('Apply button clicked.');
-      }, 200); // Adjust the delay time as needed
+      }, 250); // Adjust the delay time as needed
   } else {
       console.error('Apply button not found.');
   }
@@ -738,8 +771,100 @@ function clickApplyButton() {
 clickApplyButton();
 
 
-
-
+function clickMostRecentTab() {
+    const updateMostRecentTabValue = localStorage.getItem("updateMostRecentTabValue");
+    console.log("Most recent tab value update button:", updateMostRecentTabValue);
+    if (updateMostRecentTabValue) {
+      const characterKeywords = /character|experience|classes|senses|initiative|speed|image|character_generator/i;
+      const statsKeywords = /stats|abilities|archetypes|feats|traits|languages|power/i;
+      const possessionsKeywords = /possessions|armor|body_slots|descriptions|item|encumbrance|consumable|wealth/i;
+      const hpKeywords = /hp|ac|cmd|saves|dr|sr|resistance/i;
+      const offenseKeywords = /cmb|attack/i;
+      const spellKeywords = /level_0|level_1|level_2|level_3|level_4|level_5|level_6|level_7|level_8|level_9|spell-stats/i;
+  
+      if (characterKeywords.test(updateMostRecentTabValue)) {
+        const characterButton = document.querySelector("button[data-tab-options='tabGroup:basics,tab:character,target:js-tab-panel-character']");
+        if (characterButton) {
+            characterButton.click();
+            setTimeout(() => {
+                characterButton.focus();
+                console.log("Character tab clicked successfully!");
+              }, 300); // Delay of 100 milliseconds (adjust as needed)
+            console.log("Character tab clicked successfully!");
+        } else {
+          console.error("Character tab button not found.");
+        }
+      } else if (statsKeywords.test(updateMostRecentTabValue)) {
+        const statsButton = document.querySelector("button[data-tab-options='tabGroup:statistics,tab:stats,target:js-tab-panel-stats']");
+        if (statsButton) {
+            statsButton.click();
+            setTimeout(() => {
+                statsButton.focus();
+                console.log("Character tab clicked successfully!");
+              }, 300); // Delay of 100 milliseconds (adjust as needed)
+            console.log("Stats tab clicked successfully!");
+        } else {
+          console.error("Stats tab button not found.");
+        }
+      } else if (possessionsKeywords.test(updateMostRecentTabValue)) {
+        const possessionsButton = document.querySelector("button[data-tab-options='tabGroup:equipment,tab:possessions,target:js-tab-panel-possessions']");
+        if (possessionsButton) {
+            possessionsButton.click();
+            setTimeout(() => {
+                possessionsButton.focus();
+                console.log("Character tab clicked successfully!");
+              }, 300); // Delay of 100 milliseconds (adjust as needed)
+            console.log("Possessions tab clicked successfully!");
+        } else {
+          console.error("Possessions tab button not found.");
+        }
+      } else if (hpKeywords.test(updateMostRecentTabValue)) {
+        const hpButton = document.querySelector("button[data-tab-options='tabGroup:defense,tab:hp,target:js-tab-panel-hit-points']");
+        if (hpButton) {
+            hpButton.click();
+            setTimeout(() => {
+                hpButton.focus();
+                console.log("Character tab clicked successfully!");
+              }, 300); // Delay of 100 milliseconds (adjust as needed)
+            console.log("HP tab clicked successfully!");
+        } else {
+          console.error("HP tab button not found.");
+        }
+    } else if (offenseKeywords.test(updateMostRecentTabValue)) {
+        const cmbButton = document.querySelector("button[data-tab-options='tabGroup:offense,tab:cmb,target:js-tab-panel-combat-maneuver-bonus']");
+        if (cmbButton) {
+          cmbButton.click();
+          setTimeout(() => {
+            cmbButton.focus();
+            console.log("CMB tab clicked successfully!");
+          }, 300); // Delay of 300 milliseconds (adjust as needed)
+        } else {
+            console.error("CMB tab button not found.");
+        }
+        } else if (spellKeywords.test(updateMostRecentTabValue)) {
+            const spellButton = document.querySelector("button[data-tab-options='tabGroup:spells,tab:level_0,target:js-tab-panel-spell-level-0']");
+            if (spellButton) {
+            spellButton.click();
+            setTimeout(() => {
+                spellButton.focus();
+                console.log("Character tab clicked successfully!");
+              }, 300); // Delay of 100 milliseconds (adjust as needed)
+            console.log("Spells tab clicked successfully!");
+      }
+      } else {
+        console.log("updateMostRecentTabValue doesn't match any keywords.");
+      }
+    } else {
+      console.error("updateMostRecentTabValue not found in localStorage");
+    }
+  }
+  
+  
+  
+  
+  
+  
+  
 
 
 

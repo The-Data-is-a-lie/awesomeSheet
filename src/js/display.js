@@ -1501,6 +1501,7 @@ var display = (function() {
     var menuElement = helper.e(".js-menu");
     var menuItem = helper.e(".js-menu-link-display-mode");
     var characterSelect = helper.e(".js-character-select");
+    // var archetypeStats = helper.e(".js-archetype-stats");
     var shade = helper.e(".js-shade");
     var fab = helper.e(".js-fab");
     var fabButton = helper.e(".js-fab-button");
@@ -1515,7 +1516,8 @@ var display = (function() {
       helper.addClass(fabButton, "button-secondary");
       helper.addClass(nav, "is-display-mode");
       helper.addClass(menuElement, "is-display-mode");
-      helper.addClass(header, "is-display-mode");
+      helper.addClass(header, "is-display-mode");;
+      // helper.addClass(archetypeStats, "is-display-mode");
       helper.addClass(characterSelect, "is-display-mode");
       if (demo) {
         helper.addClass(demo, "is-display-mode");
@@ -1536,6 +1538,7 @@ var display = (function() {
       helper.removeClass(nav, "is-display-mode");
       helper.removeClass(menuElement, "is-display-mode");
       helper.removeClass(header, "is-display-mode");
+      helper.removeClass(characterSelect, "is-display-mode");
       helper.removeClass(characterSelect, "is-display-mode");
       if (demo) {
         helper.removeClass(demo, "is-display-mode");
