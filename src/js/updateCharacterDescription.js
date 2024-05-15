@@ -770,20 +770,57 @@ function clickApplyButton() {
 
 clickApplyButton();
 
+function extract_value(element) {
+  // Extract value using regex with capture group
+  const valueMatch = element?.match(/-([^-]*)$/); // Capture group for text after last "-"
+  const value = valueMatch?.[1]?.trim(); // Extract captured value and trim
+
+  if (value) {
+    console.log("Extracted value:", value);
+    return `${value}`; // Assuming value represents experience
+  } else {
+    console.error("Failed to extract value from updateMostRecentTabValue.");
+    return "";
+  }
+}
+
+function extract_value_secondary(element) {
+  // Extract value using regex with capture group
+  const valueMatch = element?.match(/_([^_]*)$/); // Capture group for text after last "_"
+  const value = valueMatch?.[1]?.trim(); // Extract captured value and trim
+
+  if (value) {
+    console.log("Extracted value:", value);
+    return `${value}`; // Assuming value represents experience
+  } else {
+    console.error("Failed to extract value from updateMostRecentTabValue.");
+    return "";
+  }
+}
+
+
 
 function clickMostRecentTab() {
     const updateMostRecentTabValue = localStorage.getItem("updateMostRecentTabValue");
+    
+    const value = extract_value(updateMostRecentTabValue);
+    const valueSecondary = extract_value_secondary(updateMostRecentTabValue);
+    console.log("this is your extracted avlue", value);
+    
     console.log("Most recent tab value update button:", updateMostRecentTabValue);
     if (updateMostRecentTabValue) {
       const characterKeywords = /character|experience|classes|senses|initiative|speed|image|character_generator/i;
       const statsKeywords = /stats|abilities|archetypes|feats|traits|languages|power/i;
       const possessionsKeywords = /possessions|armor|body_slots|descriptions|item|encumbrance|consumable|wealth/i;
-      const hpKeywords = /hp|ac|cmd|saves|dr|sr|resistance/i;
+      const hpKeywords = /hp|cmd|saves|dr|sr|resistance/i;
+      const acKeywords = /\bac\b/i;
       const offenseKeywords = /cmb|attack/i;
       const spellKeywords = /level_0|level_1|level_2|level_3|level_4|level_5|level_6|level_7|level_8|level_9|spell-stats/i;
   
       if (characterKeywords.test(updateMostRecentTabValue)) {
-        const characterButton = document.querySelector("button[data-tab-options='tabGroup:basics,tab:character,target:js-tab-panel-character']");
+        if (value == image) { `button[data-tab-options='tabGroup:basics,tab:image,target:js-tab-panel-character-image']`; 
+        } else {
+        const characterButton = document.querySelector(`button[data-tab-options='tabGroup:basics,tab:${value},target:js-tab-panel-${value}']`);
         if (characterButton) {
             characterButton.click();
             setTimeout(() => {
@@ -794,8 +831,10 @@ function clickMostRecentTab() {
         } else {
           console.error("Character tab button not found.");
         }
+      }
+
       } else if (statsKeywords.test(updateMostRecentTabValue)) {
-        const statsButton = document.querySelector("button[data-tab-options='tabGroup:statistics,tab:stats,target:js-tab-panel-stats']");
+        const statsButton = document.querySelector(`button[data-tab-options='tabGroup:statistics,tab:${value},target:js-tab-panel-${value}']`);
         if (statsButton) {
             statsButton.click();
             setTimeout(() => {
@@ -806,8 +845,37 @@ function clickMostRecentTab() {
         } else {
           console.error("Stats tab button not found.");
         }
+
+
+
+
       } else if (possessionsKeywords.test(updateMostRecentTabValue)) {
-        const possessionsButton = document.querySelector("button[data-tab-options='tabGroup:equipment,tab:possessions,target:js-tab-panel-possessions']");
+        if (value === "body_slots") {
+          const possessionsButton = document.querySelector("button[data-tab-options='tabGroup:equipment,tab:body_slots,target:js-tab-panel-body-slots']");
+          if (possessionsButton) {
+            possessionsButton.click();
+            setTimeout(() => {
+                possessionsButton.focus();
+                console.log("Character tab clicked successfully!");
+              }, 300); // Delay of 100 milliseconds (adjust as needed)
+            console.log("Possessions tab clicked successfully!");
+        } else {
+          console.error("Possessions tab button not found.");
+        }
+        } else if (value === "descriptions") {
+          const possessionsButton = document.querySelector("button[data-tab-options='tabGroup:equipment,tab:body_slots_descriptions,target:js-tab-panel-body-slots-descriptions']");
+          if (possessionsButton) {
+            possessionsButton.click();
+            setTimeout(() => {
+                possessionsButton.focus();
+                console.log("Character tab clicked successfully!");
+              }, 300); // Delay of 100 milliseconds (adjust as needed)
+            console.log("Possessions tab clicked successfully!");
+        } else {
+          console.error("Possessions tab button not found.");
+        }
+        } else {
+          const possessionsButton = document.querySelector(`button[data-tab-options='tabGroup:equipment,tab:${value},target:js-tab-panel-${value}']`);
         if (possessionsButton) {
             possessionsButton.click();
             setTimeout(() => {
@@ -818,9 +886,25 @@ function clickMostRecentTab() {
         } else {
           console.error("Possessions tab button not found.");
         }
+      }
+
+
+
       } else if (hpKeywords.test(updateMostRecentTabValue)) {
-        const hpButton = document.querySelector("button[data-tab-options='tabGroup:defense,tab:hp,target:js-tab-panel-hit-points']");
-        if (hpButton) {
+        const hpSecondValues = {
+          hp: "hit-points",
+          ac: "armor_class", 
+          cmd: "combat-maneuver-defense", 
+          saves: "saves", 
+          dr: "damage-reduction", 
+          sr: "spell-resistance", 
+          resistance: "resistances", 
+          
+        };
+        if (hpKeywords.test(updateMostRecentTabValue)) {
+          const second_value = hpSecondValues[value] || value; // Use default value if not found
+          const hpButton = document.querySelector(`button[data-tab-options='tabGroup:defense,tab:${value},target:js-tab-panel-${second_value}']`);
+          if (hpButton) {
             hpButton.click();
             setTimeout(() => {
                 hpButton.focus();
@@ -830,19 +914,32 @@ function clickMostRecentTab() {
         } else {
           console.error("HP tab button not found.");
         }
+      }
+   
     } else if (offenseKeywords.test(updateMostRecentTabValue)) {
-        const cmbButton = document.querySelector("button[data-tab-options='tabGroup:offense,tab:cmb,target:js-tab-panel-combat-maneuver-bonus']");
-        if (cmbButton) {
-          cmbButton.click();
+      const offenseSecondValues = {
+        cmb: "combat-maneuver-bonus", 
+        attack: "armor-attacks", 
+        
+      };
+      if (offenseKeywords.test(updateMostRecentTabValue)) {
+        const second_value = offenseSecondValues[value] || value; // Use default value if not found
+        const offenseButton = document.querySelector(`button[data-tab-options='tabGroup:offense,tab:${value},target:js-tab-panel-${second_value}']`);
+        if (offenseButton) {
+          offenseButton.click();
           setTimeout(() => {
-            cmbButton.focus();
-            console.log("CMB tab clicked successfully!");
-          }, 300); // Delay of 300 milliseconds (adjust as needed)
-        } else {
-            console.error("CMB tab button not found.");
-        }
+              offenseButton.focus();
+              console.log("Character tab clicked successfully!");
+            }, 300); // Delay of 100 milliseconds (adjust as needed)
+          console.log("HP tab clicked successfully!");
+      } else {
+        console.error("HP tab button not found.");
+      }
+    }
+
+
         } else if (spellKeywords.test(updateMostRecentTabValue)) {
-            const spellButton = document.querySelector("button[data-tab-options='tabGroup:spells,tab:level_0,target:js-tab-panel-spell-level-0']");
+            const spellButton = document.querySelector(`button[data-tab-options='tabGroup:spells,tab:${value},target:js-tab-panel-spell-level-${valueSecondary}']`);
             if (spellButton) {
             spellButton.click();
             setTimeout(() => {
@@ -858,7 +955,7 @@ function clickMostRecentTab() {
       console.error("updateMostRecentTabValue not found in localStorage");
     }
   }
-  
+
   
   
   
