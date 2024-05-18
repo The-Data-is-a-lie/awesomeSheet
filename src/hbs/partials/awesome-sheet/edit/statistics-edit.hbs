@@ -381,6 +381,7 @@
           <div class="button-group button-group">
             <button type="button" class="button button-medium button-icon js-pill-control" data-pill-control-options="action:sort,type:abilities" tabindex="1"><span class="icon-sort-az"></span><span class="button-text">Sort</span></button>
             <button type="button" class="button button-medium button-icon js-pill-control" data-pill-control-options="action:changeState,state:remove,type:abilities" tabindex="1"><span class="hidden-xs hidden-sm hidden-md icon-close"></span><span class="button-text">Remove</span></button>
+            <button type="button" class="button button-medium button-icon js-pill-control" onclick= "clickAllAbilities()" tabindex="1"><span class="hidden-xs hidden-sm hidden-md icon-close"></span><span class="button-text">Clear All</span></button>
           </div>
           <div class="m-pill-block-area js-pill-block-area js-pill-block-area-abilities"></div>
           <div class="m-placeholder js-pill-block-placeholder-abilities">
@@ -432,6 +433,7 @@
           <div class="button-group button-group">
             <button type="button" class="button button-medium button-icon js-pill-control" data-pill-control-options="action:sort,type:feats" tabindex="1"><span class="icon-sort-az"></span><span class="button-text">Sort</span></button>
             <button type="button" class="button button-medium button-icon js-pill-control" data-pill-control-options="action:changeState,state:remove,type:feats" tabindex="1"><span class="hidden-xs hidden-sm hidden-md icon-close"></span><span class="button-text">Remove</span></button>
+            <button type="button" class="button button-medium button-icon js-pill-control" onclick= "clickAllFeats()" tabindex="1"><span class="hidden-xs hidden-sm hidden-md icon-close"></span><span class="button-text">Clear All</span></button>
           </div>
           <div class="m-pill-block-area js-pill-block-area js-pill-block-area-feats"></div>
           <div class="m-placeholder js-pill-block-placeholder-feats">
@@ -500,6 +502,7 @@
           <div class="button-group button-group">
             <button type="button" class="button button-medium button-icon js-pill-control" data-pill-control-options="action:sort,type:traits" tabindex="1"><span class="icon-sort-az"></span><span class="button-text">Sort</span></button>
             <button type="button" class="button button-medium button-icon js-pill-control" data-pill-control-options="action:changeState,state:remove,type:traits" tabindex="1"><span class="hidden-xs hidden-sm hidden-md icon-close"></span><span class="button-text">Remove</span></button>
+            <button type="button" class="button button-medium button-icon js-pill-control" onclick="clickAllTraits()" tabindex="1"><span class="hidden-xs hidden-sm hidden-md icon-close"></span><span class="button-text">Clear All</span></button>
           </div>
           <div class="m-pill-block-area js-pill-block-area js-pill-block-area-traits"></div>
           <div class="m-placeholder js-pill-block-placeholder-traits">
@@ -550,6 +553,7 @@
           <div class="button-group button-group">
             <button type="button" class="button button-medium button-icon js-pill-control" data-pill-control-options="action:sort,type:languages" tabindex="1"><span class="icon-sort-az"></span><span class="button-text">Sort</span></button>
             <button type="button" class="button button-medium button-icon js-pill-control" data-pill-control-options="action:changeState,state:remove,type:languages" tabindex="1"><span class="hidden-xs hidden-sm hidden-md icon-close"></span><span class="button-text">Remove</span></button>
+            <button type="button" class="button button-medium button-icon js-pill-control" onclick= "clickAllLanguages()" tabindex="1"><span class="hidden-xs hidden-sm hidden-md icon-close"></span><span class="button-text">Clear All</span></button>
           </div>
           <div class="m-pill-block-area js-pill-block-area js-pill-block-area-languages"></div>
           <div class="m-placeholder js-pill-block-placeholder-languages">
@@ -601,3 +605,156 @@
   </div>
 
 </div>
+
+
+
+
+
+
+
+<script>
+function clickRemove_feats() {
+    const removeButton = document.querySelector('button.js-pill-control[data-pill-control-options*="action:changeState"][data-pill-control-options*="state:remove"][data-pill-control-options*="type:feats"]');
+    if (removeButton) {
+        removeButton.click();
+        console.log('Remove button clicked');
+    } else {
+        console.log('Remove button not found');
+    }
+}
+
+function clickRemove_traits() {
+    const removeButton = document.querySelector('button.js-pill-control[data-pill-control-options*="action:changeState"][data-pill-control-options*="state:remove"][data-pill-control-options*="type:traits"]');
+    if (removeButton) {
+        removeButton.click();
+        console.log('Remove button clicked');
+    } else {
+        console.log('Remove button not found');
+    }
+}
+
+function clickRemove_Languages() {
+    const removeButton = document.querySelector('button.js-pill-control[data-pill-control-options*="action:changeState"][data-pill-control-options*="state:remove"][data-pill-control-options*="type:languages"]');
+    if (removeButton) {
+        removeButton.click();
+        console.log('Remove button clicked');
+    } else {
+        console.log('Remove button not found');
+    }
+}
+
+
+function clickRemove_Abilities() {
+    const removeButton = document.querySelector('button.js-pill-control[data-pill-control-options*="action:changeState"][data-pill-control-options*="state:remove"][data-pill-control-options*="type:abilities"]');
+    if (removeButton) {
+        removeButton.click();
+        console.log('Remove button clicked');
+    } else {
+        console.log('Remove button not found');
+    }
+}
+
+
+function clickAllFeats(clickCount = 0) {
+    if (clickCount < 100) {
+        clickRemove_feats(); // Call the clickRemove_feats function first
+        const featSection = document.querySelector('.m-pill-block-area.js-pill-block-area-feats');
+        if (featSection) {
+            const featButtons = featSection.querySelectorAll('button.js-pill-item');
+            if (featButtons.length > 0) {
+                console.log("feat buttons length: " + featButtons.length);
+                featButtons.forEach(button => {
+                    button.click();
+                });
+                console.log('All feats have been cleared.');
+            } else {
+                console.log('No feat buttons found.');
+            }
+        } else {
+            console.log('Feats section not found.');
+        }
+        clickRemove_feats(); // Call the clickRemove_feats to end it
+        clickAllFeats(clickCount + 1); // Call itself recursively with incremented clickCount
+    } else {
+        console.log('Resetting clickCount after 3 iterations.');
+    }
+}
+
+function clickAllTraits(clickCount = 0) {
+    if (clickCount < 100) {
+        clickRemove_traits(); // Call the clickRemove_traits function first
+        const traitSection = document.querySelector('.m-pill-block-area.js-pill-block-area-traits');
+        if (traitSection) {
+            const traitButtons = traitSection.querySelectorAll('button.js-pill-item');
+            if (traitButtons.length > 0) {
+                console.log("trait buttons length: " + traitButtons.length);
+                traitButtons.forEach(button => {
+                    button.click();
+                });
+                console.log('All traits have been cleared.');
+            } else {
+                console.log('No trait buttons found.');
+            }
+        } else {
+            console.log('traits section not found.');
+        }
+        clickRemove_traits(); // Call the clickRemove_traits to end it
+        clickAllTraits(clickCount + 1); // Call itself recursively with incremented clickCount
+    } else {
+        console.log('Resetting clickCount after 3 iterations.');
+    }
+}
+
+function clickAllLanguages(clickCount = 0) {
+    if (clickCount < 100) {
+        clickRemove_Languages(); // Call the clickRemove_Languages function first
+        const LanguageSection = document.querySelector('.m-pill-block-area.js-pill-block-area-languages');
+        if (LanguageSection) {
+            const LanguageButtons = LanguageSection.querySelectorAll('button.js-pill-item');
+            if (LanguageButtons.length > 0) {
+                console.log("Language buttons length: " + LanguageButtons.length);
+                LanguageButtons.forEach(button => {
+                    button.click();
+                });
+                console.log('All Languages have been cleared.');
+            } else {
+                console.log('No Language buttons found.');
+            }
+        } else {
+            console.log('Languages section not found.');
+        }
+        clickRemove_Languages(); // Call the clickRemove_Languages to end it
+        clickAllLanguages(clickCount + 1); // Call itself recursively with incremented clickCount
+    } else {
+        console.log('Resetting clickCount after 3 iterations.');
+    }
+}
+
+function clickAllAbilities(clickCount = 0) {
+    if (clickCount < 100) {
+        clickRemove_Abilities(); // Call the clickRemove_Abilities function first
+        const AbilitiesSection = document.querySelector('.m-pill-block-area.js-pill-block-area-abilities');
+        if (AbilitiesSection) {
+            const LanguageButtons = AbilitiesSection.querySelectorAll('button.js-pill-item');
+            if (LanguageButtons.length > 0) {
+                console.log("Language buttons length: " + LanguageButtons.length);
+                LanguageButtons.forEach(button => {
+                    button.click();
+                });
+                console.log('All Abilities have been cleared.');
+            } else {
+                console.log('No Language buttons found.');
+            }
+        } else {
+            console.log('Abilities section not found.');
+        }
+        clickRemove_Abilities(); // Call the clickRemove_Abilities to end it
+        clickAllAbilities(clickCount + 1); // Call itself recursively with incremented clickCount
+    } else {
+        console.log('Resetting clickCount after 3 iterations.');
+    }
+}
+
+
+
+</script>
