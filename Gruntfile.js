@@ -141,13 +141,13 @@ module.exports = function(grunt) {
           '<%= folders.build %>/js/vendor-options.js',
           '<%= folders.build %>/js/send-character-data.js',
           '<%= folders.build %>/js/mostRecentTabValue.js', 
+          '<%= folders.build %>/js/addWithDelay.js',           
           '<%= folders.build %>/js/updateCharacterDescription.js',
           '<%= folders.build %>/js/prep_for_export.js', 
           '<%= folders.build %>/js/display_functions.js', 
           '<%= folders.build %>/js/skill_ranks.js', 
           '<%= folders.build %>/js/variableMappings.js', 
           '<%= folders.build %>/js/clearExistingData.js', 
-          '<%= folders.build %>/js/addwithDelay.js',           
           '<%= folders.build %>/js/init.js' // invoke calls
 
         ],
