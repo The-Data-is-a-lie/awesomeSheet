@@ -19,8 +19,10 @@ function skill_ranks_func (skillRanksObject, includeCustomCheckbox) {
         // Update the value/text content as before
         if (element.tagName.toLowerCase() === 'input') {
           element.value = skillRank;
+          console.log("element.value", element.value)
         } else {
           element.textContent = skillRank;
+          console.log("element.textContent", element.textContent)
         }
 
         }
@@ -36,4 +38,6 @@ function skill_ranks_func (skillRanksObject, includeCustomCheckbox) {
   
 
 
-export { skill_ranks_func }
+// export { skill_ranks_func }
+
+window.skill_ranks_func = skill_ranks_func

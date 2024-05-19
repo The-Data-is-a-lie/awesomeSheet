@@ -655,105 +655,90 @@ function clickRemove_Abilities() {
 }
 
 
-function clickAllFeats(clickCount = 0) {
-    if (clickCount < 100) {
-        clickRemove_feats(); // Call the clickRemove_feats function first
-        const featSection = document.querySelector('.m-pill-block-area.js-pill-block-area-feats');
-        if (featSection) {
-            const featButtons = featSection.querySelectorAll('button.js-pill-item');
-            if (featButtons.length > 0) {
-                console.log("feat buttons length: " + featButtons.length);
-                featButtons.forEach(button => {
-                    button.click();
-                });
-                console.log('All feats have been cleared.');
-            } else {
-                console.log('No feat buttons found.');
-            }
-        } else {
-            console.log('Feats section not found.');
+function clickAllFeats() {
+    clickRemove_feats(); // Call the clickRemove_feats function first
+    const featSection = document.querySelector('.m-pill-block-area.js-pill-block-area-feats');
+    if (featSection) {
+        let featButtons = featSection.querySelectorAll('button.js-pill-item');
+        while (featButtons.length > 0) {
+            console.log("feat buttons length: " + featButtons.length);
+            featButtons.forEach(button => {
+                button.click();
+            });
+            console.log('All feats have been cleared.');
+            
+            // Re-select buttons to check if any new ones appeared
+            featButtons = featSection.querySelectorAll('button.js-pill-item');
         }
-        clickRemove_feats(); // Call the clickRemove_feats to end it
-        clickAllFeats(clickCount + 1); // Call itself recursively with incremented clickCount
     } else {
-        console.log('Resetting clickCount after 3 iterations.');
+        console.log('Feats section not found.');
     }
+    clickRemove_feats(); // Call the clickRemove_feats to end it
 }
 
-function clickAllTraits(clickCount = 0) {
-    if (clickCount < 100) {
-        clickRemove_traits(); // Call the clickRemove_traits function first
-        const traitSection = document.querySelector('.m-pill-block-area.js-pill-block-area-traits');
-        if (traitSection) {
-            const traitButtons = traitSection.querySelectorAll('button.js-pill-item');
-            if (traitButtons.length > 0) {
-                console.log("trait buttons length: " + traitButtons.length);
-                traitButtons.forEach(button => {
-                    button.click();
-                });
-                console.log('All traits have been cleared.');
-            } else {
-                console.log('No trait buttons found.');
-            }
-        } else {
-            console.log('traits section not found.');
+
+function clickAllTraits() {
+    clickRemove_traits(); // Call the clickRemove_traits function first
+    const traitSection = document.querySelector('.m-pill-block-area.js-pill-block-area-traits');
+    if (traitSection) {
+        let traitButtons = traitSection.querySelectorAll('button.js-pill-item');
+        while (traitButtons.length > 0) {
+            console.log("trait buttons length: " + traitButtons.length);
+            traitButtons.forEach(button => {
+                button.click();
+            });
+            console.log('All traits have been cleared.');
+            // Re-select buttons to check if any new ones appeared
+            traitButtons = traitSection.querySelectorAll('button.js-pill-item');
         }
-        clickRemove_traits(); // Call the clickRemove_traits to end it
-        clickAllTraits(clickCount + 1); // Call itself recursively with incremented clickCount
     } else {
-        console.log('Resetting clickCount after 3 iterations.');
+        console.log('Traits section not found.');
     }
+    clickRemove_traits(); // Call the clickRemove_traits to end it
 }
 
-function clickAllLanguages(clickCount = 0) {
-    if (clickCount < 100) {
-        clickRemove_Languages(); // Call the clickRemove_Languages function first
-        const LanguageSection = document.querySelector('.m-pill-block-area.js-pill-block-area-languages');
-        if (LanguageSection) {
-            const LanguageButtons = LanguageSection.querySelectorAll('button.js-pill-item');
-            if (LanguageButtons.length > 0) {
-                console.log("Language buttons length: " + LanguageButtons.length);
-                LanguageButtons.forEach(button => {
-                    button.click();
-                });
-                console.log('All Languages have been cleared.');
-            } else {
-                console.log('No Language buttons found.');
-            }
-        } else {
-            console.log('Languages section not found.');
+
+function clickAllLanguages() {
+    clickRemove_Languages(); // Call the clickRemove_Languages function first
+    const languageSection = document.querySelector('.m-pill-block-area.js-pill-block-area-languages');
+    if (languageSection) {
+        let languageButtons = languageSection.querySelectorAll('button.js-pill-item');
+        while (languageButtons.length > 0) {
+            console.log("language buttons length: " + languageButtons.length);
+            languageButtons.forEach(button => {
+                button.click();
+            });
+            console.log('All languages have been cleared.');
+            // Re-select buttons to check if any new ones appeared
+            languageButtons = languageSection.querySelectorAll('button.js-pill-item');
         }
-        clickRemove_Languages(); // Call the clickRemove_Languages to end it
-        clickAllLanguages(clickCount + 1); // Call itself recursively with incremented clickCount
     } else {
-        console.log('Resetting clickCount after 3 iterations.');
+        console.log('Languages section not found.');
     }
+    clickRemove_Languages(); // Call the clickRemove_Languages to end it
 }
 
-function clickAllAbilities(clickCount = 0) {
-    if (clickCount < 100) {
-        clickRemove_Abilities(); // Call the clickRemove_Abilities function first
-        const AbilitiesSection = document.querySelector('.m-pill-block-area.js-pill-block-area-abilities');
-        if (AbilitiesSection) {
-            const LanguageButtons = AbilitiesSection.querySelectorAll('button.js-pill-item');
-            if (LanguageButtons.length > 0) {
-                console.log("Language buttons length: " + LanguageButtons.length);
-                LanguageButtons.forEach(button => {
-                    button.click();
-                });
-                console.log('All Abilities have been cleared.');
-            } else {
-                console.log('No Language buttons found.');
-            }
-        } else {
-            console.log('Abilities section not found.');
+
+function clickAllAbilities() {
+    clickRemove_Abilities(); // Call the clickRemove_Abilities function first
+    const abilitiesSection = document.querySelector('.m-pill-block-area.js-pill-block-area-abilities');
+    if (abilitiesSection) {
+        let abilitiesButtons = abilitiesSection.querySelectorAll('button.js-pill-item');
+        while (abilitiesButtons.length > 0) {
+            console.log("abilities buttons length: " + abilitiesButtons.length);
+            abilitiesButtons.forEach(button => {
+                button.click();
+            });
+            console.log('All abilities have been cleared.');
+            // Re-select buttons to check if any new ones appeared
+            abilitiesButtons = abilitiesSection.querySelectorAll('button.js-pill-item');
         }
-        clickRemove_Abilities(); // Call the clickRemove_Abilities to end it
-        clickAllAbilities(clickCount + 1); // Call itself recursively with incremented clickCount
     } else {
-        console.log('Resetting clickCount after 3 iterations.');
+        console.log('Abilities section not found.');
     }
+    clickRemove_Abilities(); // Call the clickRemove_Abilities to end it
 }
+
 
 
 
