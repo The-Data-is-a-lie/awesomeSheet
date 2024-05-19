@@ -90,7 +90,7 @@ let spellLists, featsList, day_list, known_list;
 function updateCharacterDescription() {
   // const characterDescriptionElement = document.getElementById('basics-character-description');
 
-  fetch('http://localhost:5000/get_character_data', {
+  fetch('https://pathfinder-char-creator.onrender.com/get_character_data', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json',
