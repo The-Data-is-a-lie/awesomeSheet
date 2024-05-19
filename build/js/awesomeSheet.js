@@ -564,7 +564,7 @@ var autoSuggest = (function() {
     if (input) {
       input.addEventListener("input", function() {
         clearTimeout(_timer_autoSuggest);
-        _timer_autoSuggest = setTimeout(_delayRender, 200, this);
+        _timer_autoSuggest = setTimeout(_delayRender, 25, this);
       }, false);
       input.addEventListener("keydown", function(event) {
         if (event.keyCode == 13) {
@@ -648,6 +648,7 @@ var autoSuggest = (function() {
     _removeDocumentEvent();
   };
 
+
   function render(input) {
     _currentInput = input;
     var searchTerm = _currentInput.value.replace(/^\s+/, "").replace(/\s+$/, "");
@@ -655,6 +656,26 @@ var autoSuggest = (function() {
     var autoSuggest = helper.getClosest(_currentInput, ".js-auto-suggest");
     var autoSuggestOptions = helper.makeObject(autoSuggest.dataset.autoSuggestOptions);
     var suggestItems;
+
+    console.log("Search term:", searchTerm);
+    console.log("Auto suggest options:", autoSuggestOptions);
+
+    
+
+    
+    if (searchTerm != "") {
+      suggestItems = data.get({
+        type: autoSuggestOptions.type,
+        name: searchTerm
+      });
+
+      console.log("Fetching data from:", autoSuggestOptions.type, "with name:", searchTerm);
+
+
+      if (autoSuggestOptions.type != "") {
+        console.log("Retrieved abilities:", suggestItems);
+      }      
+    }
 
     var _populateList = function(list) {
       var _populate = function() {
@@ -669,8 +690,9 @@ var autoSuggest = (function() {
           // anchor.setAttribute("data-spells-data", "index:#" + arrayItem.index);
           anchor.addEventListener("click", function() {
             if (autoSuggestOptions.type == "spells") {
-              spells.add(_currentInput, arrayItem.index);
-            } else if (autoSuggestOptions.type == "feats" || autoSuggestOptions.type == "traits" || autoSuggestOptions.type == "languages" || autoSuggestOptions.type == "abilities") {
+              spells.add(_currentInput, arrayItem.index);             
+            } else if (autoSuggestOptions.type == "feats" || autoSuggestOptions.type == "traits" || autoSuggestOptions.type == "languages" || autoSuggestOptions.type == "abilities" ) {
+              
               pill.add({
                 object: data.get({
                   type: autoSuggestOptions.type,
@@ -757,6 +779,16 @@ var autoSuggest = (function() {
             };
           };
 
+          if (autoSuggestOptions.type == "abilities") {
+            if (arrayItem.description) {
+              var resultMeta = document.createElement("i");
+              resultMeta.setAttribute("class", "m-auto-suggest-result-meta");
+              resultMeta.textContent = helper.capFirstLetter(arrayItem.description);
+              text.appendChild(resultMeta);
+            };
+          };
+
+          // to add abilities to the auto search, we need to add it to (data, auto-suggest, + auto suggest html (usually in statstics-edit.hbs) confirm the code is correct otherwise could lead to issues)
           anchor.appendChild(text);
 
           if (autoSuggestOptions.type == "spells") {
@@ -767,15 +799,6 @@ var autoSuggest = (function() {
               anchor.appendChild(textSub);
             };
           };
-
-          if (autoSuggestOptions.type == "abilities") {
-            if (arrayItem.type) {
-              var resultMeta = document.createElement("i");
-              resultMeta.setAttribute("class", "m-auto-suggest-result-meta");
-              resultMeta.textContent = helper.capFirstLetter(arrayItem.type);
-              text.appendChild(resultMeta);
-            };
-          };          
 
           li.appendChild(anchor);
           list.appendChild(li);
@@ -1095,6 +1118,10 @@ var blank = (function() {
         all: [],
         notes: ""
       },
+      abiltiies: {
+        all: [],
+        notes: ""
+      },      
       power: {
         all: []
       }
@@ -24224,734 +24251,741 @@ var data = (function() {
     "A Shining Beacon", "A Sure Thing", "Aballonian Resilience", "Abendego Spellpiercer", "Aberration Hunter", "Absalom Hotspur", "Absolute Loyalty", "Accelerated Drinker", "Acolyte of Razmir", "Acrobat", "Acupuncturist", "Adaptable Flatterer", "Adopted", "Adrift", "Adroit", "Advantageous Distraction", "Adventurous Explorer", "Advocate for the Empire", "Aerial Observer", "Affable", "Affinity of the Elements", "Agent of Chance", "Agent of Dusk", "Agent of the Sultana (Plane of Earth)", "Aid Allies", "Air-Touched", "Airship Captain (Plane of Air)", "Akitonian Ferocity", "Alabaster Odalisque", "Alabaster Outcast", "Alchemical Adept", "Alchemical Breath", "Alchemical Intuition", "Alchemical Prodigy", "Alchemical Prodigy", "Alchemists Apprentice", "Alert", "Alien Origins", "Alkenstar Defender", "Alluring", "Almost Human", "Altruistic Diplomat", "Ambassador", "Ambitious", "Ambush Training", "Amiable Blunder", "Anatomist", "Ancient Explorer", "Andoren Freedom Fighter", "Animal Friend", "Animalistic Affliction", "Anticipate Evil", "Antiquities Smuggler", "Aquatic Survivalist (Plane of Water)", "Arcane Dabbler", "Arcane Dabbler", "Arcane Depth", "Arcane Revitalization", "Arcane Student", "Arcane Temper", "Armor Expert", "Arms Master", "Artifact Hunter", "Artisan", "Artistic Dilettante", "Ascendant Recollection", "Asmodean Demon Hunter", "Aspiring Bard", "Aspiring Hellknight", "Assimilated Native", "Attuned to the Ancestors", "Augmented Disguise", "Auspicious Tattoo", "Authoritarian", "Avid Reader", "Awakened from Stasis", "Axe to Grind", "Azlant Fanatic", "Backstabber", "Bad Reputation", "Balancer's Banishing", "Balloon Headed", "Bandit", "Barroom Talespinner", "Bastard", "Bastard", "Battlefield Caster", "Battlefield Disciple", "Battlefield Surgeon", "Beacon of Faith", "Beast Bond", "Beast Bully", "Beast of the Society", "Bellflower Tiller", "Beneficient Touch", "Bent Body", "Berserker of the Society", "Best Friend", "Betrayed Ex-Noble (City of Brass)", "Big Boned", "Big Ears", "Birthmark", "Black Powder Bravado", "Black Powder Fortune", "Black Powder Interjection", "Black Sheep", "Blade Bravado", "Blade of Mercy", "Blade of the Society", "Bladed Magic", "Blessed", "Blessed Touch", "Blessing of Darkness", "Blessing of the Feast", "Blood of Dragons", "Blood of Pharaohs", "Blood Stalker", "Blood Steed", "Blooded", "Bloodthirsty", "Bloody-Minded", "Boar Resilience", "Boarded in Cheliax", "Boarded in Mediogalti", "Boarded in the Mwangi Expanse", "Boarded in the Shackles", "Boarded in Varisia", "Bog Scamp", "Border Guard", "Born Damned", "Born in the Light", "Born to the Water", "Born under the Green Star", "Born under the Stranger", "Bouncy", "Bounty Hunter", "Bralani's Step", "Brastlewark Businessman", "Bred for War", "Brewmaster", "Briar Bandit", "Brigand", "Broken Mind", "Bruising Intellect", "Brute", "Buccaneer's Blood", "Bullied", "Bully", "Buried Anxiety", "Burnished Skin", "Calculated Bribe", "Calistrian Courtesan", "Call for Help", "Called", "Candidate for Perfection", "Canter", "Captain's Blade", "Caravan Drover", "Caravan Guard", "Careful Combatant", "Carefully Hidden", "Caretaker", "Carnation Scales", "Celestial Tracker", "Cellular Match", "Centaur Vengeance", "Centered", "Chain Master", "Chance Savior", "Channel the Earth (Plane of Earth)", "Charlatan", "Charming", "Cheap to Feed", "Cheat Death", "Child of Infamy", "Child of Nature", "Child of the Crusades", "Child of the Moon", "Child of the Necropolis", "Child of the Streets", "Child of the Temple", "Child of Zolurket", "Childhood Crush", "Chip on the Shoulder", "Chivalrous", "Chosen Child", "Chosen One", "Citizen of Eleder", "Citizen of Kalabuto", "Civilized", "Clan Artisan", "Classically Schooled", "Cleansing Light", "Cleansing the Twisted", "Clearheaded", "Clergy Member", "Clever Wordplay", "Cliff Jumper", "Cliff-Master", "Clumsy Slave", "Coherent Rage", "Coin Hoarder", "Coincunning", "Cold and Calculating", "Cold Fortitude", "Cold Heart", "Collector", "Colonial", "Colonial Entitlement", "Colonial Sympathizer", "Color Thief", "Commercial Savvy", "Community-Minded", "Comparative Religion", "Competitive", "Confidante to the Oppressed", "Conscientious Miner", "Conspiracy Hunter", "Contagious Mettle", "Contract Master", "Convincing Liar", "Cooperative Combatant", "Corpse Cannibal", "Corpse Dodger", "Corpse Hunter", "Cosmopolitan", "Courageous", "Covenant of Abaddon", "Creative Manipulator", "Criminal", "Crocodile Swim", "Cross-Disciplined", "Cross-Knowledge", "Crowd Dodger", "Crusader Tactician", "Curse in the Blood", "Cynic", "Cynical Ear", "Cypher Resistance", "Dangerously Curious", "Dark Magic Affinity", "Darklands Delver", "Dawn Renewal", "Deadly Rush", "Dealer", "Dealmaker", "Death’s Deputy", "Deathkeeper", "Deathspeaker", "Deathtouched", "Deck Fighter", "Dedicated Defender", "Deep Guardian", "Deep Marker", "Deepsea Native", "Defender of the Society", "Defensive Strategist", "Deformed", "Deft Dodger", "Defy Madness", "Demon Eradicator", "Demon Slayer", "Demon Smiter", "Demonic Persuasion", "Dervish", "Desert Child", "Desert Nomad", "Desert Shadow", "Desperate Resolve", "Desperate Speed", "Destined Diplomat", "Destined For Greatness", "Destructive Blows", "Detect Disobedience", "Devil's Mark", "Devoted Healer", "Devotee of a Dead God", "Devotee of Kalistrade", "Devotee of the Green", "Devotee of the Old Gods", "Diabolical Dabbler", "Diabolist Raised", "Dilettante Artist", "Dim Seer", "Dirty Fighter", "Discerning Beliefs", "Disdainful Defender", "Disease Resistant", "Disillusioned", "Dismantle Order", "Dispelled Battler", "Distance Aptitude", "Divine Deceiver", "Divine Warrior", "Dockside Brawler", "Dog-Sniff-Hate", "Dominator", "Domineering", "Doublespeak", "Dowsing", "Draconic Echo", "Draconic Vigil", "Dragonslayer", "Drug Addict", "Dtang Ma Bloodline", "Dualborn (Suli)", "Dueling Cloak Adept", "Dunewalker", "Dungeon Dweller", "Durable Change", "Dusk Dancer", "Duskwalker Agent", "Ear for Music", "Earning Your Freedom", "Earth-Touched", "Earthbound", "Earthsense (Oread)", "Ease of Faith", "Eastern Mysteries", "Easy Way or the Hard Way", "Egorian School Apprentice", "Elaborate Trapper", "Eldritch Delver", "Eldritch Smith", "Elemental Endowment", "Elemental Pupil", "Elven Pantheist", "Elven Reflexes", "Elven Serenity", "Emissary", "Empty Heart~~~ Full Heart", "Empyreal Focus", "Enduring Mutagen", "Enemy of Slavers", "Enemy of the Undead", "Enlightened Warrior", "Eoxian Experiment", "Equality for All", "Erastil's Speaker", "Ethical Leader", "Etymologist", "Evasive Sting", "Ever Home", "Ever Wary", "Evident Supporter", "Exalted of the Society", "Exchange Agent", "Excitable", "Exiled Scholar", "Expert Boarder", "Expert Distractor (Ifrit)", "Expert Duelist", "Expert Smuggler", "Explorer", "Extremely Fashionable", "Eye for Plunder", "Eye of the Falcon", "Eye of the Father", "Eyes and Ears of the City", "Eyes of the Sun", "Eyes of the Wild", "Failed Apprentice", "Faith Healer", "Faith's Hunter", "Faithful Arodenite", "Faithful Artist", "Faithful Feedback", "Famed Performer", "Family Connections", "Fanatic", "Fangwood Diplomat", "Fashionable", "Fast-Talker", "Fatal Trapper", "Fate's Favored", "Favored Child", "Fearless Defiance", "Feline Instinct", "Fencer", "Fey Protection", "Fiend Blood", "Fiendish Confidence", "Fiendish Presence", "Fiery Dominance (Plane of Fire)", "Fiery Glare", "Fight with the Flock", "Final Embrace", "Finding Haleen", "Finish the Fight", "Fire-Tongued", "Firebug", "Firebug", "Fires of Hell", "First Memories", "Flair for Destruction", "Flame of the Dawnflower", "Flame-Touched", "Flames of Hell", "Flotsam", "Flounderer", "Focused Burn", "Focused Disciple", "Focused Mind", "Following Breeze", "Fools for Friends", "Forbidden Knowledge", "Force For Good", "Foreign Opportunist", "Forlorn", "Former Assassin", "Fortified", "Fortified Drinker", "Fortunate", "Foster Child", "Foul Belch", "Framed", "Free Spirit", "Freed Slave", "Freed Slave", "Freed Slave", "Freedom Fighter", "Freedom Fighter", "Freedom Fighter", "Freedom Fighter", "Friend in Every Town", "Friend of the Dead", "Friend of the Family", "Friend of the Fey", "Friendless", "Friends in High Places", "Friends in Low Places", "Frightening Speed", "Frontier-Forged", "Frost Spitter", "Frostborn", "Fury", "Gallant Imposter", "Garbage Picker", "Genie Blood", "Genie-Caller", "Get the Cargo Through", "Ghost Sight", "Ghost Survivor", "Ghoulish Affinity", "Gifted Adept", "Glib Barrister", "Glory of Old", "Gnoll Killer", "Goblin Foolhardiness", "Goblin Pirate", "God Scorn", "Golden Scales", "Goldfinger", "Goldsniffer", "Good Dreams", "Good Influence", "Good Natured", "Gravelwalker", "Greasy Palm", "Greater Adept of the Society", "Greater Link", "Greater Purpose", "Gregarious", "Grief-Filled", "Grim Optimism", "Grit Goggles", "Grounded", "Group Fighter", "Guardian of the Forge", "Guerilla", "Half-Forgotten Secrets", "Hard to Kill", "Hardly a Fool", "Harrow Born", "Harrow Chosen", "Harvester", "Hatred of the Gods", "Havoc of the Society", "Heart of Clay", "Heat Fortitude", "Heavenly Touch", "Hedge Magician", "Heirloom Weapon", "Hellknight Ancestry", "Helpful", "Helpful", "Hermean Paragon", "Hero Worship", "Hidden Hand", "Highlander", "Hill Fighter", "Historian", "History of Heresy", "Hobgoblin Slayer", "Holdout", "Holy Schemer", "Holy Tattoo", "Honest", "Honey-Tongued", "Honeyed Tongue", "Honeyed Words", "Hongal Bloodrider", "Honored Fist of the Society", "Horrifying Mind", "Horse Lord", "Horse Lord", "Humble Beginnings", "Hunter's Blood", "Hunter's Eye", "Hunter's Knack", "Hwan Artist", "I Know a Guy", "Iadaran Illusionist", "Ice Walker", "Icy Mementos", "Illuminator", "Imperial Soldier", "Imposing Scion", "Impressive Presence", "Improvisational Equipment", "Improvised Defense", "Inciter", "Indelible Ire", "Indentured Blacksmith", "Indomitable", "Indomitable Faith", "Inexorable Authority", "Infernal Bastard", "Infernal Influence", "Influence", "Inheritor", "Inheritor", "Inner Beauty", "Innocent", "Inoculated", "Inquisitive Archaeologist", "Insider Knowledge", "Insistent Benefactor", "Inspired", "Inspired by Greatness", "Inspiring", "Inspiring Rush", "Inspiring Speaker", "Instant Friendship (Suli)", "Instigator of Rebellion", "Intense Artist", "Into Enemy Territory", "Intrepid Delver", "Inured to Death", "Inured to Disease", "Iron Control", "Iron Grip", "Iron Liver", "Iron Lungs", "Iron Mind", "Irrepressible", "Isger Fixer", "Isgeri Orphan", "Issian", "Issian Noble", "Jenivere Crew", "Jungle Diplomat", "Jungle Fighter", "Jungle Guide", "Jungle Resilience", "Jungle Walker", "Just Like New", "Justiciar", "Kami Talker", "Keen Appraiser", "Keeper of the Ancestral Scrolls", "Keeper of the Veil", "Killer", "Kin Bond", "Kin Guardian", "Know the Land", "Knowing the Enemy", "Knowledgeable Caster", "Kobold Faith", "Kobold Herbalist", "Kobold's Neighbor", "Kuthite Caster", "Kwanlai Believer", "Kyonin Gatekeeper", "Lair Snake", "Lantern Spirit", "Lapsed Faith", "Larger Than Life", "Lastwall Cavalry Rider", "Latent Psion", "Law Enforcer", "Left Behind", "Legacy of Sand", "Legalistic Liberation", "Lessons of Chaldira", "Lettered", "Life of Toil", "Light Sleeper", "Lightning-Blessed", "Lillend's Harp", "Linebreaker", "Lingshen's Finest", "Linguistic Genius", "Linked Surge", "Liquid-Tongued", "Local Know-It-All", "Long Jumper", "Looking for Work", "Loreseeker", "Lost Nobility", "Lost Role Model", "Love Lost", "Lover of the Law", "Loyalty", "Loyalty across Lifetimes", "Lucid Dreamer", "Lucky Turnabout", "Lunar Birth ", "Lycanthropic Bloodlust", "Maestro of the Society", "Magic Crafter", "Magic is Life", "Magical Flair", "Magical Knack", "Magical Lineage", "Magical Talent", "Making Good on Promises", "Malleable Magic", "Mammoth Master", "Mana Wastes Survivalist", "Marid's Fury (Undine)", "Marked by Unknown Forces", "Market Rat", "Martial Manuscript", "Martial Performer", "Martyr's Blood", "Master of Peaks", "Master of Pentacles", "Master of the Sudden Strike", "Masterful Demeanor", "Mastery of Form", "Mathematical Prodigy", "Mediator", "Medic", "Memorable", "Mentored", "Mercenary", "Merchant", "Merchant of Katheer", "Merchant's Child", "Meridian Strike", "Meticulous Artisan", "Meticulous Concoction", "Militant Merchant", "Militia Veteran", "Mind Over Matter", "Mind Trapper", "Miner", "Missing Child", "Missionary", "Monkey Goblin", "Monument Scholar", "Mordant Heritage", "Mother's Rage", "Mother’s Teeth", "Motherless", "Mountain Guide", "Mummy-Cursed", "Mummy-Touched", "Muscle of the Society", "Mutabi-qi Explorer", "Mwangi Scholar", "Mystery Initiate", "Nanite Revival", "Narrows Survivor", "Native", "Natural Born Sailor", "Natural-Born Leader", "Naturally Gifted", "Nature's Mimic", "Necropolis Native", "Necrotic Aura", "Never Stop Shooting", "Nidalese Shadowcaster", "Nightstall Urchin", "Nimble Fingers~~~ Keen Mind", "No Escape", "Noble Born", "Noble Savage", "Nomadic", "Nonchalant Thuggery", "Nontraditional Native", "Numerological Gift", "Numerologist", "Oagan Diver", "Oathbound", "Obsequious Morsel", "Observant", "Oenopion Alchemist", "Offspring of the Ascension", "Old Before Your Time", "Omen", "On the Payroll", "Ooze Defense", "Open Hand and Mind", "Open-Minded Explorer", "Opener of Doors", "Operatic", "Opportunistic", "Optimistic Gambler", "Orc Impaler", "Ordinary", "Orphaned", "Osirionologist", "Outcast", "Outcast's Intuition", "Outlander", "Overwhelming Beauty", "Pain Artist", "Pain Is Pleasure", "Partial Protege", "Passionate Believer", "Passionate Inertia", "Pathfinder's Focus", "Patient Calm", "Patient Optimist", "Pearl Diver", "Pearl Diver", "Peg Leg", "Perfect Servant", "Perfectionist's Brew", "Performance Artist", "Perpetual Companion", "Perseverance", "Persuasive", "Pesh Addict", "Pesh Dealer", "Pillager", "Pioneer", "Pirate", "Plainsman", "Planar Historian (Plane of Water)", "Planar Negotiator", "Planar Savant", "Planar Scholar (Plane of Air)", "Planetar's Visions", "Pomp and Pageantry", "Possessed", "Potent Concoctions", "Poverty-Stricken", "Power of Suggestion", "Practiced Deception", "Practiced Impression", "Pragmatic Activator", "Prayer Breaker", "Precise Treatment", "Precision Hearing", "Precocious Spellcaster", "Prehensile Whip", "Pride of the Diamond Empire", "Prideful Temper", "Prince/Princess", "Principled", "Prismati Player", "Privileged Slave", "Prolong Magic", "Proper Training", "Prophesied", "Propitiation", "Proud Tribesman", "Providential Passenger", "Provider", "Punish Insurrection", "Purchased Loyalty", "Pure Legion Recruit", "Purity of Faith", "Purple Scales", "Pustular", "Pyromancer", "Quain Martial Artist", "Quantium University Graduate", "Quick Learner", "Rabble Rebel", "Rahadoumi Cultist", "Rahadoumi Disbeliever", "Rapscallion", "Rat Squeeze", "Reactionary", "Rebel Leader", "Reckless", "Reckless Contempt", "Reclaiming Your Roots", "Redeemer", "Regional Influence", "Regional Recluse", "Reincarnated", "Relic Hunter", "Relic-Proof", "Reluctant Apprentice", "Repel Sin", "Repulsive", "Rescued", "Researching the Blot", "Resigned", "Resilient", "Resilient Caster", "Resolve of the Rejected", "Rest for the Wicked", "Restless Hunger", "Resurrected", "Reviving Rest", "Rice Runner", "Rich Parents", "Rider of Paresh", "River Fighter", "River Freedom", "River Rat", "Riverfolk", "Rostlander", "Rough and Ready", "Rude Songs", "Ruin Raider", "Ruthless", "Sacred Avenger", "Sacred Conduit", "Sacred Smasher", "Sacred Touch", "Sandy Ambush", "Sargavan Guard", "Savage", "Savage Breaker", "Savanna Hunter", "Savannah Child", "Savant", "Scaly Ally", "Scarred by Space Pirates", "Scarred Descendant", "Scholar of Ruins", "Scholar of the Great Beyond", "Schooled Inquisitor", "Scorned by Magic", "Scouting for Fiends", "Scrapper", "Scrounger", "Sea-Souled", "Searing Beacon", "Seasoned Climber", "Second Tongue", "Secret Knowledge", "Secret of the Impossible Kingdom", "Secret Revolutionary", "Secret-Keeper", "Secrets of the Sphinx", "Seeker", "Seeker of Brightness", "Seeking Adventure", "Seer of Reality", "Selective Health", "Self-Sacrifice", "Self-Taught Scholar", "Sense of Order", "Sensing Imperfection", "Sensual Graces", "Serpent Runner", "Serpentine Squeeze", "Shackles Seafarer", "Shadow Child", "Shadow Diplomat", "Shadow Stabber", "Shadow Whispers", "Shadowsight", "Shared Curse", "Sharkchild", "Shenmen Prospector", "Shield Bearer", "Shift the Blame", "Ship's Surgeon", "Shiv", "Shoanti Tribesman", "Shoreline Skirmisher", "Shrouded Casting", "Signaler", "Signature Moves", "Silent Watcher", "Silvertongued Eunuch", "Simple Disciple", "Skater's Balance", "Skeptic", "Skilled Telepath", "Sky Spirit Worshiper", "Skymetal Affinity", "Slave Smuggler", "Slaver", "Slayer of the Deep", "Slippery", "Slippery Step", "Slithering Stride", "Smoke Resistant", "Snake Bleeder", "Snake Hater", "Snap Ignition", "Sneaky Swimmer", "Snowbound", "Snowstride", "Soaring Sprinter", "Soldier of the Faith", "Solidarity (City of Brass)", "Soul Eater", "Soul-Drinker", "Sound of Mind", "Sovyrian Pantheist", "Spark of Creation", "Speech of the Wilds", "Spell Duel Prodigy", "Spell Intuition", "Sphinx Riddler", "Sphinxfriend", "Spidery Climber ", "Spirit Guide", "Spirit Sense", "Spirit Talker", "Spirits in the Stone", "Spiritual Forester", "Sprint", "St. Clydwell's Ward", "Stable", "Stage Magic", "Stalwart of the Society", "Starchild", "Stargazer", "Startling Report", "Statuesque (Oread)", "Stealthy Escape", "Steel Skin", "Stoic Dignity", "Stoic Optimism", "Storm Hunter", "Storm Pilot", "Storm-Touched", "Stormrunner", "Storyteller", "Stowaway", "Stream Nomad", "Strength Foretold", "Strength of Body", "Strength of the Barghest", "Strength of the Land", "Strength of the Sun", "Strip the Veils", "Strong Arm~~~ Supple Wrist", "Strong Heart", "Strong Swimmer", "Strong Willed", "Student of Philosophy", "Student Survivalist", "Style Sage", "Subject of Study", "Subjective Truth", "Successful Shirker", "Suck In Your Gut", "Suicidal", "Sun Orchid Harvester", "Sun-Blessed ", "Superior Clutch", "Superstitious", "Superstitious", "Superstitious Ward", "Supportive", "Surface Stranger", "Surprise Weapon", "Survivor", "Suspicious", "Swamp Rebel", "Swamp Survivor", "Sword Scion", "Swordlord's Page", "Sworn Enemy", "Tactician", "Tactile Telekinesis", "Talented", "Talented Organizer", "Tar-Baphon's Whisper / Sotto Voce", "Tattooed Mystic", "Teacher’s Pet", "Teaching Mistake", "Technic Tinkerer", "Tempter's Tongue", "Tenacious Shifting", "Terrifying Lunge", "The City Protects", "The Flexing Arm", "The Pathfinder's Exile", "Theoretical Magician", "Third Eye", "Thoroughbred", "Thoughtful Wish-Maker (Plane of Fire)", "Thrall Spotter", "Threatening Defender", "Thrown-Together Fashion", "Thunderborn (Sylph)", "Thuvian Merchant", "Tianjing Temple Guard", "Tiger Brigadier", "Tiger's Claw", "Tireless Avenger", "Tireless Logic", "Toilcrafter", "Tomb Raider", "Tongue of Many Towns", "Touched by the Sea", "Touched by the Sky", "Tough Skin", "Town Gossip", "Toxophilite", "Tracker of the Society", "Trade Talk", "Trailblazer", "Transitional", "Transmuter", "Trap Finder", "Trap Savvy", "Traumatic Shift", "Treerazer’s Bane", "Trench Navigator", "Triaxian Dragonslayer ", "Triaxian Tradition", "Trickster", "Trifler", "Tropical Botanist", "Tropical Upbringing", "Trouper", "Trustworthy", "Truth's Agent", "Tundra Child", "Tunnel Fighter", "Twilight Zeal", "Twinned Presence", "Two-World Magic", "Ugly Swine", "Unabashed Gall", "Unblemished Barrel", "Undead Crusader", "Undead Slayer", "Undead Slayer", "Under Siege", "Underling", "Underlying Principals", "Undermarket Smuggler", "Underworld Explorer", "Undine Loyalty", "Unearth Secrets", "Unflappable Arrogance (Ifrit)", "Unflinching Faith", "Unhappy Childhood", "Unhinged Mentality", "Unidentifiable Appeal", "Unintentional Linguist", "Unnatural Presence", "Unnatural Revenge", "Unorthodox Strategy", "Unpredictable", "Unpredictable Reactions", "Unscathed", "Unseen but Not Undone", "Unspeakable Bond", "Unstable Mutagen", "Uskwood Hunter", "Ustalavic Noble", "Uwaga Highlander", "Vagabond Child", "Valashmai Veteran", "Varisian Wanderer", "Veiled Disciple", "Vengeful", "Venicaan Medic", "Venom-Drenched", "Vermin Wrangler", "Veteran of Battle", "Vigilant Battler", "Viking Blood", "Vile Kiss", "Vindictive", "Vindictive Strike", "Voice of Monsters", "Voice of Velvet", "Void Child", "Volatile Conduit", "Walking Ward", "Wanderer's Shroud", "Wanderlust", "Wardbreaker", "Warrior of Old", "Warrior Poet", "Warsmith", "Wary", "Wasp Whisperer", "Watchdog", "Watching Taldor", "Water-Touched", "Wayang Spellhunter", "Weapon of Peace", "Weapon Style", "Weathered Emissary", "Well Bred", "Well-Informed", "Westcrown Firebrand", "Wharf Rat", "Whisper Woods Hunter", "Whiteout (Undine)", "Whole-Hearted", "Wicked Leader", "Wind-Carried Voices (Sylph)", "Winter Warrior", "Winter's Soul", "Wisdom in the Flesh", "Wise Teacher", "Without a Past", "Witty Repartee", "Wolf Cub", "World Traveler", "Worldly", "Xa Hoi Soldier", "Younger Sibling", "Youthful Mischief", "Zealot", "Zealous Striker", "Zest for Battle"
   ];
 
-  var _all_languagesObject = null;
-  var _all_languagesName = [
-    "Abyssal", "Aklo", "Aquan", "Auran", "Celestial", "Common", "Draconic", "Drow Sign Language", "Druidic", "Dwarven", "Elven", "Giant", "Gnome", "Goblin", "Gnoll", "Halfling", "Ignan", "Infernal", "Orc", "Sylvan", "Terran", "Undercommon"
-  ];
-
   var _all_abilitiesObject = null;
   var _all_abilitiesName = [
-"alchemy_alchemist",
-"bomb_alchemist",
-"brew potion_alchemist",
-"mutagen_alchemist",
-"throw anything_alchemist",
-"discovery_alchemist",
-"poison resistance_alchemist",
-"poison use_alchemist",
-"swift alchemy_alchemist",
-"swift poisoning_alchemist",
-"persistent mutagen_alchemist",
-"instant alchemy_alchemist",
-"grand discovery_alchemist",
-"aura of evil_antipaladin",
-"detect good (sp)_antipaladin",
-"smite good_antipaladin",
-"unholy resilience_antipaladin",
-"touch of corruption_antipaladin",
-"aura of cowardice_antipaladin",
-"plague bringer_antipaladin",
-"cruelty_antipaladin",
-"channel negative energy_antipaladin",
-"spells_antipaladin",
-"fiendish boon (sp)_antipaladin",
-"aura of despair_antipaladin",
-"aura of vengeance_antipaladin",
-"aura of sin_antipaladin",
-"aura of depravity_antipaladin",
-"unholy champion_antipaladin",
-"code of conduct_antipaladin",
-"associates_antipaladin",
-"spells_arcanist",
-"spellbooks_arcanist",
-"arcane reservoir_arcanist",
-"cantrips_arcanist",
-"consume spells_arcanist",
-"greater exploits_arcanist",
-"magical supremacy_arcanist",
-"fast movement_barbarian",
-"rage_barbarian",
-"rage powers_barbarian",
-"uncanny dodge_barbarian",
-"trap sense_barbarian",
-"improved uncanny dodge_barbarian",
-"damage reduction_barbarian",
-"greater rage_barbarian",
-"indomitable will_barbarian",
-"tireless rage_barbarian",
-"mighty rage_barbarian",
-"fast movement_barbarian (unchained)",
-"rage_barbarian (unchained)",
-"rage powers_barbarian (unchained)",
-"barbarian (unchained) rage power_barbarian (unchained)",
-"uncanny dodge_barbarian (unchained)",
-"danger sense_barbarian (unchained)",
-"improved uncanny dodge_barbarian (unchained)",
-"damage reduction_barbarian (unchained)",
-"greater rage_barbarian (unchained)",
-"indomitable will_barbarian (unchained)",
-"tireless rage_barbarian (unchained)",
-"mighty rage_barbarian (unchained)",
-"spells_bard",
-"bardic knowledge_bard",
-"bardic performance_bard",
-"cantrips_bard",
-"versatile performance_bard",
-"well-versed_bard",
-"lore master_bard",
-"jack-of-all-trades_bard",
-"bloodline_bloodrager",
-"bloodrage_bloodrager",
-"fast movement_bloodrager",
-"uncanny dodge_bloodrager",
-"blood sanctuary_bloodrager",
-"blood casting_bloodrager",
-"eschew materials_bloodrager",
-"spells_bloodrager",
-"improved uncanny dodge_bloodrager",
-"damage reduction_bloodrager",
-"greater bloodrage_bloodrager",
-"indomitable will_bloodrager",
-"tireless bloodrage_bloodrager",
-"mighty bloodrage_bloodrager",
-"brawler's cunning_brawler",
-"martial flexibility_brawler",
-"martial training_brawler",
-"unarmed strike_brawler",
-"bonus combat feats_brawler",
-"brawler's flurry_brawler",
-"maneuver training_brawler",
-"ac bonus_brawler",
-"knockout_brawler",
-"brawler's strike_brawler",
-"close weapon mastery_brawler",
-"awesome blow_brawler",
-"improved awesome blow_brawler",
-"challenge_cavalier",
-"mount_cavalier",
-"medium cavaliers_cavalier",
-"small cavaliers_cavalier",
-"order_cavalier",
-"tactician_cavalier",
-"cavalier's charge_cavalier",
-"expert trainer_cavalier",
-"banner_cavalier",
-"bonus feat_cavalier",
-"greater tactician_cavalier",
-"mighty charge_cavalier",
-"demanding challenge_cavalier",
-"greater banner_cavalier",
-"master tactician_cavalier",
-"supreme charge_cavalier",
-"aura_cleric",
-"spells_cleric",
-"channel energy_cleric",
-"domains_cleric",
-"orisons_cleric",
-"spontaneous casting_cleric",
-"chaotic, evil, good, and lawful spells_cleric",
-"bonus languages_cleric",
-"spells_druid",
-"spontaneous casting_druid",
-"chaotic, evil, good, and lawful spells_druid",
-"orisons_druid",
-"bonus languages_druid",
-"nature bond_druid",
-"nature sense_druid",
-"wild empathy_druid",
-"woodland stride_druid",
-"trackless step_druid",
-"resist nature's lure_druid",
-"wild shape_druid",
-"venom immunity_druid",
-"a thousand faces_druid",
-"timeless body_druid",
-"bonus feats_fighter",
-"bravery_fighter",
-"armor training_fighter",
-"weapon training_fighter",
-"armor mastery_fighter",
-"weapon mastery_fighter",
-"gunsmith_gunslinger",
-"grit_gunslinger",
-"deeds_gunslinger",
-"nimble_gunslinger",
-"bonus feats_gunslinger",
-"gun training_gunslinger",
-"true grit_gunslinger",
-"daring act_gunslinger",
-"spells_hunter",
-"orisons_hunter",
-"chaotic, evil, good, and lawful spells_hunter",
-"animal companion_hunter",
-"animal focus_hunter",
-"hunter animal focuses_hunter",
-"nature training_hunter",
-"wild empathy_hunter",
-"precise companion_hunter",
-"track_hunter",
-"hunter tactics_hunter",
-"teamwork feat_hunter",
-"improved empathic link_hunter",
-"woodland stride_hunter",
-"bonus tricks_hunter",
-"second animal focus_hunter",
-"swift tracker_hunter",
-"raise animal companion (sp)_hunter",
-"speak with master_hunter",
-"greater empathic link_hunter",
-"one with the wild_hunter",
-"master hunter_hunter",
-"spells_inquisitor",
-"domain_inquisitor",
-"judgment_inquisitor",
-"monster lore_inquisitor",
-"orisons_inquisitor",
-"stern gaze_inquisitor",
-"cunning initiative_inquisitor",
-"detect alignment (sp)_inquisitor",
-"track_inquisitor",
-"solo tactics_inquisitor",
-"teamwork feat_inquisitor",
-"bane_inquisitor",
-"discern lies (sp)_inquisitor",
-"second judgment_inquisitor",
-"stalwart_inquisitor",
-"greater bane_inquisitor",
-"exploit weakness_inquisitor",
-"third judgment_inquisitor",
-"slayer_inquisitor",
-"true judgment_inquisitor",
-"chaotic, evil, good, and lawful spells_inquisitor",
-"alchemy_investigator",
-"inspiration_investigator",
-"trapfinding_investigator",
-"poison lore_investigator",
-"poison resistance_investigator",
-"investigator talent (ex or su)_investigator",
-"investigator talents_investigator",
-"keen recollection_investigator",
-"trap sense_investigator",
-"studied combat_investigator",
-"studied strike_investigator",
-"swift alchemy_investigator",
-"true inspiration_investigator",
-"elemental focus_kineticist",
-"wild talents_kineticist",
-"burn_kineticist",
-"kinetic blast (sp)_kineticist",
-"gather power_kineticist",
-"infusion_kineticist",
-"elemental defense_kineticist",
-"elemental overflow_kineticist",
-"infusion specialization_kineticist",
-"metakinesis_kineticist",
-"internal buffer_kineticist",
-"expanded element_kineticist",
-"supercharge_kineticist",
-"composite specialization_kineticist",
-"metakinetic master_kineticist",
-"omnikinesis_kineticist",
-"spells_magus",
-"spellbooks_magus",
-"arcane pool_magus",
-"cantrips_magus",
-"spell combat_magus",
-"spellstrike_magus",
-"magus arcana_magus",
-"spell recall_magus",
-"bonus feats_magus",
-"knowledge pool_magus",
-"medium armor_magus",
-"improved spell combat_magus",
-"fighter training_magus",
-"improved spell recall_magus",
-"heavy armor_magus",
-"greater spell combat_magus",
-"counterstrike_magus",
-"greater spell access_magus",
-"true magus_magus",
-"spells_medium",
-"knacks_medium",
-"spirit_medium",
-"spirit bonus_medium",
-"spirit surge_medium",
-"shared seance_medium",
-"taboo_medium",
-"haunt channeler_medium",
-"location channel (sp)_medium",
-"connection channel (sp)_medium",
-"propitiation_medium",
-"ask the spirits (sp)_medium",
-"astral journey (sp)_medium",
-"trance of three_medium",
-"spacious soul_medium",
-"spirit mastery_medium",
-"astral beacon_medium",
-"spells_mesmerist",
-"consummate liar_mesmerist",
-"hypnotic stare_mesmerist",
-"knacks_mesmerist",
-"mesmerist tricks_mesmerist",
-"painful stare_mesmerist",
-"towering ego_mesmerist",
-"bold stare_mesmerist",
-"touch treatment_mesmerist",
-"manifold tricks_mesmerist",
-"mental potency_mesmerist",
-"glib lie_mesmerist",
-"masterful tricks_mesmerist",
-"rule minds_mesmerist",
-"ac bonus_monk",
-"flurry of blows_monk",
-"unarmed strike_monk",
-"bonus feat_monk",
-"stunning fist_monk",
-"evasion_monk",
-"fast movement_monk",
-"maneuver training_monk",
-"still mind_monk",
-"ki pool_monk",
-"slow fall_monk",
-"high jump_monk",
-"purity of body_monk",
-"wholeness of body_monk",
-"improved evasion_monk",
-"diamond body_monk",
-"abundant step_monk",
-"diamond soul_monk",
-"quivering palm_monk",
-"timeless body_monk",
-"tongue of the sun and moon_monk",
-"empty body_monk",
-"perfect self_monk",
-"ac bonus_monk (unchained)",
-"bonus feat_monk (unchained)",
-"flurry of blows_monk (unchained)",
-"stunning fist_monk (unchained)",
-"unarmed strike_monk (unchained)",
-"evasion_monk (unchained)",
-"fast movement_monk (unchained)",
-"ki pool_monk (unchained)",
-"ki powers_monk (unchained)",
-"still mind_monk (unchained)",
-"purity of body_monk (unchained)",
-"style strike_monk (unchained)",
-"improved evasion_monk (unchained)",
-"tongue of the sun and moon_monk (unchained)",
-"timeless body_monk (unchained)",
-"flawless mind_monk (unchained)",
-"perfect self_monk (unchained)",
-"poison use_ninja",
-"sneak attack_ninja",
-"ki pool_ninja",
-"ninja tricks_ninja",
-"no trace_ninja",
-"uncanny dodge_ninja",
-"light steps_ninja",
-"improved uncanny dodge_ninja",
-"master tricks_ninja",
-"hidden master_ninja",
-"spells_occultist",
-"focus powers_occultist",
-"implements_occultist",
-"knacks_occultist",
-"mental focus_occultist",
-"magic item skill_occultist",
-"object reading_occultist",
-"shift focus_occultist",
-"aura sight_occultist",
-"magic circles_occultist",
-"outside contact_occultist",
-"binding circles_occultist",
-"fast circles_occultist",
-"implement mastery_occultist",
-"spells_oracle",
-"mystery_oracle",
-"oracle's curse_oracle",
-"orisons_oracle",
-"revelation_oracle",
-"final revelation_oracle",
-"aura of good_paladin",
-"detect evil (sp)_paladin",
-"smite evil_paladin",
-"divine grace_paladin",
-"lay on hands_paladin",
-"aura of courage_paladin",
-"divine health_paladin",
-"mercy_paladin",
-"channel positive energy_paladin",
-"spells_paladin",
-"divine bond (sp)_paladin",
-"medium paladins_paladin",
-"small paladins_paladin",
-"aura of resolve_paladin",
-"aura of justice_paladin",
-"aura of faith_paladin",
-"aura of righteousness_paladin",
-"holy champion_paladin",
-"code of conduct_paladin",
-"associates_paladin",
-"spells_psychic",
-"knacks_psychic",
-"phrenic pool_psychic",
-"phrenic amplifications_psychic",
-"psychic discipline (ex or sp)_psychic",
-"detect thoughts (sp)_psychic",
-"telepathic bond (sp)_psychic",
-"major amplifications_psychic",
-"telepathy_psychic",
-"remade self (sp)_psychic",
-"favored enemy_ranger",
-"track_ranger",
-"wild empathy_ranger",
-"combat style feat_ranger",
-"endurance_ranger",
-"favored terrain_ranger",
-"hunter's bond_ranger",
-"spells_ranger",
-"woodland stride_ranger",
-"swift tracker_ranger",
-"evasion_ranger",
-"quarry_ranger",
-"camouflage_ranger",
-"improved evasion_ranger",
-"hide in plain sight_ranger",
-"improved quarry_ranger",
-"master hunter_ranger",
-"sneak attack_rogue",
-"trapfinding_rogue",
-"evasion_rogue",
-"rogue talents_rogue",
-"trap sense_rogue",
-"uncanny dodge_rogue",
-"improved uncanny dodge_rogue",
-"advanced talents_rogue",
-"master strike_rogue",
-"sneak attack_rogue (unchained)",
-"trapfinding_rogue (unchained)",
-"finesse training_rogue (unchained)",
-"evasion_rogue (unchained)",
-"rogue talents_rogue (unchained)",
-"danger sense_rogue (unchained)",
-"debilitating injury_rogue (unchained)",
-"uncanny dodge_rogue (unchained)",
-"rogue's edge_rogue (unchained)",
-"improved uncanny dodge_rogue (unchained)",
-"advanced talents_rogue (unchained)",
-"master strike_rogue (unchained)",
-"challenge_samurai",
-"mount_samurai",
-"order_samurai",
-"resolve_samurai",
-"weapon expertise_samurai",
-"mounted archer_samurai",
-"banner_samurai",
-"bonus feat_samurai",
-"greater resolve_samurai",
-"honorable stand_samurai",
-"demanding challenge_samurai",
-"greater banner_samurai",
-"true resolve_samurai",
-"last stand_samurai",
-"spells_shaman",
-"orisons_shaman",
-"spirit_shaman",
-"spirit animal_shaman",
-"spirit magic_shaman",
-"hex_shaman",
-"shaman hexes_shaman",
-"wandering spirit_shaman",
-"wandering hex_shaman",
-"manifestation_shaman",
-"bonus languages_shifter",
-"shifter aspect_shifter",
-"shifter claws_shifter",
-"wild empathy_shifter",
-"defensive instinct_shifter",
-"track_shifter",
-"woodland stride_shifter",
-"wild shape_shifter",
-"trackless step_shifter",
-"shifter's fury_shifter",
-"chimeric aspect_shifter",
-"greater chimeric aspect_shifter",
-"a thousand faces_shifter",
-"timeless body_shifter",
-"final aspect_shifter",
-"bat_shifter",
-"bear_shifter",
-"bull_shifter",
-"boar_shifter",
-"crocodile_shifter",
-"dinosaur, deinonychus_shifter",
-"dolphin/orca_shifter",
-"dragon (dragonblood shifter archetype)_shifter",
-"dragonfly_shifter",
-"electric eel_shifter",
-"falcon_shifter",
-"fey (feyform shifter archetype)_shifter",
-"frog_shifter",
-"lizard_shifter",
-"mantis_shifter",
-"monkey_shifter",
-"mouse_shifter",
-"octopus_shifter",
-"owl_shifter",
-"scorpion_shifter",
-"snake_shifter",
-"spider_shifter",
-"stag_shifter",
-"swarm (swarm shifter archetype)_shifter",
-"tiger_shifter",
-"wolf_shifter",
-"wolverine_shifter",
-"bardic knowledge_skald",
-"cantrips_skald",
-"spells_skald",
-"raging song_skald",
-"scribe scroll_skald",
-"versatile performance_skald",
-"well-versed_skald",
-"rage powers_skald",
-"uncanny dodge_skald",
-"spell kenning_skald",
-"lore master_skald",
-"improved uncanny dodge_skald",
-"damage reduction_skald",
-"master skald_skald",
-"studied target_slayer",
-"track_slayer",
-"slayer talents_slayer",
-"sneak attack_slayer",
-"stalker_slayer",
-"advanced talents_slayer",
-"swift tracker_slayer",
-"slayer's advance_slayer",
-"quarry_slayer",
-"improved quarry_slayer",
-"master slayer_slayer",
-"spells_sorcerer",
-"bloodline_sorcerer",
-"cantrips_sorcerer",
-"eschew materials_sorcerer",
-"spells_spiritualist",
-"knacks_spiritualist",
-"phantom_spiritualist",
-"shared consciousness_spiritualist",
-"etheric tether_spiritualist",
-"bonded senses_spiritualist",
-"bonded manifestation_spiritualist",
-"spiritual interference (ex or su)_spiritualist",
-"detect undead (sp)_spiritualist",
-"phantom recall_spiritualist",
-"calm spirit (sp)_spiritualist",
-"see invisibility (sp)_spiritualist",
-"fused consciousness_spiritualist",
-"greater spiritual interference (ex or su)_spiritualist",
-"spiritual bond_spiritualist",
-"call spirit (sp)_spiritualist",
-"dual bond_spiritualist",
-"empowered consciousness_spiritualist",
-"spells_summoner",
-"cantrips_summoner",
-"eidolon_summoner",
-"life link_summoner",
-"summon monster i (sp)_summoner",
-"bond senses_summoner",
-"shield ally_summoner",
-"maker's call_summoner",
-"transposition_summoner",
-"aspect_summoner",
-"greater shield ally_summoner",
-"life bond_summoner",
-"merge forms_summoner",
-"greater aspect_summoner",
-"twin eidolon_summoner",
-"spells_summoner (unchained)",
-"cantrips_summoner (unchained)",
-"eidolon_summoner (unchained)",
-"life link_summoner (unchained)",
-"summon monster i (sp)_summoner (unchained)",
-"bond senses_summoner (unchained)",
-"shield ally_summoner (unchained)",
-"maker's call_summoner (unchained)",
-"transposition_summoner (unchained)",
-"aspect_summoner (unchained)",
-"greater shield ally_summoner (unchained)",
-"life bond_summoner (unchained)",
-"merge forms_summoner (unchained)",
-"greater aspect_summoner (unchained)",
-"twin eidolon_summoner (unchained)",
-"panache_swashbuckler",
-"deeds_swashbuckler",
-"swashbuckler finesse_swashbuckler",
-"charmed life_swashbuckler",
-"nimble_swashbuckler",
-"bonus feats_swashbuckler",
-"swashbuckler weapon training_swashbuckler",
-"swashbuckler weapon mastery_swashbuckler",
-"dual identity_vigilante",
-"seamless guise_vigilante",
-"social talent_vigilante",
-"vigilante specialization_vigilante",
-"vigilante talent_vigilante",
-"unshakable_vigilante",
-"startling appearance_vigilante",
-"frightening appearance_vigilante",
-"stunning appearance_vigilante",
-"vengeance strike_vigilante",
-"spells_warpriest",
-"aura_warpriest",
-"blessings_warpriest",
-"focus weapon_warpriest",
-"orisons_warpriest",
-"sacred weapon_warpriest",
-"spontaneous casting_warpriest",
-"chaotic, evil, good, and lawful spells_warpriest",
-"bonus languages_warpriest",
-"fervor_warpriest",
-"bonus feats_warpriest",
-"channel energy_warpriest",
-"sacred armor_warpriest",
-"aspect of war_warpriest",
-"spells_witch",
-"cantrips_witch",
-"hex_witch",
-"here_witch",
-"witch's familiar_witch",
-"patron spells_witch",
-"major hex_witch",
-"grand hex_witch",
-"spells gained at a new level_witch",
-"familiar teaching familiar_witch",
-"learn from a scroll_witch",
-"spells_wizard",
-"bonus languages_wizard",
-"arcane bond (ex or sp)_wizard",
-"arcane school_wizard",
-"cantrips_wizard",
-"scribe scroll_wizard",
-"bonus feats_wizard",
-"spellbooks_wizard",
-"maneuvers_harbinger",
-"discipline exchanges_harbinger",
-"surging shark_harbinger",
-"unquiet grave_harbinger",
-"maneuvers readied_harbinger",
-"stances known_harbinger",
-"dark claim (su)_harbinger",
-"accursed will (ex)_harbinger",
-"ill tidings (ex)_harbinger",
-"dark focus (ex)_harbinger",
-"grim news (su)_harbinger",
-"massacre (ex)_harbinger",
-"elusive shadow (ex)_harbinger",
-"sorcerous deception (sp)_harbinger",
-"ill intentions (su)_harbinger",
-"black omen (su)_harbinger",
-"bleak prophecy (su)_harbinger",
-"dark murmur (su)_harbinger",
-"rumors of war (ex)_harbinger",
-"voices in the dark (ex)_harbinger",
-"whispers of atrocity (su)_harbinger",
-"maneuvers_mystic",
-"discipline exchanges_mystic",
-"surging shark_mystic",
-"unquiet grave_mystic",
-"maneuvers readied/granted_mystic",
-"stances known_mystic",
-"animus (su)_mystic",
-"elemental attunement (su)_mystic",
-"blade meditation (su)_mystic",
-"bonus feat_mystic",
-"arcane defense (ex)_mystic",
-"elemental glyph (su)_mystic",
-"mystic artifice (su)_mystic",
-"withstand spell (su)_mystic",
-"instant enlightenment (ex)_mystic",
-"quell magic (su)_mystic",
-"font of animus (su)_mystic",
-"glyph mastery (su)_mystic",
-"maneuvers_stalker",
-"discipline exchanges_stalker",
-"surging shark_stalker",
-"unquiet grave_stalker",
-"maneuvers readied_stalker",
-"stances known_stalker",
-"ki pool (su)_stalker",
-"deadly strike (ex)_stalker",
-"stalker arts_stalker",
-"combat insight (su)_stalker",
-"dodge bonus (ex)_stalker",
-"blending (su)_stalker",
-"dual strike (ex)_stalker",
-"retributive ki (su)_stalker",
-"maneuvers_warder",
-"discipline exchanges_warder",
-"surging shark_warder",
-"brutal crocodile_warder",
-"leaden hyena_warder",
-"maneuvers readied_warder",
-"stances known_warder",
-"defensive focus (ex)_warder",
-"aegis (ex)_warder",
-"armiger's mark (ex)_warder",
-"bonus feat_warder",
-"tactical acumen (ex)_warder",
-"extended defense (ex)_warder",
-"clad in steel (ex)_warder",
-"adaptive tactics (ex)_warder",
-"stalwart (ex)_warder",
-"steel defense (ex)_warder",
-"born of steel (ex)_warder",
-"deathless defenses (ex)_warder",
-"maneuvers_warlord",
-"discipline exchanges_warlord",
-"surging shark_warlord",
-"brutal crocodile_warlord",
-"leaden hyena_warlord",
-"unquiet grave_warlord",
-"maneuvers readied_warlord",
-"stances known_warlord",
-"warlord's gambit (ex)_warlord",
-"bonus feat_warlord",
-"tactical presence (ex)_warlord",
-"new tactical presences_warlord",
-"warleader_warlord",
-"force of personality (ex)_warlord",
-"tactical flanker (ex)_warlord",
-"battle prowess (ex)_warlord",
-"dual boost (ex)_warlord",
-"tactical assistance (ex)_warlord",
-"dual tactical presence (ex)_warlord",
-"improved warleader_warlord",
-"warlord's presence (ex)_warlord",
-"master warleader_warlord",
-"dual stance (ex)_warlord",
-"maneuvers_zealot",
-"discipline exchanges_zealot",
-"surging shark_zealot",
-"leaden hyena_zealot",
-"maneuvers readied_zealot",
-"stances known_zealot",
-"power points_zealot",
-"collective (su)_zealot",
-"compartmentalized aid (ex)_zealot",
-"zeal (su)_zealot",
-"burning contemplation (ex)_zealot",
-"conviction_zealot",
-"martyrdom (su)_zealot",
-"commitment (su)_zealot",
-"telepathy (su)_zealot",
-"echoes of steel (su)_zealot",
-"mission (su)_zealot",
-"zealot active energy types_zealot",
-"defiance (su)_zealot",
-"unshakable will (su)_zealot",
-"stalwart (su)_zealot",
-"metaphysical transcendence (su)_zealot"
-  ];  
+
+    "alchemy_alchemist",
+    "bomb_alchemist",
+    "brew potion_alchemist",
+    "mutagen_alchemist",
+    "throw anything_alchemist",
+    "discovery_alchemist",
+    "poison resistance_alchemist",
+    "poison use_alchemist",
+    "swift alchemy_alchemist",
+    "swift poisoning_alchemist",
+    "persistent mutagen_alchemist",
+    "instant alchemy_alchemist",
+    "grand discovery_alchemist",
+    "aura of evil_antipaladin",
+    "detect good (sp)_antipaladin",
+    "smite good_antipaladin",
+    "unholy resilience_antipaladin",
+    "touch of corruption_antipaladin",
+    "aura of cowardice_antipaladin",
+    "plague bringer_antipaladin",
+    "cruelty_antipaladin",
+    "channel negative energy_antipaladin",
+    "spells_antipaladin",
+    "fiendish boon (sp)_antipaladin",
+    "aura of despair_antipaladin",
+    "aura of vengeance_antipaladin",
+    "aura of sin_antipaladin",
+    "aura of depravity_antipaladin",
+    "unholy champion_antipaladin",
+    "code of conduct_antipaladin",
+    "associates_antipaladin",
+    "spells_arcanist",
+    "spellbooks_arcanist",
+    "arcane reservoir_arcanist",
+    "cantrips_arcanist",
+    "consume spells_arcanist",
+    "greater exploits_arcanist",
+    "magical supremacy_arcanist",
+    "fast movement_barbarian",
+    "rage_barbarian",
+    "rage powers_barbarian",
+    "uncanny dodge_barbarian",
+    "trap sense_barbarian",
+    "improved uncanny dodge_barbarian",
+    "damage reduction_barbarian",
+    "greater rage_barbarian",
+    "indomitable will_barbarian",
+    "tireless rage_barbarian",
+    "mighty rage_barbarian",
+    "fast movement_barbarian (unchained)",
+    "rage_barbarian (unchained)",
+    "rage powers_barbarian (unchained)",
+    "barbarian (unchained) rage power_barbarian (unchained)",
+    "uncanny dodge_barbarian (unchained)",
+    "danger sense_barbarian (unchained)",
+    "improved uncanny dodge_barbarian (unchained)",
+    "damage reduction_barbarian (unchained)",
+    "greater rage_barbarian (unchained)",
+    "indomitable will_barbarian (unchained)",
+    "tireless rage_barbarian (unchained)",
+    "mighty rage_barbarian (unchained)",
+    "spells_bard",
+    "bardic knowledge_bard",
+    "bardic performance_bard",
+    "cantrips_bard",
+    "versatile performance_bard",
+    "well-versed_bard",
+    "lore master_bard",
+    "jack-of-all-trades_bard",
+    "bloodline_bloodrager",
+    "bloodrage_bloodrager",
+    "fast movement_bloodrager",
+    "uncanny dodge_bloodrager",
+    "blood sanctuary_bloodrager",
+    "blood casting_bloodrager",
+    "eschew materials_bloodrager",
+    "spells_bloodrager",
+    "improved uncanny dodge_bloodrager",
+    "damage reduction_bloodrager",
+    "greater bloodrage_bloodrager",
+    "indomitable will_bloodrager",
+    "tireless bloodrage_bloodrager",
+    "mighty bloodrage_bloodrager",
+    "brawler's cunning_brawler",
+    "martial flexibility_brawler",
+    "martial training_brawler",
+    "unarmed strike_brawler",
+    "bonus combat feats_brawler",
+    "brawler's flurry_brawler",
+    "maneuver training_brawler",
+    "ac bonus_brawler",
+    "knockout_brawler",
+    "brawler's strike_brawler",
+    "close weapon mastery_brawler",
+    "awesome blow_brawler",
+    "improved awesome blow_brawler",
+    "challenge_cavalier",
+    "mount_cavalier",
+    "medium cavaliers_cavalier",
+    "small cavaliers_cavalier",
+    "order_cavalier",
+    "tactician_cavalier",
+    "cavalier's charge_cavalier",
+    "expert trainer_cavalier",
+    "banner_cavalier",
+    "bonus feat_cavalier",
+    "greater tactician_cavalier",
+    "mighty charge_cavalier",
+    "demanding challenge_cavalier",
+    "greater banner_cavalier",
+    "master tactician_cavalier",
+    "supreme charge_cavalier",
+    "aura_cleric",
+    "spells_cleric",
+    "channel energy_cleric",
+    "domains_cleric",
+    "orisons_cleric",
+    "spontaneous casting_cleric",
+    "chaotic, evil, good, and lawful spells_cleric",
+    "bonus languages_cleric",
+    "spells_druid",
+    "spontaneous casting_druid",
+    "chaotic, evil, good, and lawful spells_druid",
+    "orisons_druid",
+    "bonus languages_druid",
+    "nature bond_druid",
+    "nature sense_druid",
+    "wild empathy_druid",
+    "woodland stride_druid",
+    "trackless step_druid",
+    "resist nature's lure_druid",
+    "wild shape_druid",
+    "venom immunity_druid",
+    "a thousand faces_druid",
+    "timeless body_druid",
+    "bonus feats_fighter",
+    "bravery_fighter",
+    "armor training_fighter",
+    "weapon training_fighter",
+    "armor mastery_fighter",
+    "weapon mastery_fighter",
+    "gunsmith_gunslinger",
+    "grit_gunslinger",
+    "deeds_gunslinger",
+    "nimble_gunslinger",
+    "bonus feats_gunslinger",
+    "gun training_gunslinger",
+    "true grit_gunslinger",
+    "daring act_gunslinger",
+    "spells_hunter",
+    "orisons_hunter",
+    "chaotic, evil, good, and lawful spells_hunter",
+    "animal companion_hunter",
+    "animal focus_hunter",
+    "hunter animal focuses_hunter",
+    "nature training_hunter",
+    "wild empathy_hunter",
+    "precise companion_hunter",
+    "track_hunter",
+    "hunter tactics_hunter",
+    "teamwork feat_hunter",
+    "improved empathic link_hunter",
+    "woodland stride_hunter",
+    "bonus tricks_hunter",
+    "second animal focus_hunter",
+    "swift tracker_hunter",
+    "raise animal companion (sp)_hunter",
+    "speak with master_hunter",
+    "greater empathic link_hunter",
+    "one with the wild_hunter",
+    "master hunter_hunter",
+    "spells_inquisitor",
+    "domain_inquisitor",
+    "judgment_inquisitor",
+    "monster lore_inquisitor",
+    "orisons_inquisitor",
+    "stern gaze_inquisitor",
+    "cunning initiative_inquisitor",
+    "detect alignment (sp)_inquisitor",
+    "track_inquisitor",
+    "solo tactics_inquisitor",
+    "teamwork feat_inquisitor",
+    "bane_inquisitor",
+    "discern lies (sp)_inquisitor",
+    "second judgment_inquisitor",
+    "stalwart_inquisitor",
+    "greater bane_inquisitor",
+    "exploit weakness_inquisitor",
+    "third judgment_inquisitor",
+    "slayer_inquisitor",
+    "true judgment_inquisitor",
+    "chaotic, evil, good, and lawful spells_inquisitor",
+    "alchemy_investigator",
+    "inspiration_investigator",
+    "trapfinding_investigator",
+    "poison lore_investigator",
+    "poison resistance_investigator",
+    "investigator talent (ex or su)_investigator",
+    "investigator talents_investigator",
+    "keen recollection_investigator",
+    "trap sense_investigator",
+    "studied combat_investigator",
+    "studied strike_investigator",
+    "swift alchemy_investigator",
+    "true inspiration_investigator",
+    "elemental focus_kineticist",
+    "wild talents_kineticist",
+    "burn_kineticist",
+    "kinetic blast (sp)_kineticist",
+    "gather power_kineticist",
+    "infusion_kineticist",
+    "elemental defense_kineticist",
+    "elemental overflow_kineticist",
+    "infusion specialization_kineticist",
+    "metakinesis_kineticist",
+    "internal buffer_kineticist",
+    "expanded element_kineticist",
+    "supercharge_kineticist",
+    "composite specialization_kineticist",
+    "metakinetic master_kineticist",
+    "omnikinesis_kineticist",
+    "spells_magus",
+    "spellbooks_magus",
+    "arcane pool_magus",
+    "cantrips_magus",
+    "spell combat_magus",
+    "spellstrike_magus",
+    "magus arcana_magus",
+    "spell recall_magus",
+    "bonus feats_magus",
+    "knowledge pool_magus",
+    "medium armor_magus",
+    "improved spell combat_magus",
+    "fighter training_magus",
+    "improved spell recall_magus",
+    "heavy armor_magus",
+    "greater spell combat_magus",
+    "counterstrike_magus",
+    "greater spell access_magus",
+    "true magus_magus",
+    "spells_medium",
+    "knacks_medium",
+    "spirit_medium",
+    "spirit bonus_medium",
+    "spirit surge_medium",
+    "shared seance_medium",
+    "taboo_medium",
+    "haunt channeler_medium",
+    "location channel (sp)_medium",
+    "connection channel (sp)_medium",
+    "propitiation_medium",
+    "ask the spirits (sp)_medium",
+    "astral journey (sp)_medium",
+    "trance of three_medium",
+    "spacious soul_medium",
+    "spirit mastery_medium",
+    "astral beacon_medium",
+    "spells_mesmerist",
+    "consummate liar_mesmerist",
+    "hypnotic stare_mesmerist",
+    "knacks_mesmerist",
+    "mesmerist tricks_mesmerist",
+    "painful stare_mesmerist",
+    "towering ego_mesmerist",
+    "bold stare_mesmerist",
+    "touch treatment_mesmerist",
+    "manifold tricks_mesmerist",
+    "mental potency_mesmerist",
+    "glib lie_mesmerist",
+    "masterful tricks_mesmerist",
+    "rule minds_mesmerist",
+    "ac bonus_monk",
+    "flurry of blows_monk",
+    "unarmed strike_monk",
+    "bonus feat_monk",
+    "stunning fist_monk",
+    "evasion_monk",
+    "fast movement_monk",
+    "maneuver training_monk",
+    "still mind_monk",
+    "ki pool_monk",
+    "slow fall_monk",
+    "high jump_monk",
+    "purity of body_monk",
+    "wholeness of body_monk",
+    "improved evasion_monk",
+    "diamond body_monk",
+    "abundant step_monk",
+    "diamond soul_monk",
+    "quivering palm_monk",
+    "timeless body_monk",
+    "tongue of the sun and moon_monk",
+    "empty body_monk",
+    "perfect self_monk",
+    "ac bonus_monk (unchained)",
+    "bonus feat_monk (unchained)",
+    "flurry of blows_monk (unchained)",
+    "stunning fist_monk (unchained)",
+    "unarmed strike_monk (unchained)",
+    "evasion_monk (unchained)",
+    "fast movement_monk (unchained)",
+    "ki pool_monk (unchained)",
+    "ki powers_monk (unchained)",
+    "still mind_monk (unchained)",
+    "purity of body_monk (unchained)",
+    "style strike_monk (unchained)",
+    "improved evasion_monk (unchained)",
+    "tongue of the sun and moon_monk (unchained)",
+    "timeless body_monk (unchained)",
+    "flawless mind_monk (unchained)",
+    "perfect self_monk (unchained)",
+    "poison use_ninja",
+    "sneak attack_ninja",
+    "ki pool_ninja",
+    "ninja tricks_ninja",
+    "no trace_ninja",
+    "uncanny dodge_ninja",
+    "light steps_ninja",
+    "improved uncanny dodge_ninja",
+    "master tricks_ninja",
+    "hidden master_ninja",
+    "spells_occultist",
+    "focus powers_occultist",
+    "implements_occultist",
+    "knacks_occultist",
+    "mental focus_occultist",
+    "magic item skill_occultist",
+    "object reading_occultist",
+    "shift focus_occultist",
+    "aura sight_occultist",
+    "magic circles_occultist",
+    "outside contact_occultist",
+    "binding circles_occultist",
+    "fast circles_occultist",
+    "implement mastery_occultist",
+    "spells_oracle",
+    "mystery_oracle",
+    "oracle's curse_oracle",
+    "orisons_oracle",
+    "revelation_oracle",
+    "final revelation_oracle",
+    "aura of good_paladin",
+    "detect evil (sp)_paladin",
+    "smite evil_paladin",
+    "divine grace_paladin",
+    "lay on hands_paladin",
+    "aura of courage_paladin",
+    "divine health_paladin",
+    "mercy_paladin",
+    "channel positive energy_paladin",
+    "spells_paladin",
+    "divine bond (sp)_paladin",
+    "medium paladins_paladin",
+    "small paladins_paladin",
+    "aura of resolve_paladin",
+    "aura of justice_paladin",
+    "aura of faith_paladin",
+    "aura of righteousness_paladin",
+    "holy champion_paladin",
+    "code of conduct_paladin",
+    "associates_paladin",
+    "spells_psychic",
+    "knacks_psychic",
+    "phrenic pool_psychic",
+    "phrenic amplifications_psychic",
+    "psychic discipline (ex or sp)_psychic",
+    "detect thoughts (sp)_psychic",
+    "telepathic bond (sp)_psychic",
+    "major amplifications_psychic",
+    "telepathy_psychic",
+    "remade self (sp)_psychic",
+    "favored enemy_ranger",
+    "track_ranger",
+    "wild empathy_ranger",
+    "combat style feat_ranger",
+    "endurance_ranger",
+    "favored terrain_ranger",
+    "hunter's bond_ranger",
+    "spells_ranger",
+    "woodland stride_ranger",
+    "swift tracker_ranger",
+    "evasion_ranger",
+    "quarry_ranger",
+    "camouflage_ranger",
+    "improved evasion_ranger",
+    "hide in plain sight_ranger",
+    "improved quarry_ranger",
+    "master hunter_ranger",
+    "sneak attack_rogue",
+    "trapfinding_rogue",
+    "evasion_rogue",
+    "rogue talents_rogue",
+    "trap sense_rogue",
+    "uncanny dodge_rogue",
+    "improved uncanny dodge_rogue",
+    "advanced talents_rogue",
+    "master strike_rogue",
+    "sneak attack_rogue (unchained)",
+    "trapfinding_rogue (unchained)",
+    "finesse training_rogue (unchained)",
+    "evasion_rogue (unchained)",
+    "rogue talents_rogue (unchained)",
+    "danger sense_rogue (unchained)",
+    "debilitating injury_rogue (unchained)",
+    "uncanny dodge_rogue (unchained)",
+    "rogue's edge_rogue (unchained)",
+    "improved uncanny dodge_rogue (unchained)",
+    "advanced talents_rogue (unchained)",
+    "master strike_rogue (unchained)",
+    "challenge_samurai",
+    "mount_samurai",
+    "order_samurai",
+    "resolve_samurai",
+    "weapon expertise_samurai",
+    "mounted archer_samurai",
+    "banner_samurai",
+    "bonus feat_samurai",
+    "greater resolve_samurai",
+    "honorable stand_samurai",
+    "demanding challenge_samurai",
+    "greater banner_samurai",
+    "true resolve_samurai",
+    "last stand_samurai",
+    "spells_shaman",
+    "orisons_shaman",
+    "spirit_shaman",
+    "spirit animal_shaman",
+    "spirit magic_shaman",
+    "hex_shaman",
+    "shaman hexes_shaman",
+    "wandering spirit_shaman",
+    "wandering hex_shaman",
+    "manifestation_shaman",
+    "bonus languages_shifter",
+    "shifter aspect_shifter",
+    "shifter claws_shifter",
+    "wild empathy_shifter",
+    "defensive instinct_shifter",
+    "track_shifter",
+    "woodland stride_shifter",
+    "wild shape_shifter",
+    "trackless step_shifter",
+    "shifter's fury_shifter",
+    "chimeric aspect_shifter",
+    "greater chimeric aspect_shifter",
+    "a thousand faces_shifter",
+    "timeless body_shifter",
+    "final aspect_shifter",
+    "bat_shifter",
+    "bear_shifter",
+    "bull_shifter",
+    "boar_shifter",
+    "crocodile_shifter",
+    "dinosaur, deinonychus_shifter",
+    "dolphin/orca_shifter",
+    "dragon (dragonblood shifter archetype)_shifter",
+    "dragonfly_shifter",
+    "electric eel_shifter",
+    "falcon_shifter",
+    "fey (feyform shifter archetype)_shifter",
+    "frog_shifter",
+    "lizard_shifter",
+    "mantis_shifter",
+    "monkey_shifter",
+    "mouse_shifter",
+    "octopus_shifter",
+    "owl_shifter",
+    "scorpion_shifter",
+    "snake_shifter",
+    "spider_shifter",
+    "stag_shifter",
+    "swarm (swarm shifter archetype)_shifter",
+    "tiger_shifter",
+    "wolf_shifter",
+    "wolverine_shifter",
+    "bardic knowledge_skald",
+    "cantrips_skald",
+    "spells_skald",
+    "raging song_skald",
+    "scribe scroll_skald",
+    "versatile performance_skald",
+    "well-versed_skald",
+    "rage powers_skald",
+    "uncanny dodge_skald",
+    "spell kenning_skald",
+    "lore master_skald",
+    "improved uncanny dodge_skald",
+    "damage reduction_skald",
+    "master skald_skald",
+    "studied target_slayer",
+    "track_slayer",
+    "slayer talents_slayer",
+    "sneak attack_slayer",
+    "stalker_slayer",
+    "advanced talents_slayer",
+    "swift tracker_slayer",
+    "slayer's advance_slayer",
+    "quarry_slayer",
+    "improved quarry_slayer",
+    "master slayer_slayer",
+    "spells_sorcerer",
+    "bloodline_sorcerer",
+    "cantrips_sorcerer",
+    "eschew materials_sorcerer",
+    "spells_spiritualist",
+    "knacks_spiritualist",
+    "phantom_spiritualist",
+    "shared consciousness_spiritualist",
+    "etheric tether_spiritualist",
+    "bonded senses_spiritualist",
+    "bonded manifestation_spiritualist",
+    "spiritual interference (ex or su)_spiritualist",
+    "detect undead (sp)_spiritualist",
+    "phantom recall_spiritualist",
+    "calm spirit (sp)_spiritualist",
+    "see invisibility (sp)_spiritualist",
+    "fused consciousness_spiritualist",
+    "greater spiritual interference (ex or su)_spiritualist",
+    "spiritual bond_spiritualist",
+    "call spirit (sp)_spiritualist",
+    "dual bond_spiritualist",
+    "empowered consciousness_spiritualist",
+    "spells_summoner",
+    "cantrips_summoner",
+    "eidolon_summoner",
+    "life link_summoner",
+    "summon monster i (sp)_summoner",
+    "bond senses_summoner",
+    "shield ally_summoner",
+    "maker's call_summoner",
+    "transposition_summoner",
+    "aspect_summoner",
+    "greater shield ally_summoner",
+    "life bond_summoner",
+    "merge forms_summoner",
+    "greater aspect_summoner",
+    "twin eidolon_summoner",
+    "spells_summoner (unchained)",
+    "cantrips_summoner (unchained)",
+    "eidolon_summoner (unchained)",
+    "life link_summoner (unchained)",
+    "summon monster i (sp)_summoner (unchained)",
+    "bond senses_summoner (unchained)",
+    "shield ally_summoner (unchained)",
+    "maker's call_summoner (unchained)",
+    "transposition_summoner (unchained)",
+    "aspect_summoner (unchained)",
+    "greater shield ally_summoner (unchained)",
+    "life bond_summoner (unchained)",
+    "merge forms_summoner (unchained)",
+    "greater aspect_summoner (unchained)",
+    "twin eidolon_summoner (unchained)",
+    "panache_swashbuckler",
+    "deeds_swashbuckler",
+    "swashbuckler finesse_swashbuckler",
+    "charmed life_swashbuckler",
+    "nimble_swashbuckler",
+    "bonus feats_swashbuckler",
+    "swashbuckler weapon training_swashbuckler",
+    "swashbuckler weapon mastery_swashbuckler",
+    "dual identity_vigilante",
+    "seamless guise_vigilante",
+    "social talent_vigilante",
+    "vigilante specialization_vigilante",
+    "vigilante talent_vigilante",
+    "unshakable_vigilante",
+    "startling appearance_vigilante",
+    "frightening appearance_vigilante",
+    "stunning appearance_vigilante",
+    "vengeance strike_vigilante",
+    "spells_warpriest",
+    "aura_warpriest",
+    "blessings_warpriest",
+    "focus weapon_warpriest",
+    "orisons_warpriest",
+    "sacred weapon_warpriest",
+    "spontaneous casting_warpriest",
+    "chaotic, evil, good, and lawful spells_warpriest",
+    "bonus languages_warpriest",
+    "fervor_warpriest",
+    "bonus feats_warpriest",
+    "channel energy_warpriest",
+    "sacred armor_warpriest",
+    "aspect of war_warpriest",
+    "spells_witch",
+    "cantrips_witch",
+    "hex_witch",
+    "here_witch",
+    "witch's familiar_witch",
+    "patron spells_witch",
+    "major hex_witch",
+    "grand hex_witch",
+    "spells gained at a new level_witch",
+    "familiar teaching familiar_witch",
+    "learn from a scroll_witch",
+    "spells_wizard",
+    "bonus languages_wizard",
+    "arcane bond (ex or sp)_wizard",
+    "arcane school_wizard",
+    "cantrips_wizard",
+    "scribe scroll_wizard",
+    "bonus feats_wizard",
+    "spellbooks_wizard",
+    "maneuvers_harbinger",
+    "discipline exchanges_harbinger",
+    "surging shark_harbinger",
+    "unquiet grave_harbinger",
+    "maneuvers readied_harbinger",
+    "stances known_harbinger",
+    "dark claim (su)_harbinger",
+    "accursed will (ex)_harbinger",
+    "ill tidings (ex)_harbinger",
+    "dark focus (ex)_harbinger",
+    "grim news (su)_harbinger",
+    "Omenwalk",
+    "Water Dweller",
+    "massacre (ex)_harbinger",
+    "elusive shadow (ex)_harbinger",
+    "sorcerous deception (sp)_harbinger",
+    "ill intentions (su)_harbinger",
+    "black omen (su)_harbinger",
+    "bleak prophecy (su)_harbinger",
+    "dark murmur (su)_harbinger",
+    "rumors of war (ex)_harbinger",
+    "voices in the dark (ex)_harbinger",
+    "whispers of atrocity (su)_harbinger",
+    "maneuvers_mystic",
+    "discipline exchanges_mystic",
+    "surging shark_mystic",
+    "unquiet grave_mystic",
+    "maneuvers readied/granted_mystic",
+    "stances known_mystic",
+    "animus (su)_mystic",
+    "elemental attunement (su)_mystic",
+    "blade meditation (su)_mystic",
+    "bonus feat_mystic",
+    "arcane defense (ex)_mystic",
+    "elemental glyph (su)_mystic",
+    "mystic artifice (su)_mystic",
+    "withstand spell (su)_mystic",
+    "instant enlightenment (ex)_mystic",
+    "quell magic (su)_mystic",
+    "font of animus (su)_mystic",
+    "glyph mastery (su)_mystic",
+    "maneuvers_stalker",
+    "discipline exchanges_stalker",
+    "surging shark_stalker",
+    "unquiet grave_stalker",
+    "maneuvers readied_stalker",
+    "stances known_stalker",
+    "ki pool (su)_stalker",
+    "deadly strike (ex)_stalker",
+    "stalker arts_stalker",
+    "combat insight (su)_stalker",
+    "dodge bonus (ex)_stalker",
+    "blending (su)_stalker",
+    "dual strike (ex)_stalker",
+    "retributive ki (su)_stalker",
+    "maneuvers_warder",
+    "discipline exchanges_warder",
+    "surging shark_warder",
+    "brutal crocodile_warder",
+    "leaden hyena_warder",
+    "maneuvers readied_warder",
+    "stances known_warder",
+    "defensive focus (ex)_warder",
+    "aegis (ex)_warder",
+    "armiger's mark (ex)_warder",
+    "bonus feat_warder",
+    "tactical acumen (ex)_warder",
+    "extended defense (ex)_warder",
+    "clad in steel (ex)_warder",
+    "adaptive tactics (ex)_warder",
+    "stalwart (ex)_warder",
+    "steel defense (ex)_warder",
+    "born of steel (ex)_warder",
+    "deathless defenses (ex)_warder",
+    "maneuvers_warlord",
+    "discipline exchanges_warlord",
+    "surging shark_warlord",
+    "brutal crocodile_warlord",
+    "leaden hyena_warlord",
+    "unquiet grave_warlord",
+    "maneuvers readied_warlord",
+    "stances known_warlord",
+    "warlord's gambit (ex)_warlord",
+    "bonus feat_warlord",
+    "tactical presence (ex)_warlord",
+    "new tactical presences_warlord",
+    "warleader_warlord",
+    "force of personality (ex)_warlord",
+    "tactical flanker (ex)_warlord",
+    "battle prowess (ex)_warlord",
+    "dual boost (ex)_warlord",
+    "tactical assistance (ex)_warlord",
+    "dual tactical presence (ex)_warlord",
+    "improved warleader_warlord",
+    "warlord's presence (ex)_warlord",
+    "master warleader_warlord",
+    "dual stance (ex)_warlord",
+    "maneuvers_zealot",
+    "discipline exchanges_zealot",
+    "surging shark_zealot",
+    "leaden hyena_zealot",
+    "maneuvers readied_zealot",
+    "stances known_zealot",
+    "power points_zealot",
+    "collective (su)_zealot",
+    "compartmentalized aid (ex)_zealot",
+    "zeal (su)_zealot",
+    "burning contemplation (ex)_zealot",
+    "conviction_zealot",
+    "martyrdom (su)_zealot",
+    "commitment (su)_zealot",
+    "telepathy (su)_zealot",
+    "echoes of steel (su)_zealot",
+    "mission (su)_zealot",
+    "zealot active energy types_zealot",
+    "defiance (su)_zealot",
+    "unshakable will (su)_zealot",
+    "stalwart (su)_zealot",
+    "metaphysical transcendence (su)_zealot"
+    
+
+  ];
+
+// Need to clean up path of war class abiltiies otherwise unuseable for character sheet abiltiies macro
+
+  var _all_languagesObject = null;
+  var _all_languagesName = [
+    "Abyssal", "Aklo", "Aquan", "Auran", "Celestial", "Common", "Cyclops", "Draconic", "Druidic", "Drow Sign Lanugage", "Dwarven",  "Elven", "Giant", "Gnome", "Goblin", "Gnoll", "Grippli", "Halfling", "Ignan", "Infernal", "Orc", "Protean", "Sphinx", "Sylvan", "Tengu", "Terran", "Undercommon", "Wayang"
+  ];
 
   function get(options) {
     var defaultOptions = {
@@ -25006,10 +25040,21 @@ var data = (function() {
               race: _all_languagesObject[index].race,
               name: arrayItem
             });
-          };
+          }
         });
-      };
+      } else if (defaultOptions.type == "abilities") {
+        _all_abilitiesName.forEach(function(arrayItem, index) {
+          if (arrayItem.toLowerCase().includes(defaultOptions.name.toLowerCase())) {
+            results.push({
+              index: index,
+              description: _all_abilitiesObject[index].description,
+              name: arrayItem
+            });
+          }
+        });
+      }
     };
+    
 
     // if type is defined
     if (defaultOptions.type != null) {
@@ -25057,6 +25102,9 @@ var data = (function() {
           } else if (defaultOptions.type == "languages") {
             // return all languages
             return _all_languagesObject;
+          } else if (defaultOptions.type == "abilities") {
+            // return all abilities
+            return _all_abilitiesObject;          
           };
         };
 
@@ -25103,6 +25151,12 @@ var data = (function() {
           results.push(_all_languagesObject[arrayItem.index]);
         });
         return results;
+      } else if (defaultOptions.type == "abilities") {
+        var results = [];
+        defaultOptions.array.forEach(function(arrayItem) {
+          results.push(_all_abilitiesObject[arrayItem.index]);
+        });
+        return results;        
       } else {
         return false;
       };
@@ -25115,6 +25169,8 @@ var data = (function() {
         return _all_traitsObject[defaultOptions.index];
       } else if (defaultOptions.type == "languages") {
         return _all_languagesObject[defaultOptions.index];
+      } else if (defaultOptions.type == "abilities") {
+        return _all_abilitiesObject[defaultOptions.index];        
       } else {
         return false;
       };
@@ -25464,24 +25520,42 @@ var data = (function() {
         _all_languagesObject.forEach(function(arrayItem, index) {
           arrayItem.index = index;
         });
-        // console.log(_all_languagesObject);
+      } else if (type == "abilities") {
+        _all_abilitiesObject = helper.csvToJSON(data);
+        _all_abilitiesObject.forEach(function(arrayItem, index) {
+          // _orginiseabilitiesObject(arrayItem);
+          arrayItem.index = index;
+        });        
+        // console.log("this is your all_abilitiesObject", _all_abilitiesObject);
+        // console.log("this is your all_languagesObject", _all_languagesObject);
+        // console.log("this is your all_traitsObject",  _all_traitsObject);        
       };
     };
     helper.loadCsv("db/spells.csv", function(data) {
       _get_data(data, "spells");
+      // console.log("Spells data loaded:", data);
     });
+    
     helper.loadCsv("db/feats.csv", function(data) {
       _get_data(data, "feats");
+      // console.log("Feats data loaded:", data);
     });
+    
     helper.loadCsv("db/traits.csv", function(data) {
       _get_data(data, "traits");
+      // console.log("Traits data loaded:", data);
     });
+    
     helper.loadCsv("db/languages.csv", function(data) {
       _get_data(data, "languages");
+      // console.log("Languages data loaded:", data);
     });
+    
     helper.loadCsv("db/abilities.csv", function(data) {
       _get_data(data, "abilities");
+      // console.log("Abilities data loaded:", data);
     });
+     
   };
 
   // exposed methods
@@ -25727,6 +25801,31 @@ var display = (function() {
           }],
         }]
       },
+      archetypes: {
+        head: "archetypes",
+        content: [{
+          type: "list",
+          element: {
+            node: "ul",
+            classname: ["u-list-unstyled", "m-display-list-dash"]
+          },
+          contentItems: [{
+            path: "statistics.archetypes.all",
+            listItemKey: "name",
+            pillLink: true,
+            pillType: "archetypes"
+          }],
+        }, {
+          type: "block",
+          element: {
+            node: "div"
+          },
+          contentItems: [{
+            path: "statistics.archetypes.notes",
+            prefix: "Archetypes Notes"
+          }],
+        }]
+      },      
       traits: {
         head: "Traits",
         content: [{
@@ -25989,9 +26088,13 @@ var display = (function() {
           }, {
             path: "equipment.body_slots.feet",
             prefix: "Feet"
-          }]
+          },
+          {
+            path: "equipment.body_slots.descriptions",
+            prefix: "Descriptions"
+          }        ]
         }]
-      },
+      },   
       item: {
         head: "Items",
         content: [{
@@ -26965,6 +27068,7 @@ var display = (function() {
     var menuElement = helper.e(".js-menu");
     var menuItem = helper.e(".js-menu-link-display-mode");
     var characterSelect = helper.e(".js-character-select");
+    // var archetypeStats = helper.e(".js-archetype-stats");
     var shade = helper.e(".js-shade");
     var fab = helper.e(".js-fab");
     var fabButton = helper.e(".js-fab-button");
@@ -26979,7 +27083,8 @@ var display = (function() {
       helper.addClass(fabButton, "button-secondary");
       helper.addClass(nav, "is-display-mode");
       helper.addClass(menuElement, "is-display-mode");
-      helper.addClass(header, "is-display-mode");
+      helper.addClass(header, "is-display-mode");;
+      // helper.addClass(archetypeStats, "is-display-mode");
       helper.addClass(characterSelect, "is-display-mode");
       if (demo) {
         helper.addClass(demo, "is-display-mode");
@@ -27000,6 +27105,7 @@ var display = (function() {
       helper.removeClass(nav, "is-display-mode");
       helper.removeClass(menuElement, "is-display-mode");
       helper.removeClass(header, "is-display-mode");
+      helper.removeClass(characterSelect, "is-display-mode");
       helper.removeClass(characterSelect, "is-display-mode");
       if (demo) {
         helper.removeClass(demo, "is-display-mode");
@@ -32383,6 +32489,7 @@ var pill = (function() {
   function _get_pillCount(type) {
     var paths = {
       abilities: "statistics.abilities.all",
+      archetypes: "statistics.archetypes.all",
       feats: "statistics.feats.all",
       traits: "statistics.traits.all",
       languages: "statistics.languages.all"
@@ -32644,8 +32751,9 @@ var pill = (function() {
         path: pillBlockOptions.path + "[" + options.index + "]"
       })));
       var snackMessage = {
-        abilities: "Ability " + helper.truncate(pillObject.name, 40, true) + " removed.",
+        abilities: "Abilities " + helper.truncate(pillObject.name, 40, true) + " removed.",
         feats: "Feat " + helper.truncate(pillObject.name, 40, true) + " removed.",
+        archetypes: "archetypes " + helper.truncate(pillObject.name, 40, true) + " removed.",
         traits: "Trait " + helper.truncate(pillObject.name, 40, true) + " removed.",
         languages: "Language " + helper.truncate(pillObject.name, 40, true) + " removed."
       };
@@ -32842,6 +32950,7 @@ var pill = (function() {
         var snackTitle = {
           abilities: "Abilities notes",
           feats: "Feats notes",
+          archetypes: "archetypes notes",
           traits: "Traits notes",
           languages: "Languages notes"
         };
@@ -33075,12 +33184,28 @@ var pill = (function() {
           };
         };
 
+        var _abilitiesData = function() {
+        if (dataObject.type != "") {
+          var para = document.createElement("p");
+          para.textContent = dataObject.type;
+          pillControl.appendChild(_create_editBox({
+            title: "Description",
+            textOnly: true,
+            guides: true,
+            content: [para],
+            boxSize: "m-edit-box-item-100"
+          }));
+        };
+      };        
+
         if (pillBlockOptions.type == "feats") {
           _featsData();
         } else if (pillBlockOptions.type == "traits") {
           _traitsData();
         } else if (pillBlockOptions.type == "languages") {
           _languagesData();
+        } else if (pillBlockOptions.type == "abilities") {
+          _abilitiesData();          
         };
 
       };
@@ -34535,7 +34660,7 @@ var repair = (function() {
         feats: _checkForValue(tempCharacterObject, "statistics.feats", ""),
         traits: _checkForValue(tempCharacterObject, "statistics.traits", ""),
         languages: _checkForValue(tempCharacterObject, "statistics.languages", ""),
-        special: _checkForValue(tempCharacterObject, "statistics.special_abilities", "")
+        special: _checkForValue(tempCharacterObject, "statistics.abilities", "")
       },
       power: {
         all: _checkForValue(tempCharacterObject, "statistics.power", [])
@@ -34560,6 +34685,7 @@ var repair = (function() {
         belts: _checkForValue(tempCharacterObject, "equipment.body_slots.belts", ""),
         body: _checkForValue(tempCharacterObject, "equipment.body_slots.body", ""),
         chest: _checkForValue(tempCharacterObject, "equipment.body_slots.chest", ""),
+        descriptions: _checkForValue(tempCharacterObject, "equipment.body_slots.descriptions", ""),
         eyes: _checkForValue(tempCharacterObject, "equipment.body_slots.eyes", ""),
         feet: _checkForValue(tempCharacterObject, "equipment.body_slots.feet", ""),
         hands: _checkForValue(tempCharacterObject, "equipment.body_slots.hands", ""),
@@ -36063,7 +36189,7 @@ var repair = (function() {
     _report._510.push("update: awesome version");
     characterObject.awesomeSheet.version = 5.1;
     // abilities
-    if (!("feats" in characterObject.statistics) || !("traits" in characterObject.statistics) || !("languages" in characterObject.statistics)) {
+    if (!("feats" in characterObject.statistics) || !("traits" in characterObject.statistics) || !("languages" in characterObject.statistics) || !("abilities" in characterObject.statistics)) {
       _report._510.push("update: feats");
       var oldFeats = characterObject.statistics.abilities.feats;
       var oldTraits = characterObject.statistics.abilities.traits;
@@ -36794,6 +36920,8 @@ var sheet = (function() {
   };
 
   function render() {
+    // added a new render test
+    // archetypeStats.render();
     stats.render();
     classes.render();
     characterSelect.render();
@@ -38904,6 +39032,7 @@ var tabs = (function() {
         stats: true,
         abilities: false,
         feats: false,
+        archetypes: false,
         traits: false,
         languages: false,
         power: false
@@ -39003,11 +39132,42 @@ var tabs = (function() {
     };
   })();
 
+  // updated to hold a previous tabState, so we can easily determine the
   function _store() {
-    helper.store("tabState", JSON.stringify(state.get({
+    // Get the current tab state
+    var currentTabState = JSON.stringify(state.get({
       all: true
-    })));
-  };
+    }));
+    // Get the previous tab state from localStorage
+    var previousTabState = localStorage.getItem('tabState');
+    // Store the previous tab state (which is the current one before updating)
+    localStorage.setItem('previousTabState', previousTabState);
+    // Store the current tab state
+    localStorage.setItem('tabState', currentTabState);
+  }
+
+  function mostRecentTab() {
+    // Retrieve previous tab state from localStorage
+    var previousTabStateString = localStorage.getItem('previousTabState');
+    var previousTabState = JSON.parse(previousTabStateString);
+  
+    // Retrieve current tab state from localStorage
+    var currentTabStateString = localStorage.getItem('tabState');
+    var currentTabState = JSON.parse(currentTabStateString);
+    var mostRecentTabValue; // Declare a variable to store the most recent tab
+  
+    // Iterate through tab states to find the most recent tab
+    for (var section in currentTabState) {
+      for (var tab in currentTabState[section]) {
+        if (currentTabState[section][tab] && !previousTabState[section][tab]) {
+          mostRecentTabValue = "js-tab-panel-".concat(tab);
+          localStorage.setItem('mostRecentTabValue', mostRecentTabValue);
+        }
+      }
+    }
+    console.log("Most recent tab:", mostRecentTabValue); // Print out the most recent tab
+    return mostRecentTabValue;
+  }
 
   function bind() {
     _bind_tabGroup();
@@ -39042,7 +39202,7 @@ var tabs = (function() {
   function _singleStepChangeState(arrow) {
     var tabOrder = {
       basics: ["character", "experience", "classes", "senses", "initiative", "speed", "image"],
-      statistics: ["stats", "abilities", "feats", "traits", "languages", "power"],
+      statistics: ["stats", "abilities", "archetypes" , "feats", "traits", "languages", "power"],
       equipment: ["possessions", "armor", "body_slots", "item", "encumbrance", "consumable", "wealth"],
       defense: ["hp", "ac", "cmd", "saves", "dr", "sr", "resistance"],
       offense: ["stats", "cmb", "attack"],
@@ -39103,6 +39263,7 @@ var tabs = (function() {
 
   function render() {
     _render_all_tabRow();
+    _render_most_recent_tab();
   };
 
   function _render_all_tabRow() {
@@ -39111,9 +39272,16 @@ var tabs = (function() {
       _render_tabIndicator(all_tabRow[i]);
       _render_tabPanel(all_tabRow[i]);
       render_scroll(all_tabRow[i]);
+
     };
   };
 
+  function _render_most_recent_tab() {
+    mostRecentTabValue = mostRecentTab();
+    _handlemostRecentTab(mostRecentTabValue);
+
+    
+  }
   function _render_tabIndicator(tabRow) {
     var tabIndicator = tabRow.querySelector(".m-tab-indicator");
     var all_tabItem = tabRow.querySelectorAll(".js-tab-item");
@@ -39131,22 +39299,54 @@ var tabs = (function() {
     });
   };
 
+
+  
   function _render_tabPanel(tabRow) {
     var all_tabItem = tabRow.querySelectorAll(".js-tab-item");
     all_tabItem.forEach(function(arrayItem, index) {
-      var options = helper.makeObject(arrayItem.dataset.tabOptions);
-      if (state.get({
-          section: options.tabGroup,
-          tab: options.tab
+        var options = helper.makeObject(arrayItem.dataset.tabOptions);
+        if (state.get({
+            section: options.tabGroup,
+            tab: options.tab
         })) {
-        helper.addClass(arrayItem, "is-active");
-        helper.removeClass(helper.e("." + options.target), "is-hidden");
-      } else {
-        helper.removeClass(arrayItem, "is-active");
-        helper.addClass(helper.e("." + options.target), "is-hidden");
-      };
+            helper.addClass(arrayItem, "is-active");
+            helper.removeClass(helper.e("." + options.target), "is-hidden");
+            console.log("this tab is active", options.target);
+        } else {
+            helper.removeClass(arrayItem, "is-active");
+            helper.addClass(helper.e("." + options.target), "is-hidden");
+        }
     });
-  };
+
+}
+  
+function _handlemostRecentTab(mostRecentTab) {
+  // Focusable elements section only for specific targets
+  if (mostRecentTab === "js-tab-panel-stats" || mostRecentTab === "js-tab-panel-character" || mostRecentTab === "js-tab-panel-classes" || mostRecentTab === "js-tab-panel-skills-all" || mostRecentTab === "js-tab-panel-archetypes" || mostRecentTab === "js-tab-panel-speed" || mostRecentTab === "js-tab-panel-intiative" || mostRecentTab === "js-tab-panel-abilties" || mostRecentTab === "js-tab-panel-archetypes" || mostRecentTab === "js-tab-panel-body_slots"
+      // || mostRecentTab === "js-tab-panel-body_slots_descriptions"
+  ) {
+    var focusableElements = document.querySelector("." + mostRecentTab).querySelectorAll('a[href], area[href], input:not([type="hidden"]), select, textarea, button, [tabindex]:not([tabindex="-1"])');
+    if (focusableElements.length > 0) {
+      for (var i = 0; i < focusableElements.length; i++) {
+        console.log("Focusing on element:", focusableElements[i]);
+        focusableElements[i].focus();
+        // Optionally, you can perform additional actions here for each focused element
+      }
+      stats.render();
+      classes.render();
+      textBlock.render();
+      textareaBlock.render();
+      // archetypeStats.render();
+    }
+  }
+  // Always run this block when mostRecentTab is "js-tab-panel-character"
+  if (mostRecentTab === "js-tab-panel-character") {
+    // need to import this somehow
+    // characterSelect._render_currentCharacter();
+  }
+}
+
+
 
   function render_scroll(tabRow) {
     var tabRowArea = tabRow.getBoundingClientRect();
@@ -40916,457 +41116,491 @@ var wealth = (function() {
 
 "use strict";
 
+document.getElementById('updateDescriptionButton').addEventListener('click', function () {
+  // Populate the data object with form field values
+  var data = {
+    input1: "Y",
+    input2: document.getElementById('basics-character_generator-region').value,
+    input3: document.getElementById('basics-character-race_generator').value,
+    input4: document.getElementById('basics-character_generator-class').value,
+    input5: document.getElementById('basics-character_generator-multi-class').value,
+    input6: document.getElementById('basics-character_generator-alignment').value,
+    input7: document.getElementById('basics-character_generator-gender').value,
+    input8: document.getElementById('basics-character_generator-truly-random-feats').value,
+    input9: document.getElementById('basics-character_generator-number-of-dice').value,
+    input10: document.getElementById('basics-character_generator-dice-size').value,
+    input11: document.getElementById('basics-character_generator-highest-level-possible').value,
+    input12: document.getElementById('basics-character_generator-lowest-level-possible').value,
+    input13: document.getElementById('basics-character_generator-starting-gold').value
+    // Add more properties as needed for other form fields
+  };
+
+  // Call the function to send data to the Flask server
+  sendDataToServer(data);
+});
+function sendDataToServer(data) {
+  fetch('http://localhost:5000/update_character_data', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  }).then(function (response) {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  }).then(function (data) {
+    console.log("Successfully Sent Data");
+    // Populate form fields with received data if they are empty
+    updateFormField('basics-character_generator-region', data.input2);
+    updateFormField('basics-character-race_generator', data.input3);
+    updateFormField('basics-character_generator-class', data.input4);
+    updateFormField('basics-character_generator-multi-class', data.input5);
+    updateFormField('basics-character_generator-alignment', data.input6);
+    updateFormField('basics-character_generator-number-of-dice', data.input7);
+    updateFormField('basics-character_generator-dice-size', data.input8);
+    updateFormField('basics-character_generator-highest-level-possible', data.input9);
+    updateFormField('basics-character_generator-lowest-level-possible', data.input10);
+    updateFormField('basics-character_generator-starting-gold', data.input11);
+  })["catch"](function (error) {
+    // Handle error
+    console.error('Error sending data to server:', error);
+  });
+}
+function updateFormField(fieldId, value) {
+  var field = document.getElementById(fieldId);
+  if (field.value.trim() === '') {
+    // Check if the field is empty
+    field.value = value; // Update the field value only if it's empty
+  }
+}
+"use strict";
+
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, defineProperty = Object.defineProperty || function (obj, key, desc) { obj[key] = desc.value; }, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return defineProperty(generator, "_invoke", { value: makeInvokeMethod(innerFn, self, context) }), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; defineProperty(this, "_invoke", { value: function value(method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; } function maybeInvokeDelegate(delegate, context) { var methodName = context.method, method = delegate.iterator[methodName]; if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel; var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), defineProperty(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (val) { var object = Object(val), keys = []; for (var key in object) keys.push(key); return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, "catch": function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, defineProperty = Object.defineProperty || function (obj, key, desc) { obj[key] = desc.value; }, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return defineProperty(generator, "_invoke", { value: makeInvokeMethod(innerFn, self, context) }), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; defineProperty(this, "_invoke", { value: function value(method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; } function maybeInvokeDelegate(delegate, context) { var methodName = context.method, method = delegate.iterator[methodName]; if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel; var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), defineProperty(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (val) { var object = Object(val), keys = []; for (var key in object) keys.push(key); return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, "catch": function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 document.addEventListener('DOMContentLoaded', function () {
-  // Dynamic import inside the DOMContentLoaded event listener
-  var variableMappings = [{
-    elementId: 'basics-character-name',
-    dataKey: 'character_full_name'
-  }, {
-    elementId: 'basics-character-description',
-    dataKey: 'professions'
-  },
-  // physical appearance varialbes
-  {
-    elementId: 'basics-character-race',
-    dataKey: 'chosen_race'
-  }, {
-    elementId: 'basics-character-age',
-    dataKey: 'age_number'
-  }, {
-    elementId: 'basics-character-weight',
-    dataKey: 'weight_number'
-  }, {
-    elementId: 'basics-character-height',
-    dataKey: 'height_number'
-  },
-  // Spiritual variables
-  {
-    elementId: 'basics-character-alignment',
-    dataKey: 'alignment'
-  }, {
-    elementId: 'basics-character-deity',
-    dataKey: 'deity_name'
-  },
-  // Stat variables
-  {
-    elementId: 'statistics-stats-str-base',
-    dataKey: 'str'
-  }, {
-    elementId: 'statistics-stats-dex-base',
-    dataKey: 'dex'
-  }, {
-    elementId: 'statistics-stats-con-base',
-    dataKey: 'con'
-  }, {
-    elementId: 'statistics-stats-int-base',
-    dataKey: 'int'
-  }, {
-    elementId: 'statistics-stats-wis-base',
-    dataKey: 'wis'
-  }, {
-    elementId: 'statistics-stats-cha-base',
-    dataKey: 'cha'
-  },
-  // Equipment variables
-  {
-    elementId: 'equipment-body-slots-belts',
-    dataKey: ['equipment_list', 0]
-  }, {
-    elementId: 'equipment-body-slots-body',
-    dataKey: ['equipment_list', 1]
-  }, {
-    elementId: 'equipment-body-slots-chest',
-    dataKey: ['equipment_list', 2]
-  }, {
-    elementId: 'equipment-body-slots-eyes',
-    dataKey: ['equipment_list', 3]
-  }, {
-    elementId: 'equipment-body-slots-feet',
-    dataKey: ['equipment_list', 4]
-  }, {
-    elementId: 'equipment-body-slots-hands',
-    dataKey: ['equipment_list', 5]
-  }, {
-    elementId: 'equipment-body-slots-head',
-    dataKey: ['equipment_list', 6]
-  }, {
-    elementId: 'equipment-body-slots-headband',
-    dataKey: ['equipment_list', 7]
-  }, {
-    elementId: 'equipment-body-slots-neck',
-    dataKey: ['equipment_list', 8]
-  }, {
-    elementId: 'equipment-body-slots-shoulders',
-    dataKey: ['equipment_list', 9]
-  }, {
-    elementId: 'equipment-body-slots-wrist',
-    dataKey: ['equipment_list', 10]
-  }, {
-    elementId: 'equipment-body-slots-ring-left-hand',
-    dataKey: ['equipment_list', 11]
-  }, {
-    elementId: 'equipment-body-slots-ring-right-hand',
-    dataKey: ['equipment_list', 12]
-  },
-  // Class name section
-  {
-    elementId: 'basics-classes-all-0-name',
-    dataKey: 'c_class'
-  }, {
-    elementId: 'basics-classes-all-0-level',
-    dataKey: 'level'
-  }, {
-    elementId: 'basics-classes-all-0-hp-base',
-    dataKey: 'total_hp_rolls'
-  }, {
-    elementId: 'basics-classes-all-0-saves-fortitude',
-    dataKey: 'fort_saving_throw'
-  }, {
-    elementId: 'basics-classes-all-0-saves-reflex',
-    dataKey: 'reflex_saving_throw'
-  }, {
-    elementId: 'basics-classes-all-0-saves-will',
-    dataKey: 'wisdom_saving_throw'
-  }, {
-    elementId: 'basics-classes-all-0-bab',
-    dataKey: 'bab_total'
-  },
-  // Defense section
-  {
-    elementId: 'defense-ac-stats-armor',
-    dataKey: 'armor_ac'
-  }, {
-    elementId: 'defense-ac-stats-shield',
-    dataKey: 'shield_ac'
-  }, {
-    elementId: 'equipment-armor-armor-name',
-    dataKey: 'armor_name'
-  }, {
-    elementId: 'equipment-armor-armor-check-penalty',
-    dataKey: 'armor_armor_check_penalty'
-  }, {
-    elementId: 'equipment-armor-armor-max-dex',
-    dataKey: 'armor_max_dex_bonus'
-  }, {
-    elementId: 'equipment-armor-armor-arcane-spell-failure',
-    dataKey: 'armor_spell_failure'
-  }, {
-    elementId: 'equipment-armor-armor-weight',
-    dataKey: 'armor_weight'
-  }, {
-    elementId: 'equipment-armor-shield-name',
-    dataKey: 'shield_name'
-  }, {
-    elementId: 'equipment-armor-shield-check-penalty',
-    dataKey: 'shield_armor_check_penalty'
-  }, {
-    elementId: 'equipment-armor-shield-max-dex',
-    dataKey: 'shield_max_dex_bonus'
-  }, {
-    elementId: 'equipment-armor-shield-arcane-spell-failure',
-    dataKey: 'shield_spell_failure'
-  }, {
-    elementId: 'equipment-armor-shield-weight',
-    dataKey: 'shield_weight'
-  },
-  // Wealth
-  {
-    elementId: 'equipment-wealth-platinum',
-    dataKey: 'platnium'
-  },
-  // description / test variables
-
-  // Bloodlines + Domains + Schools
-  {
-    elementId: 'spells-stats-school',
-    dataKey: 'school'
-  }, {
-    elementId: 'spells-stats-opposition',
-    dataKey: 'opposing_school'
-  }, {
-    elementId: 'spells-stats-domains',
-    dataKey: 'full_domain'
-  }, {
-    elementId: 'spells-stats-bloodline',
-    dataKey: 'bloodline'
-  }
-
-  // Add more mappings for additional variables as needed
-  ];
-
-  var spellLists, featsList, day_list, known_list;
+  var spellLists, featsList, day_list, known_list, traitsList, languageList, abilitiesList;
   function updateCharacterDescription() {
-    fetch('https://pathfinder-char-creator.onrender.com/get_character_data', {
-      method: 'GET',
-      credentials: 'omit'
-    }).then(function (response) {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+    return new Promise(function (resolve, reject) {
+      var updateMostRecentTabValue = localStorage.getItem("mostRecentTabValue");
+      if (!updateMostRecentTabValue) {
+        updateMostRecentTabValue = "js-tab-panel-character";
       }
-      return response.json();
-    }).then(function (characterData) {
-      console.log('Received character data:', characterData);
-
-      // Auto Replace Skills function
-      if (characterData.spell_list_choose_from) {
-        spellLists = characterData.spell_list_choose_from;
-        day_list = characterData.day_list;
-        known_list = characterData.known_list;
-      } else {
-        console.log("spellLists is not populated");
-        // Handle the case where spellLists is not populated
-      }
-
-      updatespells_known_and_spells_per_day();
-      featsList = characterData.feats;
-      console.log('Feats List:', featsList);
-
-      // console.log("featsList",featsList);
-      // console.log(spellLists)
-      var skillRanksString = characterData.skill_ranks;
-      var skillRanksObject = JSON.parse(skillRanksString);
-
-      //   Need to add a fix for Perform + knowledge martial + Profession portions + remove skills that don't belong in the list
-      for (var skillName in skillRanksObject) {
-        if (skillRanksObject.hasOwnProperty(skillName)) {
-          var skillRank = skillRanksObject[skillName];
-          var elementId = "skills-default-".concat(skillName.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase(), "-ranks");
-          var element = document.getElementById(elementId);
-          console.log('Skill Name:', skillName);
-          console.log('Element ID:', elementId);
-          console.log('Element:', element);
-          if (element) {
-            // Check if the element is an <input> element
-            if (element.tagName.toLowerCase() === 'input') {
-              // Update the value property for <input> elements
-              element.value = skillRank;
-            } else {
-              // Update the text content for other types of elements
-              element.textContent = skillRank;
+      localStorage.setItem("updateMostRecentTabValue", updateMostRecentTabValue);
+      fetch('http://localhost:5000/get_character_data', {
+        method: 'GET',
+        credentials: 'omit'
+      }).then(function (response) {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      }).then(function (characterData) {
+        console.log('Received character data:', characterData);
+        localStorage.setItem('characterData', JSON.stringify(characterData));
+        if (characterData.spell_list_choose_from) {
+          spellLists = characterData.spell_list_choose_from;
+          day_list = characterData.day_list;
+          known_list = characterData.known_list;
+        } else {
+          console.log("spellLists is not populated");
+        }
+        updatespells_known_and_spells_per_day();
+        featsList = characterData.feats;
+        console.log('Feats List:', featsList);
+        traitsList = characterData.selected_traits;
+        console.log('traits List:', traitsList);
+        languagesList = characterData.language_text;
+        console.log('languages List:', languagesList);
+        abilitiesList = characterData.class_ability;
+        console.log('abilities List:', abilitiesList);
+        _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+          var featsInfoModule, displayFeatsInfo, displayTraitsInfo, displayArchetypeInfo, displaybodyslotsInfo, display_abilties, display_character_description, featsDescriptionElement, traitsDescriptionElement, archetypeDescriptionElement, bodyslotsDescriptionElement, info, abilitiesDescriptionElement, characterDescriptionElement;
+          return _regeneratorRuntime().wrap(function _callee$(_context) {
+            while (1) switch (_context.prev = _context.next) {
+              case 0:
+                _context.prev = 0;
+                _context.next = 3;
+                return Promise.resolve().then(function () {
+                  return _interopRequireWildcard(require('./display_functions.js'));
+                });
+              case 3:
+                featsInfoModule = _context.sent;
+                displayFeatsInfo = featsInfoModule.displayFeatsInfo;
+                displayTraitsInfo = featsInfoModule.displayTraitsInfo;
+                displayArchetypeInfo = featsInfoModule.displayArchetypeInfo;
+                displaybodyslotsInfo = featsInfoModule.displaybodyslotsInfo;
+                display_abilties = featsInfoModule.display_abilties;
+                display_character_description = featsInfoModule.display_character_description;
+                featsDescriptionElement = document.getElementById('statistics-feats-notes');
+                traitsDescriptionElement = document.getElementById('statistics-traits-notes');
+                archetypeDescriptionElement = document.getElementById('statistics-archetypes-notes');
+                bodyslotsDescriptionElement = document.getElementById('equipment-body-slots-notes');
+                info = characterData.equip_descrip;
+                abilitiesDescriptionElement = document.getElementById('statistics-abilities-notes');
+                class_features = characterData['class features'];
+                characterDescriptionElement = document.getElementById('basics-character-description');
+                displayFeatsInfo(featsDescriptionElement, characterData);
+                displayTraitsInfo(traitsDescriptionElement, characterData);
+                displayArchetypeInfo(archetypeDescriptionElement, characterData);
+                displaybodyslotsInfo(bodyslotsDescriptionElement, characterData, info);
+                display_abilties(abilitiesDescriptionElement, characterData, class_features);
+                display_character_description(characterDescriptionElement, characterData);
+                _context.next = 29;
+                break;
+              case 26:
+                _context.prev = 26;
+                _context.t0 = _context["catch"](0);
+                console.error('Error during dynamic import:', _context.t0);
+              case 29:
+              case "end":
+                return _context.stop();
             }
-          }
+          }, _callee, null, [[0, 26]]);
+        }))();
+        _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+          var featsInfoModule, variableMappings;
+          return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+            while (1) switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                _context2.next = 3;
+                return Promise.resolve().then(function () {
+                  return _interopRequireWildcard(require('./variableMappings.js'));
+                });
+              case 3:
+                featsInfoModule = _context2.sent;
+                variableMappings = featsInfoModule.variableMappings_data;
+                variableMappings.forEach(function (mapping, index) {
+                  var element = document.getElementById(mapping.elementId);
+                  if (element) {
+                    var value;
+                    if (Array.isArray(mapping.dataKey)) {
+                      var _mapping$dataKey = _slicedToArray(mapping.dataKey, 2),
+                        objectKey = _mapping$dataKey[0],
+                        nestedKey = _mapping$dataKey[1];
+                      value = characterData[objectKey] ? characterData[objectKey][nestedKey] : undefined;
+                    } else {
+                      var keys = mapping.dataKey.split('.');
+                      value = keys.reduce(function (acc, key) {
+                        return acc ? acc[key] : undefined;
+                      }, characterData);
+                    }
+                    if (value !== undefined) {
+                      element.value = value;
+                      element.focus();
+                      stats.render();
+                      classes.render();
+                      textBlock.render();
+                      textareaBlock.render();
+                    }
+                  }
+                });
+                _context2.next = 11;
+                break;
+              case 8:
+                _context2.prev = 8;
+                _context2.t0 = _context2["catch"](0);
+                console.error('Error during dynamic import:', _context2.t0);
+              case 11:
+              case "end":
+                return _context2.stop();
+            }
+          }, _callee2, null, [[0, 8]]);
+        }))();
+        _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+          var tabValueModule, clickMostRecentTab;
+          return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+            while (1) switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.prev = 0;
+                _context3.next = 3;
+                return Promise.resolve().then(function () {
+                  return _interopRequireWildcard(require('./mostRecentTabValue.js'));
+                });
+              case 3:
+                tabValueModule = _context3.sent;
+                clickMostRecentTab = tabValueModule.clickMostRecentTab;
+                clickMostRecentTab(characterData, updateMostRecentTabValue);
+                _context3.next = 11;
+                break;
+              case 8:
+                _context3.prev = 8;
+                _context3.t0 = _context3["catch"](0);
+                console.error('Error during dynamic import:', _context3.t0);
+              case 11:
+              case "end":
+                return _context3.stop();
+            }
+          }, _callee3, null, [[0, 8]]);
+        }))();
+        _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+          var skillRanksString, skillRanksObject, skillRanksModule, skill_ranks_func, includeCustomCheckbox;
+          return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+            while (1) switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.prev = 0;
+                skillRanksString = characterData.skill_ranks;
+                skillRanksObject = JSON.parse(skillRanksString);
+                _context4.next = 5;
+                return Promise.resolve().then(function () {
+                  return _interopRequireWildcard(require('./skill_ranks.js'));
+                });
+              case 5:
+                skillRanksModule = _context4.sent;
+                skill_ranks_func = skillRanksModule.skill_ranks_func;
+                includeCustomCheckbox = document.getElementById('skills-ranks-include-custom');
+                skill_ranks_func(skillRanksObject, includeCustomCheckbox);
+                skills.render();
+                _context4.next = 15;
+                break;
+              case 12:
+                _context4.prev = 12;
+                _context4.t0 = _context4["catch"](0);
+                console.error('Error during dynamic import:', _context4.t0);
+              case 15:
+              case "end":
+                return _context4.stop();
+            }
+          }, _callee4, null, [[0, 12]]);
+        }))();
+        resolve(characterData);
+      })["catch"](function (error) {
+        console.error('Error fetching or parsing character data:', error);
+        var characterDescriptionElement = document.getElementById('basics-character-description');
+        if (characterDescriptionElement) {
+          characterDescriptionElement.innerHTML = "<pre>Error: ".concat(error.message, "</pre>");
         }
-      }
-
-      // End of Auto Replace Skills Function
-
-      variableMappings.forEach(function (mapping) {
-        var element = document.getElementById(mapping.elementId);
-        if (element) {
-          var value;
-          if (Array.isArray(mapping.dataKey)) {
-            var _mapping$dataKey = _slicedToArray(mapping.dataKey, 2),
-              objectKey = _mapping$dataKey[0],
-              nestedKey = _mapping$dataKey[1];
-            value = characterData[objectKey] ? characterData[objectKey][nestedKey] : undefined;
-          } else {
-            var keys = mapping.dataKey.split('.'); // Split the dataKey by '.' to handle nested keys
-            value = keys.reduce(function (acc, key) {
-              return acc ? acc[key] : undefined;
-            }, characterData);
-          }
-          if (value !== undefined) {
-            element.value = value;
-          }
-        }
+        reject(error);
       });
-
-      // characterDescriptionElement.innerHTML = `<pre>${JSON.stringify(characterData, null, 2)}</pre>`;
-    })["catch"](function (error) {
-      console.error('Error fetching or parsing character data:', error);
-      // characterDescriptionElement.innerHTML = `<pre>Error: ${error.message}</pre>`;
     });
   }
-
-  // Filling out Spell list + feats
-  // Somewhat buggy
-
-  // Event listener for the "Update Character" button
   var updateDescriptionButton = document.getElementById('updateDescriptionButton');
-
-  // filling out spells per day + spells known
   function updatespells_known_and_spells_per_day() {
+    // Early return if either list is empty
+    if (!day_list || !known_list) {
+      console.log("Not a caster");
+      return;
+    }
     console.log("day_list electric boogaloo", day_list);
     console.log("known_list electric boogaloo", known_list);
-    // Update spell list per day and spells known
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < Math.min(day_list.length, known_list.length); i++) {
       var dayElement = document.getElementById("spells-book-level-".concat(i, "-per_day"));
       var knownElement = document.getElementById("spells-book-level-".concat(i, "-known"));
-      if (day_list && known_list) {
-        // Check if the index is within the bounds of the lists
-        if (i < day_list.length) {
-          // Set the value property for input elements
-          dayElement.value = day_list[i];
-          knownElement.value = known_list[i];
-        } else {
-          // Handle the case where the lists don't have enough elements
-          dayElement.value = "N/A";
-          knownElement.value = "N/A";
-        }
+      if (i < day_list.length) {
+        dayElement.value = day_list[i];
+        knownElement.value = known_list[i];
+      } else {
+        dayElement.value = "N/A";
+        knownElement.value = "N/A";
       }
     }
   }
-  if (updateDescriptionButton) {
-    // Define a function to handle both spells and feats
-    var handleSpellsAndFeats = /*#__PURE__*/function () {
-      var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-        var j, spellList, i, spellName, _i2, featName;
-        return _regeneratorRuntime().wrap(function _callee$(_context) {
-          while (1) switch (_context.prev = _context.next) {
-            case 0:
-              console.log('Button clicked');
-              _context.next = 3;
-              return updateCharacterDescription();
-            case 3:
-              if (!spellLists) {
-                _context.next = 21;
-                break;
-              }
-              j = 0;
-            case 5:
-              if (!(j < spellLists.length)) {
-                _context.next = 19;
-                break;
-              }
-              spellList = spellLists[j];
-              i = 0;
-            case 8:
-              if (!(i < spellList.length)) {
-                _context.next = 16;
-                break;
-              }
-              spellName = spellList[i];
-              console.log("Spell Name: ".concat(spellName));
-              _context.next = 13;
-              return addSpellWithDelay(j, spellName);
-            case 13:
-              i++;
-              _context.next = 8;
-              break;
-            case 16:
-              j++;
-              _context.next = 5;
-              break;
-            case 19:
-              _context.next = 22;
-              break;
-            case 21:
-              console.log('spellLists is not populated');
-              // Handle the case where spellLists is not populated
-            case 22:
-              _i2 = 0;
-            case 23:
-              if (!(_i2 < featsList.length)) {
-                _context.next = 31;
-                break;
-              }
-              featName = featsList[_i2];
-              console.log("Feat Name: ".concat(featName));
-              _context.next = 28;
-              return addFeatWithDelay(featName);
-            case 28:
-              _i2++;
-              _context.next = 23;
-              break;
-            case 31:
-              clickApplyButton();
-            case 32:
-            case "end":
-              return _context.stop();
-          }
-        }, _callee);
-      }));
-      return function handleSpellsAndFeats() {
-        return _ref.apply(this, arguments);
-      };
-    }(); // Attach the event listener to the "Update Character" button
-    var addSpellWithDelay = function addSpellWithDelay(level, spellName) {
-      return new Promise(function (resolve) {
-        setTimeout(function () {
-          var spellInput = document.getElementById("add-new-spell-level-".concat(level));
-          if (spellInput && spellName) {
-            spellInput.value = spellName;
-            spellInput.dispatchEvent(new Event('input')); // Emulate typing in the search bar
-            setTimeout(function () {
-              var suggestionItems = document.querySelectorAll('.m-auto-suggest-result');
-              suggestionItems.forEach(function (item) {
-                if (item.textContent.trim() === spellName) {
-                  item.closest('.m-auto-suggest-text').click(); // Click on the suggestion item
-                  var addButton = document.querySelector('.js-add-new-spell');
-                  addButton.click(); // Emulate clicking the add button
-                  resolve(); // Resolve the promise once the spell is added
-                }
-              });
-            }, 200); // Wait for the suggestion list to populate
-          }
-        }, 200); // Adjust delay as needed
-      });
-    }; // Only selecting first feat, because the second option is always mythic
-    var addFeatWithDelay = function addFeatWithDelay(featName) {
-      return new Promise(function (resolve) {
-        setTimeout(function () {
-          var featInput = document.getElementById('statistics-feat-all');
-          var addButton = document.querySelector('.js-pill-block-add');
-          if (featInput && addButton && featName) {
-            // Check if the feat is already present
-            var existingFeats = document.querySelectorAll('.js-pill-block');
-            var featAlreadyExists = false;
-            existingFeats.forEach(function (existingFeat) {
-              if (existingFeat.textContent.trim() === featName) {
-                featAlreadyExists = true;
-              }
+  function clickClearAllButtons() {
+    return _clickClearAllButtons.apply(this, arguments);
+  }
+  function _clickClearAllButtons() {
+    _clickClearAllButtons = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+      var clearExistingAbilitiesModule, clickClearAllFeatButton, clickClearAllTraitsButton, clickClearAllLanguageButton, clickClearAllAbilitiesButton;
+      return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+        while (1) switch (_context6.prev = _context6.next) {
+          case 0:
+            _context6.next = 2;
+            return Promise.resolve().then(function () {
+              return _interopRequireWildcard(require('./clearExistingData.js'));
             });
-            if (!featAlreadyExists) {
-              // If the feat is not already present, add it
-              featInput.value = featName;
-              featInput.dispatchEvent(new Event('input')); // Emulate typing in the feat input field
-              console.log('Waiting for suggestion list to populate...');
-              setTimeout(function () {
-                var suggestionItems = document.querySelectorAll('.m-auto-suggest-result');
-                console.log('Suggestion list populated');
-                var added = false; // Flag to track if the feat has been added
-                suggestionItems.forEach(function (item) {
-                  if (item.textContent.trim() === featName && !added) {
-                    console.log('Adding feat:', featName);
-                    item.closest('.m-auto-suggest-text').click(); // Click on the suggestion item
-                    addButton.click(); // Click on the add button to add the feat
-                    added = true; // Set the flag to true to indicate the feat has been added
-                    resolve(); // Resolve the promise once the feat is added
-                  }
-                });
-              }, 200); // Wait for the suggestion list to populate
-            } else {
-              // If the feat is already present, resolve the promise immediately
-              console.log('Feat already exists:', featName);
-              resolve();
+          case 2:
+            clearExistingAbilitiesModule = _context6.sent;
+            clickClearAllFeatButton = clearExistingAbilitiesModule.clickClearAllFeatButton;
+            clickClearAllTraitsButton = clearExistingAbilitiesModule.clickClearAllTraitsButton;
+            clickClearAllLanguageButton = clearExistingAbilitiesModule.clickClearAllLanguageButton;
+            clickClearAllAbilitiesButton = clearExistingAbilitiesModule.clickClearAllAbilitiesButton;
+            _context6.next = 9;
+            return clickClearAllFeatButton();
+          case 9:
+            _context6.next = 11;
+            return clickClearAllTraitsButton();
+          case 11:
+            _context6.next = 13;
+            return clickClearAllLanguageButton();
+          case 13:
+            _context6.next = 15;
+            return clickClearAllAbilitiesButton();
+          case 15:
+          case "end":
+            return _context6.stop();
+        }
+      }, _callee6);
+    }));
+    return _clickClearAllButtons.apply(this, arguments);
+  }
+  function handleSpellsAndFeats() {
+    return _handleSpellsAndFeats.apply(this, arguments);
+  }
+  function _handleSpellsAndFeats() {
+    _handleSpellsAndFeats = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+      var addWithDelayModule, addSpellWithDelay, addFeatWithDelay, addTraitWithDelay, addLanguageWithDelay, addAbilitiesWithDelay, j, spellList, i, spellName, _i2, featName, _i3, traitName, _i4, abilitiesName, _i5, languageName;
+      return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+        while (1) switch (_context7.prev = _context7.next) {
+          case 0:
+            _context7.next = 2;
+            return Promise.resolve().then(function () {
+              return _interopRequireWildcard(require('./addWithDelay.js'));
+            });
+          case 2:
+            addWithDelayModule = _context7.sent;
+            addSpellWithDelay = addWithDelayModule.addSpellWithDelay;
+            addFeatWithDelay = addWithDelayModule.addFeatWithDelay;
+            addTraitWithDelay = addWithDelayModule.addTraitWithDelay;
+            addLanguageWithDelay = addWithDelayModule.addLanguageWithDelay;
+            addAbilitiesWithDelay = addWithDelayModule.addAbilitiesWithDelay;
+            console.log('Button clicked');
+            _context7.next = 11;
+            return updateCharacterDescription();
+          case 11:
+            if (!spellLists) {
+              _context7.next = 29;
+              break;
             }
-          }
-        }, 200); // Adjust delay as needed
-      });
-    }; // Adds platnium to the wealth calculator + clicks button after feats and spells are added  
-    var clickApplyButton = function clickApplyButton() {
-      var applyButton = document.querySelector('a[data-input-block-aggregate-options="target:equipment-wealth-platinum,action:aggregate"]');
-      if (applyButton) {
-        setTimeout(function () {
-          applyButton.click();
-          console.log('Apply button clicked.');
-        }, 200); // Adjust the delay time as needed
-      } else {
-        console.error('Apply button not found.');
-      }
-    };
-    updateDescriptionButton.addEventListener('click', handleSpellsAndFeats);
-    clickApplyButton();
+            j = 0;
+          case 13:
+            if (!(j < spellLists.length)) {
+              _context7.next = 27;
+              break;
+            }
+            spellList = spellLists[j];
+            i = 0;
+          case 16:
+            if (!(i < spellList.length)) {
+              _context7.next = 24;
+              break;
+            }
+            spellName = spellList[i];
+            console.log("Spell Name: ".concat(spellName));
+            _context7.next = 21;
+            return addSpellWithDelay(j, spellName);
+          case 21:
+            i++;
+            _context7.next = 16;
+            break;
+          case 24:
+            j++;
+            _context7.next = 13;
+            break;
+          case 27:
+            _context7.next = 30;
+            break;
+          case 29:
+            console.log('spellLists is not populated');
+          case 30:
+            _i2 = 0;
+          case 31:
+            if (!(_i2 < featsList.length)) {
+              _context7.next = 39;
+              break;
+            }
+            featName = featsList[_i2];
+            console.log("Feat Name: ".concat(featName));
+            _context7.next = 36;
+            return addFeatWithDelay(featName);
+          case 36:
+            _i2++;
+            _context7.next = 31;
+            break;
+          case 39:
+            _i3 = 0;
+          case 40:
+            if (!(_i3 < traitsList.length)) {
+              _context7.next = 48;
+              break;
+            }
+            traitName = traitsList[_i3];
+            console.log("Trait Name: ".concat(traitName));
+            _context7.next = 45;
+            return addTraitWithDelay(traitName);
+          case 45:
+            _i3++;
+            _context7.next = 40;
+            break;
+          case 48:
+            _i4 = 0;
+          case 49:
+            if (!(_i4 < abilitiesList.length)) {
+              _context7.next = 57;
+              break;
+            }
+            abilitiesName = abilitiesList[_i4];
+            console.log("Abilities Name: ".concat(abilitiesName));
+            _context7.next = 54;
+            return addAbilitiesWithDelay(abilitiesName);
+          case 54:
+            _i4++;
+            _context7.next = 49;
+            break;
+          case 57:
+            _i5 = 0;
+          case 58:
+            if (!(_i5 < languagesList.length)) {
+              _context7.next = 66;
+              break;
+            }
+            languageName = languagesList[_i5];
+            console.log("Language Name: ".concat(languageName));
+            _context7.next = 63;
+            return addLanguageWithDelay(languageName);
+          case 63:
+            _i5++;
+            _context7.next = 58;
+            break;
+          case 66:
+          case "end":
+            return _context7.stop();
+        }
+      }, _callee7);
+    }));
+    return _handleSpellsAndFeats.apply(this, arguments);
+  }
+  if (updateDescriptionButton) {
+    updateDescriptionButton.addEventListener('click', /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+        while (1) switch (_context5.prev = _context5.next) {
+          case 0:
+            _context5.next = 2;
+            return clickClearAllButtons();
+          case 2:
+            _context5.next = 4;
+            return handleSpellsAndFeats();
+          case 4:
+            _context5.next = 6;
+            return clickApplyButton();
+          case 6:
+          case "end":
+            return _context5.stop();
+        }
+      }, _callee5);
+    })));
+  }
+  function clickApplyButton() {
+    var applyButton = document.querySelector('a[data-input-block-aggregate-options="target:equipment-wealth-platinum,action:aggregate"]');
+    if (applyButton) {
+      setTimeout(function () {
+        applyButton.click();
+        console.log('Apply button clicked.');
+      }, 100);
+    } else {
+      console.error('Apply button not found.');
+    }
   }
 });
 (function() {

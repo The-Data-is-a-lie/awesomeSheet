@@ -185,7 +185,7 @@ var display = (function() {
         }]
       },
       abilities: {
-        head: "abilities",
+        head: "Abilities",
         content: [{
           type: "list",
           element: {
@@ -205,7 +205,7 @@ var display = (function() {
           },
           contentItems: [{
             path: "statistics.abilities.notes",
-            prefix: "abilities Notes"
+            prefix: "Abilities Notes"
           }],
         }]
       },
@@ -234,6 +234,31 @@ var display = (function() {
           }],
         }]
       },
+      archetypes: {
+        head: "archetypes",
+        content: [{
+          type: "list",
+          element: {
+            node: "ul",
+            classname: ["u-list-unstyled", "m-display-list-dash"]
+          },
+          contentItems: [{
+            path: "statistics.archetypes.all",
+            listItemKey: "name",
+            pillLink: true,
+            pillType: "archetypes"
+          }],
+        }, {
+          type: "block",
+          element: {
+            node: "div"
+          },
+          contentItems: [{
+            path: "statistics.archetypes.notes",
+            prefix: "Archetypes Notes"
+          }],
+        }]
+      },      
       traits: {
         head: "Traits",
         content: [{
@@ -496,9 +521,13 @@ var display = (function() {
           }, {
             path: "equipment.body_slots.feet",
             prefix: "Feet"
-          }]
+          },
+          {
+            path: "equipment.body_slots.descriptions",
+            prefix: "Descriptions"
+          }        ]
         }]
-      },
+      },   
       item: {
         head: "Items",
         content: [{
@@ -1472,6 +1501,7 @@ var display = (function() {
     var menuElement = helper.e(".js-menu");
     var menuItem = helper.e(".js-menu-link-display-mode");
     var characterSelect = helper.e(".js-character-select");
+    // var archetypeStats = helper.e(".js-archetype-stats");
     var shade = helper.e(".js-shade");
     var fab = helper.e(".js-fab");
     var fabButton = helper.e(".js-fab-button");
@@ -1486,7 +1516,8 @@ var display = (function() {
       helper.addClass(fabButton, "button-secondary");
       helper.addClass(nav, "is-display-mode");
       helper.addClass(menuElement, "is-display-mode");
-      helper.addClass(header, "is-display-mode");
+      helper.addClass(header, "is-display-mode");;
+      // helper.addClass(archetypeStats, "is-display-mode");
       helper.addClass(characterSelect, "is-display-mode");
       if (demo) {
         helper.addClass(demo, "is-display-mode");
@@ -1507,6 +1538,7 @@ var display = (function() {
       helper.removeClass(nav, "is-display-mode");
       helper.removeClass(menuElement, "is-display-mode");
       helper.removeClass(header, "is-display-mode");
+      helper.removeClass(characterSelect, "is-display-mode");
       helper.removeClass(characterSelect, "is-display-mode");
       if (demo) {
         helper.removeClass(demo, "is-display-mode");

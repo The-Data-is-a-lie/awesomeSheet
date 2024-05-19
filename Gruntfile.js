@@ -10,7 +10,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-babel');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-usemin');
@@ -155,12 +154,7 @@ module.exports = function(grunt) {
     },
 
     uglify: {
-      options: {
-        compress: {
-          ecma: 6, // Enable ES6 support
-          passes: 2 // Increase the number of passes for better compression
-        }
-      },
+
       build: {
         src: '<%= folders.build %>/js/awesomeSheet.js',
         dest: '<%= folders.build %>/js/awesomeSheet.min.js'
@@ -344,30 +338,7 @@ module.exports = function(grunt) {
       }
     },
 
-    babel: {
-      options: {
-        sourceMap: true,
-        presets: ['@babel/preset-env']
-      },
-      dev: {
-        files: [{
-          expand: true,
-          cwd: '<%= folders.src %>/js',
-          src: ['**/*.js'],
-          dest: '<%= folders.dev %>/js',
-          ext: '.js'
-        }]
-      },
-      build: {
-        files: [{
-          expand: true,
-          cwd: '<%= folders.src %>/js',
-          src: ['**/*.js'],
-          dest: '<%= folders.build %>/js',
-          ext: '.js'
-        }]
-      }
-    }
+
 
   });
 
@@ -403,7 +374,6 @@ module.exports = function(grunt) {
     'cssmin:build',
     'useminPrepare',
     'concat:build',
-    'babel:build',
     'uglify:build',
     'usemin',
     'htmlmin',
@@ -417,7 +387,6 @@ module.exports = function(grunt) {
     'copy:build',
     'copy:webapp',
     'concat:dev',
-    'babel:build',
     'sass:build',
     'autoprefixer:build',
     'sw-precache:default'

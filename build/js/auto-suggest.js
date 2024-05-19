@@ -19,7 +19,7 @@ var autoSuggest = (function() {
     if (input) {
       input.addEventListener("input", function() {
         clearTimeout(_timer_autoSuggest);
-        _timer_autoSuggest = setTimeout(_delayRender, 200, this);
+        _timer_autoSuggest = setTimeout(_delayRender, 25, this);
       }, false);
       input.addEventListener("keydown", function(event) {
         if (event.keyCode == 13) {
@@ -103,6 +103,7 @@ var autoSuggest = (function() {
     _removeDocumentEvent();
   };
 
+
   function render(input) {
     _currentInput = input;
     var searchTerm = _currentInput.value.replace(/^\s+/, "").replace(/\s+$/, "");
@@ -110,6 +111,26 @@ var autoSuggest = (function() {
     var autoSuggest = helper.getClosest(_currentInput, ".js-auto-suggest");
     var autoSuggestOptions = helper.makeObject(autoSuggest.dataset.autoSuggestOptions);
     var suggestItems;
+
+    console.log("Search term:", searchTerm);
+    console.log("Auto suggest options:", autoSuggestOptions);
+
+    
+
+    
+    if (searchTerm != "") {
+      suggestItems = data.get({
+        type: autoSuggestOptions.type,
+        name: searchTerm
+      });
+
+      console.log("Fetching data from:", autoSuggestOptions.type, "with name:", searchTerm);
+
+
+      if (autoSuggestOptions.type != "") {
+        console.log("Retrieved abilities:", suggestItems);
+      }      
+    }
 
     var _populateList = function(list) {
       var _populate = function() {
@@ -124,8 +145,9 @@ var autoSuggest = (function() {
           // anchor.setAttribute("data-spells-data", "index:#" + arrayItem.index);
           anchor.addEventListener("click", function() {
             if (autoSuggestOptions.type == "spells") {
-              spells.add(_currentInput, arrayItem.index);
-            } else if (autoSuggestOptions.type == "feats" || autoSuggestOptions.type == "traits" || autoSuggestOptions.type == "languages") {
+              spells.add(_currentInput, arrayItem.index);             
+            } else if (autoSuggestOptions.type == "feats" || autoSuggestOptions.type == "traits" || autoSuggestOptions.type == "languages" || autoSuggestOptions.type == "abilities" ) {
+              
               pill.add({
                 object: data.get({
                   type: autoSuggestOptions.type,
@@ -212,6 +234,16 @@ var autoSuggest = (function() {
             };
           };
 
+          if (autoSuggestOptions.type == "abilities") {
+            if (arrayItem.description) {
+              var resultMeta = document.createElement("i");
+              resultMeta.setAttribute("class", "m-auto-suggest-result-meta");
+              resultMeta.textContent = helper.capFirstLetter(arrayItem.description);
+              text.appendChild(resultMeta);
+            };
+          };
+
+          // to add abilities to the auto search, we need to add it to (data, auto-suggest, + auto suggest html (usually in statstics-edit.hbs) confirm the code is correct otherwise could lead to issues)
           anchor.appendChild(text);
 
           if (autoSuggestOptions.type == "spells") {

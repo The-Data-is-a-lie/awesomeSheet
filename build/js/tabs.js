@@ -15,6 +15,7 @@ var tabs = (function() {
         stats: true,
         abilities: false,
         feats: false,
+        archetypes: false,
         traits: false,
         languages: false,
         power: false
@@ -114,11 +115,42 @@ var tabs = (function() {
     };
   })();
 
+  // updated to hold a previous tabState, so we can easily determine the
   function _store() {
-    helper.store("tabState", JSON.stringify(state.get({
+    // Get the current tab state
+    var currentTabState = JSON.stringify(state.get({
       all: true
-    })));
-  };
+    }));
+    // Get the previous tab state from localStorage
+    var previousTabState = localStorage.getItem('tabState');
+    // Store the previous tab state (which is the current one before updating)
+    localStorage.setItem('previousTabState', previousTabState);
+    // Store the current tab state
+    localStorage.setItem('tabState', currentTabState);
+  }
+
+  function mostRecentTab() {
+    // Retrieve previous tab state from localStorage
+    var previousTabStateString = localStorage.getItem('previousTabState');
+    var previousTabState = JSON.parse(previousTabStateString);
+  
+    // Retrieve current tab state from localStorage
+    var currentTabStateString = localStorage.getItem('tabState');
+    var currentTabState = JSON.parse(currentTabStateString);
+    var mostRecentTabValue; // Declare a variable to store the most recent tab
+  
+    // Iterate through tab states to find the most recent tab
+    for (var section in currentTabState) {
+      for (var tab in currentTabState[section]) {
+        if (currentTabState[section][tab] && !previousTabState[section][tab]) {
+          mostRecentTabValue = "js-tab-panel-".concat(tab);
+          localStorage.setItem('mostRecentTabValue', mostRecentTabValue);
+        }
+      }
+    }
+    console.log("Most recent tab:", mostRecentTabValue); // Print out the most recent tab
+    return mostRecentTabValue;
+  }
 
   function bind() {
     _bind_tabGroup();
@@ -153,7 +185,7 @@ var tabs = (function() {
   function _singleStepChangeState(arrow) {
     var tabOrder = {
       basics: ["character", "experience", "classes", "senses", "initiative", "speed", "image"],
-      statistics: ["stats", "abilities", "feats", "traits", "languages", "power"],
+      statistics: ["stats", "abilities", "archetypes" , "feats", "traits", "languages", "power"],
       equipment: ["possessions", "armor", "body_slots", "item", "encumbrance", "consumable", "wealth"],
       defense: ["hp", "ac", "cmd", "saves", "dr", "sr", "resistance"],
       offense: ["stats", "cmb", "attack"],
@@ -214,6 +246,7 @@ var tabs = (function() {
 
   function render() {
     _render_all_tabRow();
+    _render_most_recent_tab();
   };
 
   function _render_all_tabRow() {
@@ -222,9 +255,16 @@ var tabs = (function() {
       _render_tabIndicator(all_tabRow[i]);
       _render_tabPanel(all_tabRow[i]);
       render_scroll(all_tabRow[i]);
+
     };
   };
 
+  function _render_most_recent_tab() {
+    mostRecentTabValue = mostRecentTab();
+    _handlemostRecentTab(mostRecentTabValue);
+
+    
+  }
   function _render_tabIndicator(tabRow) {
     var tabIndicator = tabRow.querySelector(".m-tab-indicator");
     var all_tabItem = tabRow.querySelectorAll(".js-tab-item");
@@ -242,22 +282,54 @@ var tabs = (function() {
     });
   };
 
+
+  
   function _render_tabPanel(tabRow) {
     var all_tabItem = tabRow.querySelectorAll(".js-tab-item");
     all_tabItem.forEach(function(arrayItem, index) {
-      var options = helper.makeObject(arrayItem.dataset.tabOptions);
-      if (state.get({
-          section: options.tabGroup,
-          tab: options.tab
+        var options = helper.makeObject(arrayItem.dataset.tabOptions);
+        if (state.get({
+            section: options.tabGroup,
+            tab: options.tab
         })) {
-        helper.addClass(arrayItem, "is-active");
-        helper.removeClass(helper.e("." + options.target), "is-hidden");
-      } else {
-        helper.removeClass(arrayItem, "is-active");
-        helper.addClass(helper.e("." + options.target), "is-hidden");
-      };
+            helper.addClass(arrayItem, "is-active");
+            helper.removeClass(helper.e("." + options.target), "is-hidden");
+            console.log("this tab is active", options.target);
+        } else {
+            helper.removeClass(arrayItem, "is-active");
+            helper.addClass(helper.e("." + options.target), "is-hidden");
+        }
     });
-  };
+
+}
+  
+function _handlemostRecentTab(mostRecentTab) {
+  // Focusable elements section only for specific targets
+  if (mostRecentTab === "js-tab-panel-stats" || mostRecentTab === "js-tab-panel-character" || mostRecentTab === "js-tab-panel-classes" || mostRecentTab === "js-tab-panel-skills-all" || mostRecentTab === "js-tab-panel-archetypes" || mostRecentTab === "js-tab-panel-speed" || mostRecentTab === "js-tab-panel-intiative" || mostRecentTab === "js-tab-panel-abilties" || mostRecentTab === "js-tab-panel-archetypes" || mostRecentTab === "js-tab-panel-body_slots"
+      // || mostRecentTab === "js-tab-panel-body_slots_descriptions"
+  ) {
+    var focusableElements = document.querySelector("." + mostRecentTab).querySelectorAll('a[href], area[href], input:not([type="hidden"]), select, textarea, button, [tabindex]:not([tabindex="-1"])');
+    if (focusableElements.length > 0) {
+      for (var i = 0; i < focusableElements.length; i++) {
+        console.log("Focusing on element:", focusableElements[i]);
+        focusableElements[i].focus();
+        // Optionally, you can perform additional actions here for each focused element
+      }
+      stats.render();
+      classes.render();
+      textBlock.render();
+      textareaBlock.render();
+      // archetypeStats.render();
+    }
+  }
+  // Always run this block when mostRecentTab is "js-tab-panel-character"
+  if (mostRecentTab === "js-tab-panel-character") {
+    // need to import this somehow
+    // characterSelect._render_currentCharacter();
+  }
+}
+
+
 
   function render_scroll(tabRow) {
     var tabRowArea = tabRow.getBoundingClientRect();

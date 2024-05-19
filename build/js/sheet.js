@@ -208,6 +208,8 @@ var sheet = (function() {
   };
 
   function render() {
+    // added a new render test
+    // archetypeStats.render();
     stats.render();
     classes.render();
     characterSelect.render();
