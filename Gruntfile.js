@@ -155,6 +155,12 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      options: {
+        compress: {
+          ecma: 6, // Enable ES6 support
+          passes: 2 // Increase the number of passes for better compression
+        }
+      },
       build: {
         src: '<%= folders.build %>/js/awesomeSheet.js',
         dest: '<%= folders.build %>/js/awesomeSheet.min.js'
