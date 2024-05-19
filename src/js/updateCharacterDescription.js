@@ -179,17 +179,17 @@ document.addEventListener('DOMContentLoaded', function () {
   }
     
   async function clickClearAllButtons() {
-    const clearExistingAbilitiesModule = await import('./clearExistingData.js');
+    // const clearExistingAbilitiesModule = await import('./clearExistingData.js');
 
-    const clickClearAllFeatButton = clearExistingAbilitiesModule.clickClearAllFeatButton;
-    const clickClearAllTraitsButton = clearExistingAbilitiesModule.clickClearAllTraitsButton;
-    const clickClearAllLanguageButton = clearExistingAbilitiesModule.clickClearAllLanguageButton;
-    const clickClearAllAbilitiesButton = clearExistingAbilitiesModule.clickClearAllAbilitiesButton;
+    // const clickClearAllFeatButton = clearExistingAbilitiesModule.clickClearAllFeatButton;
+    // const clickClearAllTraitsButton = clearExistingAbilitiesModule.clickClearAllTraitsButton;
+    // const clickClearAllLanguageButton = clearExistingAbilitiesModule.clickClearAllLanguageButton;
+    // const clickClearAllAbilitiesButton = clearExistingAbilitiesModule.clickClearAllAbilitiesButton;
 
-    await clickClearAllFeatButton();
-    await clickClearAllTraitsButton();
-    await clickClearAllLanguageButton();
-    await clickClearAllAbilitiesButton();
+    // await clickClearAllFeatButton();
+    // await clickClearAllTraitsButton();
+    // await clickClearAllLanguageButton();
+    // await clickClearAllAbilitiesButton();
 }
 
 
