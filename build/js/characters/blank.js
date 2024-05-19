@@ -183,6 +183,10 @@ var blank = (function() {
         all: [],
         notes: ""
       },
+      abiltiies: {
+        all: [],
+        notes: ""
+      },      
       power: {
         all: []
       }

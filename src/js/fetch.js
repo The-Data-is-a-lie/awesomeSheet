@@ -1,4 +1,4 @@
-fetch('http://localhost:5000/get_data')
+fetch('https://pathfinder-char-creator.onrender.com/get_data')
     .then(response => response.json())
     .then(data => {
         console.log(data);

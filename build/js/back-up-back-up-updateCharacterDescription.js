@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var spellLists, featsList, day_list, known_list, traitsList, languageList;
   function updateCharacterDescription() {
     // fetch('https://pathfinder-char-creator.onrender.com/get_character_data', {
-    fetch('https://pathfinder-char-creator.onrender.com/get_character_data', {
+    fetch('http://localhost:5000/get_character_data', {
         
       method: 'GET',
       credentials: 'omit'

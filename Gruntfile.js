@@ -141,9 +141,22 @@ module.exports = function(grunt) {
           '<%= folders.build %>/js/vendor-options.js',
           '<%= folders.build %>/js/send-character-data.js',
           '<%= folders.build %>/js/updateCharacterDescription.js',
+          '<%= folders.build %>/js/prep_for_export.js', 
+          '<%= folders.build %>/js/display_functions.js', 
+          '<%= folders.build %>/js/mostRecentTabValue.js', 
+          '<%= folders.build %>/js/skill_ranks.js', 
+          '<%= folders.build %>/js/variableMappings.js', 
+          '<%= folders.build %>/js/clearExistingData.js', 
           '<%= folders.build %>/js/init.js' // invoke calls
+
         ],
-        dest: '<%= folders.build %>/js/awesomeSheet.js'
+        dest: '<%= folders.build %>/js/awesomeSheet.js',
+        options: {
+          // Added Babel transformation using process option
+          process: function(src) {
+            return require('@babel/core').transform(src, { presets: ['@babel/preset-env'] }).code;
+          }
+        }
       },
       dev: {
         src: [
@@ -154,6 +167,7 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+
       build: {
         src: '<%= folders.build %>/js/awesomeSheet.js',
         dest: '<%= folders.build %>/js/awesomeSheet.min.js'
@@ -335,7 +349,10 @@ module.exports = function(grunt) {
           'js/**/*.js'
         ],
       }
-    }
+    },
+
+
+
   });
 
   grunt.registerTask('dev', [
@@ -387,5 +404,4 @@ module.exports = function(grunt) {
     'autoprefixer:build',
     'sw-precache:default'
   ]);
-
 };
