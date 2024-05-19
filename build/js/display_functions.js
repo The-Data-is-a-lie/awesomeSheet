@@ -206,4 +206,11 @@ function display_character_description(characterDescriptionElement, characterDat
     characterDescriptionElement.focus();
     }
 // Export the function
-export { displayFeatsInfo, displayTraitsInfo, displayArchetypeInfo, displaybodyslotsInfo, display_abilties, display_character_description };
+// export { displayFeatsInfo, displayTraitsInfo, displayArchetypeInfo, displaybodyslotsInfo, display_abilties, display_character_description };
+
+window.displayFeatsInfo = displayFeatsInfo
+window.displayTraitsInfo = displayTraitsInfo
+window.displayArchetypeInfo = displayArchetypeInfo
+window.displaybodyslotsInfo = displaybodyslotsInfo
+window.display_abilties = display_abilties
+window.display_character_description = display_character_description

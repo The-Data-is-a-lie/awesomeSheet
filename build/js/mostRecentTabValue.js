@@ -194,5 +194,7 @@ function clickMostRecentTab(characterData, updateMostRecentTabValue) {
       }
     }
     
-    export { clickMostRecentTab };
+    // export { clickMostRecentTab };
+
+    window.clickMostRecentTab = clickMostRecentTab
   

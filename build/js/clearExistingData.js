@@ -26,7 +26,7 @@ function clickClearAllAbilitiesButton() {
 }
 
 // Select the clearExistingDataButton element
-const clearExistingDataButton_to_click = document.getElementById("clearExistingDataButton");
+var clearExistingDataButton_to_click = document.getElementById("clearExistingDataButton");
 
 // Add an event listener to the clearExistingDataButton button
 clearExistingDataButton_to_click.addEventListener('click', function() {

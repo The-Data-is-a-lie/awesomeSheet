@@ -48,24 +48,31 @@ document.addEventListener('DOMContentLoaded', function () {
     
                 (async () => {
                     try {
-                        const featsInfoModule = await import('./display_functions.js');
-                        const displayFeatsInfo = featsInfoModule.displayFeatsInfo;
-                        const displayTraitsInfo = featsInfoModule.displayTraitsInfo;
-                        const displayArchetypeInfo = featsInfoModule.displayArchetypeInfo;
-                        const displaybodyslotsInfo = featsInfoModule.displaybodyslotsInfo;
-                        const display_abilties = featsInfoModule.display_abilties;
-                        const display_character_description = featsInfoModule.display_character_description;
+                        // const featsInfoModule = await import('./display_functions.js');
+                        // const displayFeatsInfo = featsInfoModule.displayFeatsInfo;
+                        // const displayTraitsInfo = featsInfoModule.displayTraitsInfo;
+                        // const displayArchetypeInfo = featsInfoModule.displayArchetypeInfo;
+                        // const displaybodyslotsInfo = featsInfoModule.displaybodyslotsInfo;
+                        // const display_abilties = featsInfoModule.display_abilties;
+                        // const display_character_description = featsInfoModule.display_character_description;
+
+                        window.displayFeatsInfo = displayFeatsInfo;
+                        window.displayTraitsInfo = displayTraitsInfo;
+                        window.displayArchetypeInfo = displayArchetypeInfo;
+                        window.displaybodyslotsInfo = displaybodyslotsInfo;
+                        window.display_abilties = display_abilties;
+                        window.display_character_description = display_character_description;                        
     
-                        const featsDescriptionElement = document.getElementById('statistics-feats-notes');
-                        const traitsDescriptionElement = document.getElementById('statistics-traits-notes');
-                        const archetypeDescriptionElement = document.getElementById('statistics-archetypes-notes');
-                        const bodyslotsDescriptionElement = document.getElementById('equipment-body-slots-notes');
-                        const info = characterData.equip_descrip;
+                        var featsDescriptionElement = document.getElementById('statistics-feats-notes');
+                        var traitsDescriptionElement = document.getElementById('statistics-traits-notes');
+                        var archetypeDescriptionElement = document.getElementById('statistics-archetypes-notes');
+                        var bodyslotsDescriptionElement = document.getElementById('equipment-body-slots-notes');
+                        var info = characterData.equip_descrip;
                         
-                        const abilitiesDescriptionElement = document.getElementById('statistics-abilities-notes');
+                        var abilitiesDescriptionElement = document.getElementById('statistics-abilities-notes');
                         class_features = characterData['class features'];
     
-                        const characterDescriptionElement = document.getElementById('basics-character-description');
+                        var characterDescriptionElement = document.getElementById('basics-character-description');
     
                         displayFeatsInfo(featsDescriptionElement, characterData);
                         displayTraitsInfo(traitsDescriptionElement, characterData);
@@ -81,21 +88,29 @@ document.addEventListener('DOMContentLoaded', function () {
     
                 (async () => {
                     try {
-                        const featsInfoModule = await import('./variableMappings.js');
-                        const variableMappings = featsInfoModule.variableMappings_data;
-                        variableMappings.forEach((mapping, index) => {
+                        // Ensure variableMappings_data is correctly assigned to the window object
+                        window.variableMappings_data = variableMappings_data;
+                
+                        // Log the data to confirm it's correctly assigned
+                        console.log("window.variableMappings_data", window.variableMappings_data);
+                
+                        // Iterate through window.variableMappings_data instead of window.variableMappings
+                        window.variableMappings_data.forEach((mapping, index) => {
                             const element = document.getElementById(mapping.elementId);
                             if (element) {
                                 let value;
                                 if (Array.isArray(mapping.dataKey)) {
                                     const [objectKey, nestedKey] = mapping.dataKey;
                                     value = characterData[objectKey] ? characterData[objectKey][nestedKey] : undefined;
+                                    console.log("value array", value);
                                 } else {
                                     const keys = mapping.dataKey.split('.');
                                     value = keys.reduce((acc, key) => acc ? acc[key] : undefined, characterData);
+                                    console.log("value non array", value);
                                 }
-    
+                
                                 if (value !== undefined) {
+                                    console.log("value assigned to element", value);
                                     element.value = value;
                                     element.focus();
                                     stats.render();
@@ -103,18 +118,21 @@ document.addEventListener('DOMContentLoaded', function () {
                                     textBlock.render();
                                     textareaBlock.render();
                                 }
+                            } else {
+                                console.warn(`Element with ID ${mapping.elementId} not found`);
                             }
                         });
-    
+                
                     } catch (error) {
-                        console.error('Error during dynamic import:', error);
+                        console.error('Error during dynamic import or execution:', error);
                     }
                 })();
+                
     
                 (async () => {
                   try {
-                      const tabValueModule = await import('./mostRecentTabValue.js');
-                      const clickMostRecentTab = tabValueModule.clickMostRecentTab;
+                    //   const tabValueModule = await import('./mostRecentTabValue.js');
+                      window.clickMostRecentTab = clickMostRecentTab;
                       clickMostRecentTab(characterData, updateMostRecentTabValue);
   
                   } catch (error) {
@@ -124,14 +142,16 @@ document.addEventListener('DOMContentLoaded', function () {
     
                 (async () => {
                     try {
-                        const skillRanksString = characterData.skill_ranks;
-                        const skillRanksObject = JSON.parse(skillRanksString);
-                        const skillRanksModule = await import('./skill_ranks.js');
-                        const skill_ranks_func = skillRanksModule.skill_ranks_func;
-                        const includeCustomCheckbox = document.getElementById('skills-ranks-include-custom');
+                        var skillRanksString = characterData.skill_ranks;
+                        var skillRanksObject = JSON.parse(skillRanksString);
+                        console.log("skillRanksObject", skillRanksObject);
+                        // var skillRanksModule = await import('./skill_ranks.js');
+                        var includeCustomCheckbox = document.getElementById('skills-ranks-include-custom');
+                        console.log("includeCustomCheckbox", includeCustomCheckbox);
+                        window.skill_ranks_func = skill_ranks_func
     
-                        skill_ranks_func(skillRanksObject, includeCustomCheckbox);
-                        skills.render();
+                        window.skill_ranks_func(skillRanksObject, includeCustomCheckbox);
+                        // skills.render();
     
                     } catch (error) {
                         console.error('Error during dynamic import:', error);
@@ -143,7 +163,7 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .catch(error => {
                 console.error('Error fetching or parsing character data:', error);
-                const characterDescriptionElement = document.getElementById('basics-character-description');
+                var characterDescriptionElement = document.getElementById('basics-character-description');
                 if (characterDescriptionElement) {
                     characterDescriptionElement.innerHTML = `<pre>Error: ${error.message}</pre>`;
                 }
@@ -152,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     
-    const updateDescriptionButton = document.getElementById('updateDescriptionButton');
+    var updateDescriptionButton = document.getElementById('updateDescriptionButton');
     
     function updatespells_known_and_spells_per_day() {
       // Early return if either list is empty

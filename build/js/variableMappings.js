@@ -1,4 +1,5 @@
-const variableMappings_data = [
+
+var variableMappings_data = [
     { elementId: 'basics-character-name', dataKey: 'character_full_name' },
   //   { elementId: 'basics-character-description', dataKey: 'professions' },
 
@@ -85,4 +86,6 @@ const variableMappings_data = [
 
 ];
 
-export { variableMappings_data };
+// export { variableMappings_data };
+// Manually add to the window object
+window.variableMappings_data = variableMappings_data;
