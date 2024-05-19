@@ -405,6 +405,7 @@ module.exports = function(grunt) {
     'cssmin:build',
     'useminPrepare',
     'concat:build',
+    'babel:build',
     'uglify:build',
     'usemin',
     'htmlmin',
