@@ -129,19 +129,42 @@ var tabs = (function() {
 }
 
 function mostRecentTab() {
-  // Retrieve previous tab state from localStorage
-  const previousTabStateString = localStorage.getItem('previousTabState');
-  const previousTabState = JSON.parse(previousTabStateString);
+// Retrieve previous tab state from localStorage
+var previousTabStateString = localStorage.getItem('previousTabState');
+let previousTabState;
+try {
+    previousTabState = JSON.parse(previousTabStateString);
+} catch (e) {
+    previousTabState = null;
+}
 
-  // Retrieve current tab state from localStorage
-  const currentTabStateString = localStorage.getItem('tabState');
-  const currentTabState = JSON.parse(currentTabStateString);
+// Set default value if previousTabState is null
+if (!previousTabState) {
+    previousTabState = "js-tab-panel-character";
+}
+
+// Retrieve current tab state from localStorage
+var currentTabStateString = localStorage.getItem('tabState');
+let currentTabState;
+try {
+    currentTabState = JSON.parse(currentTabStateString);
+} catch (e) {
+    currentTabState = null;
+}
+
+// Set default value if currentTabState is null
+if (!currentTabState) {
+    currentTabState = "js-tab-panel-character";
+}
+
+console.log('Previous Tab State:', previousTabState);
+console.log('Current Tab State:', currentTabState);
 
   let mostRecentTabValue; // Declare a variable to store the most recent tab
 
   // Iterate through tab states to find the most recent tab
-  for (const section in currentTabState) {
-      for (const tab in currentTabState[section]) {
+  for (var section in currentTabState) {
+      for (var tab in currentTabState[section]) {
           if (currentTabState[section][tab] && !previousTabState[section][tab]) {
               mostRecentTabValue = `js-tab-panel-${tab}`;
               localStorage.setItem('mostRecentTabValue', mostRecentTabValue);

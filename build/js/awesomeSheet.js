@@ -37574,11 +37574,33 @@ var tabs = function () {
   function mostRecentTab() {
     // Retrieve previous tab state from localStorage
     var previousTabStateString = localStorage.getItem('previousTabState');
-    var previousTabState = JSON.parse(previousTabStateString);
+    var previousTabState;
+    try {
+      previousTabState = JSON.parse(previousTabStateString);
+    } catch (e) {
+      previousTabState = null;
+    }
+
+    // Set default value if previousTabState is null
+    if (!previousTabState) {
+      previousTabState = "js-tab-panel-character";
+    }
 
     // Retrieve current tab state from localStorage
     var currentTabStateString = localStorage.getItem('tabState');
-    var currentTabState = JSON.parse(currentTabStateString);
+    var currentTabState;
+    try {
+      currentTabState = JSON.parse(currentTabStateString);
+    } catch (e) {
+      currentTabState = null;
+    }
+
+    // Set default value if currentTabState is null
+    if (!currentTabState) {
+      currentTabState = "js-tab-panel-character";
+    }
+    console.log('Previous Tab State:', previousTabState);
+    console.log('Current Tab State:', currentTabState);
     var mostRecentTabValue; // Declare a variable to store the most recent tab
 
     // Iterate through tab states to find the most recent tab
