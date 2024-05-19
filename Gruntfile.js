@@ -147,6 +147,7 @@ module.exports = function(grunt) {
           '<%= folders.build %>/js/skill_ranks.js', 
           '<%= folders.build %>/js/variableMappings.js', 
           '<%= folders.build %>/js/clearExistingData.js', 
+          '<%= folders.build %>/js/addwithDelay.js',           
           '<%= folders.build %>/js/init.js' // invoke calls
 
         ],

@@ -39853,32 +39853,21 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   function _clickClearAllButtons() {
     _clickClearAllButtons = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
-      var clearExistingAbilitiesModule, clickClearAllFeatButton, clickClearAllTraitsButton, clickClearAllLanguageButton, clickClearAllAbilitiesButton;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
           case 0:
             _context6.next = 2;
-            return Promise.resolve().then(function () {
-              return _interopRequireWildcard(require('./clearExistingData.js'));
-            });
+            return window.clickClearAllFeatButton();
           case 2:
-            clearExistingAbilitiesModule = _context6.sent;
-            clickClearAllFeatButton = clearExistingAbilitiesModule.clickClearAllFeatButton;
-            clickClearAllTraitsButton = clearExistingAbilitiesModule.clickClearAllTraitsButton;
-            clickClearAllLanguageButton = clearExistingAbilitiesModule.clickClearAllLanguageButton;
-            clickClearAllAbilitiesButton = clearExistingAbilitiesModule.clickClearAllAbilitiesButton;
-            _context6.next = 9;
-            return clickClearAllFeatButton();
-          case 9:
-            _context6.next = 11;
-            return clickClearAllTraitsButton();
-          case 11:
-            _context6.next = 13;
-            return clickClearAllLanguageButton();
-          case 13:
-            _context6.next = 15;
-            return clickClearAllAbilitiesButton();
-          case 15:
+            _context6.next = 4;
+            return window.clickClearAllTraitsButton();
+          case 4:
+            _context6.next = 6;
+            return window.clickClearAllLanguageButton();
+          case 6:
+            _context6.next = 8;
+            return window.clickClearAllAbilitiesButton();
+          case 8:
           case "end":
             return _context6.stop();
         }
@@ -39891,120 +39880,115 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   function _handleSpellsAndFeats() {
     _handleSpellsAndFeats = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
-      var addWithDelayModule, addSpellWithDelay, addFeatWithDelay, addTraitWithDelay, addLanguageWithDelay, addAbilitiesWithDelay, j, spellList, i, spellName, _i, featName, _i2, traitName, _i3, abilitiesName, _i4, languageName;
+      var j, spellList, i, spellName, _i, featName, _i2, traitName, _i3, abilitiesName, _i4, languageName;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {
           case 0:
-            _context7.next = 2;
-            return Promise.resolve().then(function () {
-              return _interopRequireWildcard(require('./addWithDelay.js'));
-            });
-          case 2:
-            addWithDelayModule = _context7.sent;
-            addSpellWithDelay = addWithDelayModule.addSpellWithDelay;
-            addFeatWithDelay = addWithDelayModule.addFeatWithDelay;
-            addTraitWithDelay = addWithDelayModule.addTraitWithDelay;
-            addLanguageWithDelay = addWithDelayModule.addLanguageWithDelay;
-            addAbilitiesWithDelay = addWithDelayModule.addAbilitiesWithDelay;
+            // Instantiate the Clear modules
+            window.addSpellWithDelay = addSpellWithDelay;
+            window.addFeatWithDelay = addFeatWithDelay;
+            window.addTraitWithDelay = addTraitWithDelay;
+            window.addAbilitiesWithDelay = addAbilitiesWithDelay;
+            window.addLanguageWithDelay = addLanguageWithDelay;
             console.log('Button clicked');
-            _context7.next = 11;
+            _context7.next = 8;
             return updateCharacterDescription();
-          case 11:
+          case 8:
             if (!spellLists) {
-              _context7.next = 29;
+              _context7.next = 26;
               break;
             }
             j = 0;
-          case 13:
+          case 10:
             if (!(j < spellLists.length)) {
-              _context7.next = 27;
+              _context7.next = 24;
               break;
             }
             spellList = spellLists[j];
             i = 0;
-          case 16:
+          case 13:
             if (!(i < spellList.length)) {
-              _context7.next = 24;
+              _context7.next = 21;
               break;
             }
             spellName = spellList[i];
             console.log("Spell Name: ".concat(spellName));
-            _context7.next = 21;
+            _context7.next = 18;
             return addSpellWithDelay(j, spellName);
-          case 21:
+          case 18:
             i++;
-            _context7.next = 16;
-            break;
-          case 24:
-            j++;
             _context7.next = 13;
             break;
-          case 27:
-            _context7.next = 30;
+          case 21:
+            j++;
+            _context7.next = 10;
             break;
-          case 29:
+          case 24:
+            _context7.next = 27;
+            break;
+          case 26:
             console.log('spellLists is not populated');
-          case 30:
+          case 27:
             _i = 0;
-          case 31:
+          case 28:
             if (!(_i < featsList.length)) {
-              _context7.next = 39;
+              _context7.next = 36;
               break;
             }
             featName = featsList[_i];
             console.log("Feat Name: ".concat(featName));
-            _context7.next = 36;
-            return addFeatWithDelay(featName);
-          case 36:
+            _context7.next = 33;
+            return window.addFeatWithDelay(featName);
+          case 33:
             _i++;
-            _context7.next = 31;
+            _context7.next = 28;
             break;
-          case 39:
+          case 36:
             _i2 = 0;
-          case 40:
+          case 37:
             if (!(_i2 < traitsList.length)) {
-              _context7.next = 48;
+              _context7.next = 45;
               break;
             }
             traitName = traitsList[_i2];
             console.log("Trait Name: ".concat(traitName));
-            _context7.next = 45;
-            return addTraitWithDelay(traitName);
-          case 45:
+            _context7.next = 42;
+            return window.addTraitWithDelay(traitName);
+          case 42:
             _i2++;
-            _context7.next = 40;
+            _context7.next = 37;
             break;
-          case 48:
+          case 45:
             _i3 = 0;
-          case 49:
+          case 46:
             if (!(_i3 < abilitiesList.length)) {
-              _context7.next = 57;
+              _context7.next = 54;
               break;
             }
             abilitiesName = abilitiesList[_i3];
             console.log("Abilities Name: ".concat(abilitiesName));
-            _context7.next = 54;
-            return addAbilitiesWithDelay(abilitiesName);
-          case 54:
+            _context7.next = 51;
+            return window.addAbilitiesWithDelay(abilitiesName);
+          case 51:
             _i3++;
-            _context7.next = 49;
+            _context7.next = 46;
             break;
-          case 57:
+          case 54:
             _i4 = 0;
-          case 58:
+          case 55:
             if (!(_i4 < languagesList.length)) {
-              _context7.next = 66;
+              _context7.next = 63;
               break;
             }
             languageName = languagesList[_i4];
             console.log("Language Name: ".concat(languageName));
-            _context7.next = 63;
-            return addLanguageWithDelay(languageName);
-          case 63:
+            _context7.next = 60;
+            return window.addLanguageWithDelay(languageName);
+          case 60:
             _i4++;
-            _context7.next = 58;
+            _context7.next = 55;
             break;
-          case 66:
+          case 63:
           case "end":
             return _context7.stop();
         }
@@ -40645,13 +40629,6 @@ var variableMappings_data = exports.variableMappings_data = [{
 }];
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.clickClearAllAbilitiesButton = clickClearAllAbilitiesButton;
-exports.clickClearAllFeatButton = clickClearAllFeatButton;
-exports.clickClearAllLanguageButton = clickClearAllLanguageButton;
-exports.clickClearAllTraitsButton = clickClearAllTraitsButton;
 // Function to simulate click on Clear All Feats button
 function clickClearAllFeatButton() {
   setTimeout(function () {
@@ -40689,6 +40666,232 @@ clearExistingDataButton.addEventListener('click', function () {
   clickClearAllLanguageButton();
   clickClearAllAbilitiesButton();
 });
+
+// export { clickClearAllFeatButton, clickClearAllTraitsButton, clickClearAllLanguageButton, clickClearAllAbilitiesButton };
+
+window.clickClearAllFeatButton = clickClearAllFeatButton;
+window.clickClearAllTraitsButton = clickClearAllTraitsButton;
+window.clickClearAllLanguageButton = clickClearAllLanguageButton;
+window.clickClearAllAbilitiesButton = clickClearAllAbilitiesButton;
+"use strict";
+
+function addSpellWithDelay(level, spellName) {
+  return new Promise(function (resolve) {
+    setTimeout(function () {
+      var spellInput = document.getElementById("add-new-spell-level-".concat(level));
+      if (spellInput && spellName) {
+        spellInput.value = spellName;
+        spellInput.dispatchEvent(new Event('input')); // Emulate typing in the search bar
+        setTimeout(function () {
+          var suggestionItems = document.querySelectorAll('.m-auto-suggest-result');
+          suggestionItems.forEach(function (item) {
+            if (item.textContent.trim() === spellName) {
+              item.closest('.m-auto-suggest-text').click(); // Click on the suggestion item
+              var addButton = document.querySelector('.js-add-new-spell');
+              addButton.click(); // Emulate clicking the add button
+              resolve(); // Resolve the promise once the spell is added
+            }
+          });
+        }, 100); // Wait for the suggestion list to populate
+      }
+    }, 100); // Adjust delay as needed
+  });
+}
+function addFeatWithDelay(featName) {
+  return new Promise(function (resolve, reject) {
+    setTimeout(function () {
+      var featInput = document.getElementById('statistics-feat-all');
+      var addButton = document.querySelector('.js-pill-block-add');
+      if (!featInput || !addButton) {
+        reject(new Error('Missing required elements for adding feat'));
+        return;
+      }
+
+      // Check if the feat already exists (modify selector for specific section if needed)
+      var existingFeats = document.querySelectorAll('.js-pill-block');
+      var featAlreadyExists = false;
+      existingFeats.forEach(function (existingFeat) {
+        if (existingFeat.textContent.trim() === featName) {
+          featAlreadyExists = true;
+        }
+      });
+      if (!featAlreadyExists) {
+        featInput.value = '';
+        featInput.dispatchEvent(new Event('input'));
+        setTimeout(function () {
+          featInput.value = featName;
+          featInput.dispatchEvent(new Event('input'));
+          setTimeout(function () {
+            var suggestionItems = document.querySelectorAll('.m-auto-suggest-result');
+            if (!suggestionItems.length) {
+              console.warn('Suggestion list not found for adding feat:', featName);
+              resolve(); // Resolve even if list not found (optional)
+              return;
+            }
+            var added = false;
+            suggestionItems.forEach(function (item) {
+              if (item.textContent.trim() === featName && !added) {
+                console.log("Adding feat at ".concat(new Date().toLocaleTimeString(), ":"), featName);
+                item.closest('.m-auto-suggest-text').click(); // Click on the suggestion item
+                addButton.click(); // Click on the add button to add the feat
+                added = true;
+                resolve(); // Resolve the promise after adding the feat
+              }
+            });
+            if (!added) {
+              console.warn('Feat not found in suggestions:', featName);
+              resolve(); // Resolve even if feat not found in suggestions
+            }
+          }, 100); // Adjust delay for suggestion list population
+        }, 100); // Clear input delay
+      } else {
+        console.log('Feat already exists:', featName);
+        resolve(); // Resolve even if feat already exists
+      }
+    }, 100); // Initial delay (adjustable)
+  });
+}
+function addTraitWithDelay(traitName) {
+  return new Promise(function (resolve) {
+    setTimeout(function () {
+      var traitInput = document.getElementById('statistics-traits-all');
+      var addButton = document.querySelector('.js-pill-block-add');
+      if (traitInput && addButton && traitName) {
+        // Check if the trait is already present
+        var existingtraits = document.querySelectorAll('.js-pill-block');
+        var traitAlreadyExists = false;
+        existingtraits.forEach(function (existingtrait) {
+          if (existingtrait.textContent.trim() === traitName) {
+            traitAlreadyExists = true;
+          }
+        });
+        if (!traitAlreadyExists) {
+          // If the trait is not already present, add it
+          traitInput.value = traitName;
+          traitInput.dispatchEvent(new Event('input')); // Emulate typing in the trait input field
+          console.log('Waiting for suggestion list to populate...');
+          setTimeout(function () {
+            var suggestionItems = document.querySelectorAll('.m-auto-suggest-result');
+            console.log('Suggestion list populated');
+            var added = false; // Flag to track if the trait has been added
+            suggestionItems.forEach(function (item) {
+              if (item.textContent.trim() === traitName && !added) {
+                console.log('Adding trait:', traitName);
+                item.closest('.m-auto-suggest-text').click(); // Click on the suggestion item
+                addButton.click(); // Click on the add button to add the trait
+                added = true; // Set the flag to true to indicate the trait has been added
+                resolve(); // Resolve the promise once the trait is added
+              }
+            });
+          }, 100); // Wait for the suggestion list to populate
+        } else {
+          // If the trait is already present, resolve the promise immediately
+          console.log('trait already exists:', traitName);
+          resolve();
+        }
+      }
+    }, 100); // Adjust delay as needed
+  });
+}
+function addLanguageWithDelay(languageName) {
+  return new Promise(function (resolve) {
+    setTimeout(function () {
+      var languageInput = document.getElementById('statistics-languages-all');
+      var addButton = document.querySelector('.js-pill-block-add');
+      if (languageInput && addButton && languageName) {
+        // Check if the language is already present
+        var existinglanguages = document.querySelectorAll('.js-pill-block');
+        var languageAlreadyExists = false;
+        existinglanguages.forEach(function (existinglanguage) {
+          if (existinglanguage.textContent.trim() === languageName) {
+            languageAlreadyExists = true;
+          }
+        });
+        if (!languageAlreadyExists) {
+          // If the language is not already present, add it
+          languageInput.value = languageName;
+          languageInput.dispatchEvent(new Event('input')); // Emulate typing in the language input field
+          console.log('Waiting for suggestion list to populate...');
+          setTimeout(function () {
+            var suggestionItems = document.querySelectorAll('.m-auto-suggest-result');
+            console.log('Suggestion list populated');
+            var added = false; // Flag to track if the language has been added
+            suggestionItems.forEach(function (item) {
+              if (item.textContent.trim() === languageName && !added) {
+                console.log('Adding language:', languageName);
+                item.closest('.m-auto-suggest-text').click(); // Click on the suggestion item
+                addButton.click(); // Click on the add button to add the language
+                added = true; // Set the flag to true to indicate the language has been added
+                resolve(); // Resolve the promise once the language is added
+              }
+            });
+          }, 100); // Wait for the suggestion list to populate
+        } else {
+          // If the language is already present, resolve the promise immediately
+          console.log('language already exists:', languageName);
+          resolve();
+        }
+      }
+    }, 100); // Adjust delay as needed
+  });
+}
+function addAbilitiesWithDelay(abilitiesName) {
+  return new Promise(function (resolve) {
+    setTimeout(function () {
+      var abilitiesInput = document.getElementById('statistics-abilities-all');
+      var addButton = document.querySelector('.js-pill-block-add');
+      if (abilitiesInput && addButton && abilitiesName) {
+        // Check if the abilities is already present
+        var existingabilities = document.querySelectorAll('.js-pill-block');
+        var abilitiesAlreadyExists = false;
+        existingabilities.forEach(function (existingabilities) {
+          if (existingabilities.textContent.trim() === abilitiesName) {
+            abilitiesAlreadyExists = true;
+          }
+        });
+        if (!abilitiesAlreadyExists) {
+          // If the abilities is not already present, add it
+          abilitiesInput.value = abilitiesName;
+          abilitiesInput.dispatchEvent(new Event('input')); // Emulate typing in the abilities input field
+          console.log('Waiting for suggestion list to populate...');
+          setTimeout(function () {
+            var suggestionItems = document.querySelectorAll('.m-auto-suggest-result');
+            console.log('Suggestion list populated');
+            var added = false; // Flag to track if the abilities has been added
+            suggestionItems.forEach(function (item) {
+              if (item.textContent.trim() === abilitiesName && !added) {
+                console.log('Adding abilities:', abilitiesName);
+                item.closest('.m-auto-suggest-text').click(); // Click on the suggestion item
+                addButton.click(); // Click on the add button to add the abilities
+                added = true; // Set the flag to true to indicate the abilities has been added
+                resolve(); // Resolve the promise once the abilities is added
+              }
+            });
+          }, 100); // Wait for the suggestion list to populate
+        } else {
+          // If the abilities is already present, resolve the promise immediately
+          console.log('abilities already exists:', abilitiesName);
+          resolve();
+        }
+      }
+    }, 100); // Adjust delay as needed
+  });
+}
+
+// Export the functions
+// export { 
+//     addSpellWithDelay, 
+//     addFeatWithDelay, 
+//     addTraitWithDelay, 
+//     addLanguageWithDelay, 
+//     addAbilitiesWithDelay 
+// };
+
+window.addSpellWithDelay = addSpellWithDelay;
+window.addFeatWithDelay = addFeatWithDelay;
+window.addTraitWithDelay = addTraitWithDelay;
+window.addLanguageWithDelay = addLanguageWithDelay;
+window.addAbilitiesWithDelay = addAbilitiesWithDelay;
 "use strict";
 
 (function () {

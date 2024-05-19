@@ -1,277 +1,291 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-  let spellLists, featsList, day_list, known_list, traitsList, languageList, abilitiesList;
-  
-  function updateCharacterDescription() {
-      return new Promise((resolve, reject) => {
-          let updateMostRecentTabValue = localStorage.getItem("mostRecentTabValue");
-          if (!updateMostRecentTabValue) {
-              updateMostRecentTabValue = "js-tab-panel-character";
-          }
-          localStorage.setItem("updateMostRecentTabValue", updateMostRecentTabValue);
-  
-          fetch('http://localhost:5000/get_character_data', {
-              method: 'GET',
-              credentials: 'omit'
-          })
-          .then(response => {
-              if (!response.ok) {
-                  throw new Error('Network response was not ok');
-              }
-              return response.json();
-          })
-          .then(characterData => {
-              console.log('Received character data:', characterData);
-              localStorage.setItem('characterData', JSON.stringify(characterData));
-  
-              if (characterData.spell_list_choose_from) {
-                  spellLists = characterData.spell_list_choose_from;
-                  day_list = characterData.day_list;
-                  known_list = characterData.known_list;
-              } else {
-                  console.log("spellLists is not populated");
-              }
-  
-              updatespells_known_and_spells_per_day();
-  
-              featsList = characterData.feats;
-              console.log('Feats List:', featsList);
-  
-              traitsList = characterData.selected_traits;
-              console.log('traits List:', traitsList);
-  
-              languagesList = characterData.language_text;
-              console.log('languages List:', languagesList);
-  
-              abilitiesList = characterData.class_ability;
-              console.log('abilities List:', abilitiesList);
-  
-              (async () => {
-                  try {
-                      const featsInfoModule = await import('./display_functions.js');
-                      const displayFeatsInfo = featsInfoModule.displayFeatsInfo;
-                      const displayTraitsInfo = featsInfoModule.displayTraitsInfo;
-                      const displayArchetypeInfo = featsInfoModule.displayArchetypeInfo;
-                      const displaybodyslotsInfo = featsInfoModule.displaybodyslotsInfo;
-                      const display_abilties = featsInfoModule.display_abilties;
-                      const display_character_description = featsInfoModule.display_character_description;
-  
-                      const featsDescriptionElement = document.getElementById('statistics-feats-notes');
-                      const traitsDescriptionElement = document.getElementById('statistics-traits-notes');
-                      const archetypeDescriptionElement = document.getElementById('statistics-archetypes-notes');
-                      const bodyslotsDescriptionElement = document.getElementById('equipment-body-slots-notes');
-                      const info = characterData.equip_descrip;
-                      
-                      const abilitiesDescriptionElement = document.getElementById('statistics-abilities-notes');
-                      class_features = characterData['class features'];
-  
-                      const characterDescriptionElement = document.getElementById('basics-character-description');
-  
-                      displayFeatsInfo(featsDescriptionElement, characterData);
-                      displayTraitsInfo(traitsDescriptionElement, characterData);
-                      displayArchetypeInfo(archetypeDescriptionElement, characterData);
-                      displaybodyslotsInfo(bodyslotsDescriptionElement, characterData, info);
-                      display_abilties(abilitiesDescriptionElement, characterData, class_features);
-                      display_character_description(characterDescriptionElement, characterData);
-  
-                  } catch (error) {
-                      console.error('Error during dynamic import:', error);
-                  }
-              })();
-  
-              (async () => {
-                  try {
-                      const featsInfoModule = await import('./variableMappings.js');
-                      const variableMappings = featsInfoModule.variableMappings_data;
-                      variableMappings.forEach((mapping, index) => {
-                          const element = document.getElementById(mapping.elementId);
-                          if (element) {
-                              let value;
-                              if (Array.isArray(mapping.dataKey)) {
-                                  const [objectKey, nestedKey] = mapping.dataKey;
-                                  value = characterData[objectKey] ? characterData[objectKey][nestedKey] : undefined;
-                              } else {
-                                  const keys = mapping.dataKey.split('.');
-                                  value = keys.reduce((acc, key) => acc ? acc[key] : undefined, characterData);
-                              }
-  
-                              if (value !== undefined) {
-                                  element.value = value;
-                                  element.focus();
-                                  stats.render();
-                                  classes.render();
-                                  textBlock.render();
-                                  textareaBlock.render();
-                              }
-                          }
-                      });
-  
-                  } catch (error) {
-                      console.error('Error during dynamic import:', error);
-                  }
-              })();
-  
-              (async () => {
-                try {
-                    const tabValueModule = await import('./mostRecentTabValue.js');
-                    const clickMostRecentTab = tabValueModule.clickMostRecentTab;
-                    clickMostRecentTab(characterData, updateMostRecentTabValue);
-
-                } catch (error) {
-                    console.error('Error during dynamic import:', error);
+    let spellLists, featsList, day_list, known_list, traitsList, languageList, abilitiesList;
+    
+    function updateCharacterDescription() {
+        return new Promise((resolve, reject) => {
+            let updateMostRecentTabValue = localStorage.getItem("mostRecentTabValue");
+            if (!updateMostRecentTabValue) {
+                updateMostRecentTabValue = "js-tab-panel-character";
+            }
+            localStorage.setItem("updateMostRecentTabValue", updateMostRecentTabValue);
+    
+            fetch('http://localhost:5000/get_character_data', {
+                method: 'GET',
+                credentials: 'omit'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
-            })();
-  
-              (async () => {
+                return response.json();
+            })
+            .then(characterData => {
+                console.log('Received character data:', characterData);
+                localStorage.setItem('characterData', JSON.stringify(characterData));
+    
+                if (characterData.spell_list_choose_from) {
+                    spellLists = characterData.spell_list_choose_from;
+                    day_list = characterData.day_list;
+                    known_list = characterData.known_list;
+                } else {
+                    console.log("spellLists is not populated");
+                }
+    
+                updatespells_known_and_spells_per_day();
+    
+                featsList = characterData.feats;
+                console.log('Feats List:', featsList);
+    
+                traitsList = characterData.selected_traits;
+                console.log('traits List:', traitsList);
+    
+                languagesList = characterData.language_text;
+                console.log('languages List:', languagesList);
+    
+                abilitiesList = characterData.class_ability;
+                console.log('abilities List:', abilitiesList);
+    
+                (async () => {
+                    try {
+                        const featsInfoModule = await import('./display_functions.js');
+                        const displayFeatsInfo = featsInfoModule.displayFeatsInfo;
+                        const displayTraitsInfo = featsInfoModule.displayTraitsInfo;
+                        const displayArchetypeInfo = featsInfoModule.displayArchetypeInfo;
+                        const displaybodyslotsInfo = featsInfoModule.displaybodyslotsInfo;
+                        const display_abilties = featsInfoModule.display_abilties;
+                        const display_character_description = featsInfoModule.display_character_description;
+    
+                        const featsDescriptionElement = document.getElementById('statistics-feats-notes');
+                        const traitsDescriptionElement = document.getElementById('statistics-traits-notes');
+                        const archetypeDescriptionElement = document.getElementById('statistics-archetypes-notes');
+                        const bodyslotsDescriptionElement = document.getElementById('equipment-body-slots-notes');
+                        const info = characterData.equip_descrip;
+                        
+                        const abilitiesDescriptionElement = document.getElementById('statistics-abilities-notes');
+                        class_features = characterData['class features'];
+    
+                        const characterDescriptionElement = document.getElementById('basics-character-description');
+    
+                        displayFeatsInfo(featsDescriptionElement, characterData);
+                        displayTraitsInfo(traitsDescriptionElement, characterData);
+                        displayArchetypeInfo(archetypeDescriptionElement, characterData);
+                        displaybodyslotsInfo(bodyslotsDescriptionElement, characterData, info);
+                        display_abilties(abilitiesDescriptionElement, characterData, class_features);
+                        display_character_description(characterDescriptionElement, characterData);
+    
+                    } catch (error) {
+                        console.error('Error during dynamic import:', error);
+                    }
+                })();
+    
+                (async () => {
+                    try {
+                        const featsInfoModule = await import('./variableMappings.js');
+                        const variableMappings = featsInfoModule.variableMappings_data;
+                        variableMappings.forEach((mapping, index) => {
+                            const element = document.getElementById(mapping.elementId);
+                            if (element) {
+                                let value;
+                                if (Array.isArray(mapping.dataKey)) {
+                                    const [objectKey, nestedKey] = mapping.dataKey;
+                                    value = characterData[objectKey] ? characterData[objectKey][nestedKey] : undefined;
+                                } else {
+                                    const keys = mapping.dataKey.split('.');
+                                    value = keys.reduce((acc, key) => acc ? acc[key] : undefined, characterData);
+                                }
+    
+                                if (value !== undefined) {
+                                    element.value = value;
+                                    element.focus();
+                                    stats.render();
+                                    classes.render();
+                                    textBlock.render();
+                                    textareaBlock.render();
+                                }
+                            }
+                        });
+    
+                    } catch (error) {
+                        console.error('Error during dynamic import:', error);
+                    }
+                })();
+    
+                (async () => {
                   try {
-                      const skillRanksString = characterData.skill_ranks;
-                      const skillRanksObject = JSON.parse(skillRanksString);
-                      const skillRanksModule = await import('./skill_ranks.js');
-                      const skill_ranks_func = skillRanksModule.skill_ranks_func;
-                      const includeCustomCheckbox = document.getElementById('skills-ranks-include-custom');
-  
-                      skill_ranks_func(skillRanksObject, includeCustomCheckbox);
-                      skills.render();
+                      const tabValueModule = await import('./mostRecentTabValue.js');
+                      const clickMostRecentTab = tabValueModule.clickMostRecentTab;
+                      clickMostRecentTab(characterData, updateMostRecentTabValue);
   
                   } catch (error) {
                       console.error('Error during dynamic import:', error);
                   }
               })();
+    
+                (async () => {
+                    try {
+                        const skillRanksString = characterData.skill_ranks;
+                        const skillRanksObject = JSON.parse(skillRanksString);
+                        const skillRanksModule = await import('./skill_ranks.js');
+                        const skill_ranks_func = skillRanksModule.skill_ranks_func;
+                        const includeCustomCheckbox = document.getElementById('skills-ranks-include-custom');
+    
+                        skill_ranks_func(skillRanksObject, includeCustomCheckbox);
+                        skills.render();
+    
+                    } catch (error) {
+                        console.error('Error during dynamic import:', error);
+                    }
+                })();
+    
+                resolve(characterData);
+    
+            })
+            .catch(error => {
+                console.error('Error fetching or parsing character data:', error);
+                const characterDescriptionElement = document.getElementById('basics-character-description');
+                if (characterDescriptionElement) {
+                    characterDescriptionElement.innerHTML = `<pre>Error: ${error.message}</pre>`;
+                }
+                reject(error);
+            });
+        });
+    }
+    
+    const updateDescriptionButton = document.getElementById('updateDescriptionButton');
+    
+    function updatespells_known_and_spells_per_day() {
+      // Early return if either list is empty
+      if (!day_list || !known_list) {
+        console.log("Not a caster");
+        return;
+      }
+    
+      console.log("day_list electric boogaloo", day_list);
+      console.log("known_list electric boogaloo", known_list);
+    
+      for (let i = 0; i < Math.min(day_list.length, known_list.length); i++) {
+        const dayElement = document.getElementById(`spells-book-level-${i}-per_day`);
+        const knownElement = document.getElementById(`spells-book-level-${i}-known`);
+    
+        if (i < day_list.length) {
+          dayElement.value = day_list[i];
+          knownElement.value = known_list[i];
+        } else {
+          dayElement.value = "N/A";
+          knownElement.value = "N/A";
+        }
+      }
+    }
+      
+    async function clickClearAllButtons() {
+        // // No need to import when functions are globally available
+        // const clickClearAllFeatButton = window.clickClearAllFeatButton;
+        // const clickClearAllTraitsButton = window.clickClearAllTraitsButton;
+        // const clickClearAllLanguageButton = window.clickClearAllLanguageButton;
+        // const clickClearAllAbilitiesButton = window.clickClearAllAbilitiesButton;
+      
+        // // Call the functions directly
+        // await clickClearAllFeatButton();
+        // await clickClearAllTraitsButton();
+        // await clickClearAllLanguageButton();
+        // await clickClearAllAbilitiesButton();
+
+            // window.clickClearAllFeatButton = clickClearAllFeatButton;
+            // window.clickClearAllTraitsButton = clickClearAllTraitsButton;
+            // window.clickClearAllLanguageButton = clickClearAllLanguageButton;
+            // window.clickClearAllAbilitiesButton = clickClearAllAbilitiesButton;
+
+
+            await window.clickClearAllFeatButton();
+            await window.clickClearAllTraitsButton();
+            await window.clickClearAllLanguageButton();
+            await window.clickClearAllAbilitiesButton();        
+      }
+      
   
-              resolve(characterData);
   
-          })
-          .catch(error => {
-              console.error('Error fetching or parsing character data:', error);
-              const characterDescriptionElement = document.getElementById('basics-character-description');
-              if (characterDescriptionElement) {
-                  characterDescriptionElement.innerHTML = `<pre>Error: ${error.message}</pre>`;
+
+      async function handleSpellsAndFeats() {
+        // Instantiate the Clear modules
+        window.addSpellWithDelay = addSpellWithDelay;
+        window.addFeatWithDelay = addFeatWithDelay;
+        window.addTraitWithDelay = addTraitWithDelay;
+        window.addAbilitiesWithDelay = addAbilitiesWithDelay;
+        window.addLanguageWithDelay = addLanguageWithDelay;
+    
+        console.log('Button clicked');
+        await updateCharacterDescription();
+  
+
+
+  
+          if (spellLists) {
+              for (let j = 0; j < spellLists.length; j++) {
+                  const spellList = spellLists[j];
+                  for (let i = 0; i < spellList.length; i++) {
+                      const spellName = spellList[i];
+                      console.log(`Spell Name: ${spellName}`);
+                      await addSpellWithDelay(j, spellName);
+                  }
               }
-              reject(error);
-          });
+          } else {
+              console.log('spellLists is not populated');
+          }
+  
+          for (let i = 0; i < featsList.length; i++) {
+              const featName = featsList[i];
+              console.log(`Feat Name: ${featName}`);
+              await window.addFeatWithDelay(featName);
+          }
+  
+          for (let i = 0; i < traitsList.length; i++) {
+              const traitName = traitsList[i];
+              console.log(`Trait Name: ${traitName}`);
+              await window.addTraitWithDelay(traitName);
+          }
+  
+          for (let i = 0; i < abilitiesList.length; i++) {
+              const abilitiesName = abilitiesList[i];
+              console.log(`Abilities Name: ${abilitiesName}`);
+              await window.addAbilitiesWithDelay(abilitiesName);
+          }
+  
+          for (let i = 0; i < languagesList.length; i++) {
+              const languageName = languagesList[i];
+              console.log(`Language Name: ${languageName}`);
+              await window.addLanguageWithDelay(languageName);
+          }
+  
+  }
+  
+          
+  if (updateDescriptionButton) {
+      updateDescriptionButton.addEventListener('click', async function() {
+          await clickClearAllButtons();
+          await handleSpellsAndFeats();
+          await clickApplyButton();
       });
   }
   
-  const updateDescriptionButton = document.getElementById('updateDescriptionButton');
   
-  function updatespells_known_and_spells_per_day() {
-    // Early return if either list is empty
-    if (!day_list || !known_list) {
-      console.log("Not a caster");
-      return;
-    }
   
-    console.log("day_list electric boogaloo", day_list);
-    console.log("known_list electric boogaloo", known_list);
   
-    for (let i = 0; i < Math.min(day_list.length, known_list.length); i++) {
-      const dayElement = document.getElementById(`spells-book-level-${i}-per_day`);
-      const knownElement = document.getElementById(`spells-book-level-${i}-known`);
-  
-      if (i < day_list.length) {
-        dayElement.value = day_list[i];
-        knownElement.value = known_list[i];
-      } else {
-        dayElement.value = "N/A";
-        knownElement.value = "N/A";
-      }
-    }
-  }
     
-  async function clickClearAllButtons() {
-    // const clearExistingAbilitiesModule = await import('./clearExistingData.js');
-
-    // const clickClearAllFeatButton = clearExistingAbilitiesModule.clickClearAllFeatButton;
-    // const clickClearAllTraitsButton = clearExistingAbilitiesModule.clickClearAllTraitsButton;
-    // const clickClearAllLanguageButton = clearExistingAbilitiesModule.clickClearAllLanguageButton;
-    // const clickClearAllAbilitiesButton = clearExistingAbilitiesModule.clickClearAllAbilitiesButton;
-
-    // await clickClearAllFeatButton();
-    // await clickClearAllTraitsButton();
-    // await clickClearAllLanguageButton();
-    // await clickClearAllAbilitiesButton();
-}
-
-
-    async function handleSpellsAndFeats() {
-        const addWithDelayModule = await import('./addWithDelay.js');
-        const addSpellWithDelay = addWithDelayModule.addSpellWithDelay;
-        const addFeatWithDelay = addWithDelayModule.addFeatWithDelay;
-        const addTraitWithDelay = addWithDelayModule.addTraitWithDelay;
-        const addLanguageWithDelay = addWithDelayModule.addLanguageWithDelay;
-        const addAbilitiesWithDelay = addWithDelayModule.addAbilitiesWithDelay;
-
-        console.log('Button clicked');
-        await updateCharacterDescription(); // Wait for character data to be fetched
-
-        // Instantiate the Clear modules
-
-        if (spellLists) {
-            for (let j = 0; j < spellLists.length; j++) {
-                const spellList = spellLists[j];
-                for (let i = 0; i < spellList.length; i++) {
-                    const spellName = spellList[i];
-                    console.log(`Spell Name: ${spellName}`);
-                    await addSpellWithDelay(j, spellName);
-                }
+        function clickApplyButton() {
+            const applyButton = document.querySelector('a[data-input-block-aggregate-options="target:equipment-wealth-platinum,action:aggregate"]');
+            if (applyButton) {
+                setTimeout(() => {
+                    applyButton.click();
+                    console.log('Apply button clicked.');
+                }, 100);
+            } else {
+                console.error('Apply button not found.');
             }
-        } else {
-            console.log('spellLists is not populated');
         }
-
-        for (let i = 0; i < featsList.length; i++) {
-            const featName = featsList[i];
-            console.log(`Feat Name: ${featName}`);
-            await addFeatWithDelay(featName);
-        }
-
-        for (let i = 0; i < traitsList.length; i++) {
-            const traitName = traitsList[i];
-            console.log(`Trait Name: ${traitName}`);
-            await addTraitWithDelay(traitName);
-        }
-
-        for (let i = 0; i < abilitiesList.length; i++) {
-            const abilitiesName = abilitiesList[i];
-            console.log(`Abilities Name: ${abilitiesName}`);
-            await addAbilitiesWithDelay(abilitiesName);
-        }
-
-        for (let i = 0; i < languagesList.length; i++) {
-            const languageName = languagesList[i];
-            console.log(`Language Name: ${languageName}`);
-            await addLanguageWithDelay(languageName);
-        }
-
-}
-
-        
-if (updateDescriptionButton) {
-    updateDescriptionButton.addEventListener('click', async function() {
-        await clickClearAllButtons();
-        await handleSpellsAndFeats();
-        await clickApplyButton();
-    });
-}
-
-
-
-
+    
   
-      function clickApplyButton() {
-          const applyButton = document.querySelector('a[data-input-block-aggregate-options="target:equipment-wealth-platinum,action:aggregate"]');
-          if (applyButton) {
-              setTimeout(() => {
-                  applyButton.click();
-                  console.log('Apply button clicked.');
-              }, 100);
-          } else {
-              console.error('Apply button not found.');
-          }
+  
       }
-  
-
-
-    }
-  );
-  
+    );
+    

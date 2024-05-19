@@ -227,10 +227,17 @@ function addSpellWithDelay(level, spellName) {
     
 
     // Export the functions
-export { 
-    addSpellWithDelay, 
-    addFeatWithDelay, 
-    addTraitWithDelay, 
-    addLanguageWithDelay, 
-    addAbilitiesWithDelay 
-};
+// export { 
+//     addSpellWithDelay, 
+//     addFeatWithDelay, 
+//     addTraitWithDelay, 
+//     addLanguageWithDelay, 
+//     addAbilitiesWithDelay 
+// };
+
+    window.addSpellWithDelay = addSpellWithDelay;
+    window.addFeatWithDelay = addFeatWithDelay;
+    window.addTraitWithDelay = addTraitWithDelay; 
+    window.addLanguageWithDelay = addLanguageWithDelay; 
+    window.addAbilitiesWithDelay = addAbilitiesWithDelay;
+     

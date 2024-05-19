@@ -38,3 +38,8 @@ clearExistingDataButton.addEventListener('click', function() {
 });
 
 // export { clickClearAllFeatButton, clickClearAllTraitsButton, clickClearAllLanguageButton, clickClearAllAbilitiesButton };
+
+window.clickClearAllFeatButton = clickClearAllFeatButton;
+window.clickClearAllTraitsButton = clickClearAllTraitsButton;
+window.clickClearAllLanguageButton = clickClearAllLanguageButton;
+window.clickClearAllAbilitiesButton = clickClearAllAbilitiesButton;

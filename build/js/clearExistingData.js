@@ -37,4 +37,9 @@ clearExistingDataButton.addEventListener('click', function() {
   clickClearAllAbilitiesButton();
 });
 
-export { clickClearAllFeatButton, clickClearAllTraitsButton, clickClearAllLanguageButton, clickClearAllAbilitiesButton };
+// export { clickClearAllFeatButton, clickClearAllTraitsButton, clickClearAllLanguageButton, clickClearAllAbilitiesButton };
+
+window.clickClearAllFeatButton = clickClearAllFeatButton;
+window.clickClearAllTraitsButton = clickClearAllTraitsButton;
+window.clickClearAllLanguageButton = clickClearAllLanguageButton;
+window.clickClearAllAbilitiesButton = clickClearAllAbilitiesButton;
