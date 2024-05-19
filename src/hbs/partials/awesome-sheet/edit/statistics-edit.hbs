@@ -613,150 +613,142 @@
 
 
 <script>
+"use strict";
+
 function clickRemove_feats() {
-    var removeButton = document.querySelector('button.js-pill-control[data-pill-control-options*="action:changeState"][data-pill-control-options*="state:remove"][data-pill-control-options*="type:feats"]');
-    if (removeButton) {
-        removeButton.click();
-        console.log('Remove button clicked');
-    } else {
-        console.log('Remove button not found');
-    }
+  var removeButton = document.querySelector('button.js-pill-control[data-pill-control-options*="action:changeState"][data-pill-control-options*="state:remove"][data-pill-control-options*="type:feats"]');
+  if (removeButton) {
+    removeButton.click();
+    console.log('Remove button clicked');
+  } else {
+    console.log('Remove button not found');
+  }
 }
-
 function clickRemove_traits() {
-    var removeButton = document.querySelector('button.js-pill-control[data-pill-control-options*="action:changeState"][data-pill-control-options*="state:remove"][data-pill-control-options*="type:traits"]');
-    if (removeButton) {
-        removeButton.click();
-        console.log('Remove button clicked');
-    } else {
-        console.log('Remove button not found');
-    }
+  var removeButton = document.querySelector('button.js-pill-control[data-pill-control-options*="action:changeState"][data-pill-control-options*="state:remove"][data-pill-control-options*="type:traits"]');
+  if (removeButton) {
+    removeButton.click();
+    console.log('Remove button clicked');
+  } else {
+    console.log('Remove button not found');
+  }
 }
-
 function clickRemove_Languages() {
-    var removeButton = document.querySelector('button.js-pill-control[data-pill-control-options*="action:changeState"][data-pill-control-options*="state:remove"][data-pill-control-options*="type:languages"]');
-    if (removeButton) {
-        removeButton.click();
-        console.log('Remove button clicked');
-    } else {
-        console.log('Remove button not found');
-    }
+  var removeButton = document.querySelector('button.js-pill-control[data-pill-control-options*="action:changeState"][data-pill-control-options*="state:remove"][data-pill-control-options*="type:languages"]');
+  if (removeButton) {
+    removeButton.click();
+    console.log('Remove button clicked');
+  } else {
+    console.log('Remove button not found');
+  }
 }
-
-
 function clickRemove_Abilities() {
-    var removeButton = document.querySelector('button.js-pill-control[data-pill-control-options*="action:changeState"][data-pill-control-options*="state:remove"][data-pill-control-options*="type:abilities"]');
-    if (removeButton) {
-        removeButton.click();
-        console.log('Remove button clicked');
-    } else {
-        console.log('Remove button not found');
-    }
+  var removeButton = document.querySelector('button.js-pill-control[data-pill-control-options*="action:changeState"][data-pill-control-options*="state:remove"][data-pill-control-options*="type:abilities"]');
+  if (removeButton) {
+    removeButton.click();
+    console.log('Remove button clicked');
+  } else {
+    console.log('Remove button not found');
+  }
 }
-
-
 function clickAllFeats(clickCount) {
-    clickCount = clickCount || 0;
-    if (clickCount < 100) {
-        clickRemove_feats();
-        var featSection = document.querySelector('.m-pill-block-area.js-pill-block-area-feats');
-        if (featSection) {
-            var featButtons = featSection.querySelectorAll('button.js-pill-item');
-            if (featButtons.length > 0) {
-                console.log("feat buttons length: " + featButtons.length);
-                featButtons.forEach(function (button) {
-                    button.click();
-                });
-                console.log('All feats have been cleared.');
-            } else {
-                console.log('No feat buttons found.');
-            }
-        } else {
-            console.log('Feats section not found.');
-        }
-        clickRemove_feats();
-        clickAllFeats(clickCount + 1);
+  clickCount = clickCount || 0;
+  if (clickCount < 100) {
+    clickRemove_feats();
+    var featSection = document.querySelector('.m-pill-block-area.js-pill-block-area-feats');
+    if (featSection) {
+      var featButtons = featSection.querySelectorAll('button.js-pill-item');
+      if (featButtons.length > 0) {
+        console.log("feat buttons length: " + featButtons.length);
+        featButtons.forEach(function (button) {
+          button.click();
+        });
+        console.log('All feats have been cleared.');
+      } else {
+        console.log('No feat buttons found.');
+      }
     } else {
-        console.log('Resetting clickCount after 3 iterations.');
+      console.log('Feats section not found.');
     }
+    clickRemove_feats();
+    clickAllFeats(clickCount + 1);
+  } else {
+    console.log('Resetting clickCount after 3 iterations.');
+  }
 }
-
 function clickAllTraits(clickCount) {
-    clickCount = clickCount || 0;
-    if (clickCount < 100) {
-        clickRemove_traits();
-        var traitSection = document.querySelector('.m-pill-block-area.js-pill-block-area-traits');
-        if (traitSection) {
-            var traitButtons = traitSection.querySelectorAll('button.js-pill-item');
-            if (traitButtons.length > 0) {
-                console.log("trait buttons length: " + traitButtons.length);
-                traitButtons.forEach(function (button) {
-                    button.click();
-                });
-                console.log('All traits have been cleared.');
-            } else {
-                console.log('No trait buttons found.');
-            }
-        } else {
-            console.log('traits section not found.');
-        }
-        clickRemove_traits();
-        clickAllTraits(clickCount + 1);
+  clickCount = clickCount || 0;
+  if (clickCount < 100) {
+    clickRemove_traits();
+    var traitSection = document.querySelector('.m-pill-block-area.js-pill-block-area-traits');
+    if (traitSection) {
+      var traitButtons = traitSection.querySelectorAll('button.js-pill-item');
+      if (traitButtons.length > 0) {
+        console.log("trait buttons length: " + traitButtons.length);
+        traitButtons.forEach(function (button) {
+          button.click();
+        });
+        console.log('All traits have been cleared.');
+      } else {
+        console.log('No trait buttons found.');
+      }
     } else {
-        console.log('Resetting clickCount after 3 iterations.');
+      console.log('traits section not found.');
     }
+    clickRemove_traits();
+    clickAllTraits(clickCount + 1);
+  } else {
+    console.log('Resetting clickCount after 3 iterations.');
+  }
 }
-
 function clickAllLanguages(clickCount) {
-    clickCount = clickCount || 0;
-    if (clickCount < 100) {
-        clickRemove_Languages();
-        var LanguageSection = document.querySelector('.m-pill-block-area.js-pill-block-area-languages');
-        if (LanguageSection) {
-            var LanguageButtons = LanguageSection.querySelectorAll('button.js-pill-item');
-            if (LanguageButtons.length > 0) {
-                console.log("Language buttons length: " + LanguageButtons.length);
-                LanguageButtons.forEach(function (button) {
-                    button.click();
-                });
-                console.log('All Languages have been cleared.');
-            } else {
-                console.log('No Language buttons found.');
-            }
-        } else {
-            console.log('Languages section not found.');
-        }
-        clickRemove_Languages();
-        clickAllLanguages(clickCount + 1);
+  clickCount = clickCount || 0;
+  if (clickCount < 100) {
+    clickRemove_Languages();
+    var LanguageSection = document.querySelector('.m-pill-block-area.js-pill-block-area-languages');
+    if (LanguageSection) {
+      var LanguageButtons = LanguageSection.querySelectorAll('button.js-pill-item');
+      if (LanguageButtons.length > 0) {
+        console.log("Language buttons length: " + LanguageButtons.length);
+        LanguageButtons.forEach(function (button) {
+          button.click();
+        });
+        console.log('All Languages have been cleared.');
+      } else {
+        console.log('No Language buttons found.');
+      }
     } else {
-        console.log('Resetting clickCount after 3 iterations.');
+      console.log('Languages section not found.');
     }
+    clickRemove_Languages();
+    clickAllLanguages(clickCount + 1);
+  } else {
+    console.log('Resetting clickCount after 3 iterations.');
+  }
 }
-
 function clickAllAbilities(clickCount) {
-    clickCount = clickCount || 0;
-    if (clickCount < 100) {
-        clickRemove_Abilities();
-        var AbilitiesSection = document.querySelector('.m-pill-block-area.js-pill-block-area-abilities');
-        if (AbilitiesSection) {
-            var LanguageButtons = AbilitiesSection.querySelectorAll('button.js-pill-item');
-            if (LanguageButtons.length > 0) {
-                console.log("Language buttons length: " + LanguageButtons.length);
-                LanguageButtons.forEach(function (button) {
-                    button.click();
-                });
-                console.log('All Abilities have been cleared.');
-            } else {
-                console.log('No Language buttons found.');
-            }
-        } else {
-            console.log('Abilities section not found.');
-        }
-        clickRemove_Abilities();
-        clickAllAbilities(clickCount + 1);
+  clickCount = clickCount || 0;
+  if (clickCount < 100) {
+    clickRemove_Abilities();
+    var AbilitiesSection = document.querySelector('.m-pill-block-area.js-pill-block-area-abilities');
+    if (AbilitiesSection) {
+      var LanguageButtons = AbilitiesSection.querySelectorAll('button.js-pill-item');
+      if (LanguageButtons.length > 0) {
+        console.log("Language buttons length: " + LanguageButtons.length);
+        LanguageButtons.forEach(function (button) {
+          button.click();
+        });
+        console.log('All Abilities have been cleared.');
+      } else {
+        console.log('No Language buttons found.');
+      }
     } else {
-        console.log('Resetting clickCount after 3 iterations.');
+      console.log('Abilities section not found.');
     }
+    clickRemove_Abilities();
+    clickAllAbilities(clickCount + 1);
+  } else {
+    console.log('Resetting clickCount after 3 iterations.');
+  }
 }
-
 </script>
