@@ -26,10 +26,10 @@ function clickClearAllAbilitiesButton() {
 }
 
 // Select the clearExistingDataButton element
-const clearExistingDataButton = document.getElementById("clearExistingDataButton");
+const clearExistingDataButton_to_click = document.getElementById("clearExistingDataButton");
 
 // Add an event listener to the clearExistingDataButton button
-clearExistingDataButton.addEventListener('click', function() {
+clearExistingDataButton_to_click.addEventListener('click', function() {
   // Call functions to click all four buttons
   clickClearAllFeatButton();
   clickClearAllTraitsButton();
