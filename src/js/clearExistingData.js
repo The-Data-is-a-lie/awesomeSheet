@@ -1,12 +1,5 @@
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.clickClearAllAbilitiesButton = clickClearAllAbilitiesButton;
-exports.clickClearAllFeatButton = clickClearAllFeatButton;
-exports.clickClearAllLanguageButton = clickClearAllLanguageButton;
-exports.clickClearAllTraitsButton = clickClearAllTraitsButton;
 // Function to simulate click on Clear All Feats button
 function clickClearAllFeatButton() {
   setTimeout(function () {
@@ -45,3 +38,9 @@ clearExistingDataButton.addEventListener('click', function () {
   clickClearAllLanguageButton();
   clickClearAllAbilitiesButton();
 });
+
+// Exporting functions
+window.clickClearAllFeatButton = clickClearAllFeatButton;
+window.clickClearAllTraitsButton = clickClearAllTraitsButton;
+window.clickClearAllLanguageButton = clickClearAllLanguageButton;
+window.clickClearAllAbilitiesButton = clickClearAllAbilitiesButton;
