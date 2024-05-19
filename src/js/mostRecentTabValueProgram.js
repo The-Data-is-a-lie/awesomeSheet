@@ -1,8 +1,6 @@
 function clickMostRecentTab(characterData, updateMostRecentTabValue) {
     var value = extract_value(updateMostRecentTabValue);
-    var valueSecondary = extract_value_secondary(updateMostRecentTabValue);
     console.log("this is your extracted avlue", value);
-    console.log("this is yur extracted secondary value", valueSecondary);
     
     console.log("Most recent tab value update button:", updateMostRecentTabValue);
     if (updateMostRecentTabValue) {
@@ -146,8 +144,22 @@ function clickMostRecentTab(characterData, updateMostRecentTabValue) {
     }
 
 
-        } else if (spellKeywords.test(updateMostRecentTabValue)) {
-            const spellButton = document.querySelector(`button[data-tab-options='tabGroup:spells,tab:${value},target:js-tab-panel-spell-level-${valueSecondary}']`);
+            } else if (spellKeywords.test(updateMostRecentTabValue)) {
+              const spellSecondValues = {
+                level_0: "level-0", 
+                level_1: "level-1", 
+                level_2: "level-2", 
+                level_3: "level-3", 
+                level_4: "level-4", 
+                level_5: "level-5", 
+                level_6: "level-6", 
+                level_7: "level-7", 
+                level_8: "level-8", 
+                level_9: "level-9", 
+
+                
+              };
+            const spellButton = document.querySelector(`button[data-tab-options='tabGroup:spells,tab:${value},target:js-tab-panel-spell-level-${second_value}']`);
             if (spellButton) {
             spellButton.click();
             setTimeout(() => {

@@ -4,11 +4,27 @@ document.addEventListener('DOMContentLoaded', function () {
     
     function updateCharacterDescription() {
         return new Promise((resolve, reject) => {
-            let updateMostRecentTabValue = localStorage.getItem("mostRecentTabValue");
-            if (!updateMostRecentTabValue) {
-                updateMostRecentTabValue = "js-tab-panel-character";
+            if (localStorage.getItem('MostRecentTabValue')) {
+                // If it exists, use the value from localStorage
+                var MostRecentTabValue = localStorage.getItem('MostRecentTabValue');
+            } else {
+                // If it doesn't exist, set the default value to 'js-tab-panel-character'
+                var MostRecentTabValue = 'js-tab-panel-character';
+                // Optionally, save this default value to localStorage for future use
+                localStorage.setItem('MostRecentTabValue', MostRecentTabValue);
             }
-            localStorage.setItem("updateMostRecentTabValue", updateMostRecentTabValue);
+            
+            // Now you can use MostRecentTabValue in your code
+            if (localStorage.getItem('updateMostRecentTabValue')) {
+                // If it exists, use the value from localStorage
+                var updateMostRecentTabValue = localStorage.getItem('updateMostRecentTabValue');
+                console.log('updateMostRecentTabValue: if statement', updateMostRecentTabValue);
+            } else {
+                // If it doesn't exist, set the default value to 'js-tab-panel-character'
+                var updateMostRecentTabValue = 'js-tab-panel-character';
+                // Optionally, save this default value to localStorage for future use
+                localStorage.setItem('updateMostRecentTabValue', updateMostRecentTabValue);
+            }
     
             fetch('http://localhost:5000/get_character_data', {
                 method: 'GET',

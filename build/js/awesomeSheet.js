@@ -39839,9 +39839,7 @@ window.addAbilitiesWithDelay = addAbilitiesWithDelay;
 
 function clickMostRecentTab(characterData, updateMostRecentTabValue) {
   var value = extract_value(updateMostRecentTabValue);
-  var valueSecondary = extract_value_secondary(updateMostRecentTabValue);
   console.log("this is your extracted avlue", value);
-  console.log("this is yur extracted secondary value", valueSecondary);
   console.log("Most recent tab value update button:", updateMostRecentTabValue);
   if (updateMostRecentTabValue) {
     var characterKeywords = /character|experience|classes|senses|initiative|speed|image|character_generator/i;
@@ -39970,7 +39968,19 @@ function clickMostRecentTab(characterData, updateMostRecentTabValue) {
         }
       }
     } else if (spellKeywords.test(updateMostRecentTabValue)) {
-      var spellButton = document.querySelector("button[data-tab-options='tabGroup:spells,tab:".concat(value, ",target:js-tab-panel-spell-level-").concat(valueSecondary, "']"));
+      var spellSecondValues = {
+        level_0: "level-0",
+        level_1: "level-1",
+        level_2: "level-2",
+        level_3: "level-3",
+        level_4: "level-4",
+        level_5: "level-5",
+        level_6: "level-6",
+        level_7: "level-7",
+        level_8: "level-8",
+        level_9: "level-9"
+      };
+      var spellButton = document.querySelector("button[data-tab-options='tabGroup:spells,tab:".concat(value, ",target:js-tab-panel-spell-level-").concat(second_value, "']"));
       if (spellButton) {
         spellButton.click();
         setTimeout(function () {
@@ -40036,11 +40046,27 @@ document.addEventListener('DOMContentLoaded', function () {
   var spellLists, featsList, day_list, known_list, traitsList, languageList, abilitiesList;
   function updateCharacterDescription() {
     return new Promise(function (resolve, reject) {
-      var updateMostRecentTabValue = localStorage.getItem("mostRecentTabValue");
-      if (!updateMostRecentTabValue) {
-        updateMostRecentTabValue = "js-tab-panel-character";
+      if (localStorage.getItem('MostRecentTabValue')) {
+        // If it exists, use the value from localStorage
+        var MostRecentTabValue = localStorage.getItem('MostRecentTabValue');
+      } else {
+        // If it doesn't exist, set the default value to 'js-tab-panel-character'
+        var MostRecentTabValue = 'js-tab-panel-character';
+        // Optionally, save this default value to localStorage for future use
+        localStorage.setItem('MostRecentTabValue', MostRecentTabValue);
       }
-      localStorage.setItem("updateMostRecentTabValue", updateMostRecentTabValue);
+
+      // Now you can use MostRecentTabValue in your code
+      if (localStorage.getItem('updateMostRecentTabValue')) {
+        // If it exists, use the value from localStorage
+        var updateMostRecentTabValue = localStorage.getItem('updateMostRecentTabValue');
+        console.log('updateMostRecentTabValue: if statement', updateMostRecentTabValue);
+      } else {
+        // If it doesn't exist, set the default value to 'js-tab-panel-character'
+        var updateMostRecentTabValue = 'js-tab-panel-character';
+        // Optionally, save this default value to localStorage for future use
+        localStorage.setItem('updateMostRecentTabValue', updateMostRecentTabValue);
+      }
       fetch('http://localhost:5000/get_character_data', {
         method: 'GET',
         credentials: 'omit'
