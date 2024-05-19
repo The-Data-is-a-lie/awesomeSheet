@@ -142,6 +142,7 @@ module.exports = function(grunt) {
           '<%= folders.build %>/js/send-character-data.js',
           '<%= folders.build %>/js/mostRecentTabValue.js', 
           '<%= folders.build %>/js/addWithDelay.js',           
+          '<%= folders.build %>/js/mostRecentTabValueProgram.js',
           '<%= folders.build %>/js/updateCharacterDescription.js',
           '<%= folders.build %>/js/prep_for_export.js', 
           '<%= folders.build %>/js/display_functions.js', 
