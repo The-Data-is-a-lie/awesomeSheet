@@ -10,6 +10,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-babel');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-usemin');
@@ -17,7 +18,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-assemble');
   grunt.loadNpmTasks('grunt-autoprefixer');
   grunt.loadNpmTasks('grunt-sw-precache');
-  grunt.loadNpmTasks('grunt-babel');
 
   require('time-grunt')(grunt);
 
