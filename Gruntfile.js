@@ -140,7 +140,6 @@ module.exports = function(grunt) {
           '<%= folders.build %>/js/wealth.js',
           '<%= folders.build %>/js/vendor-options.js',
           '<%= folders.build %>/js/send-character-data.js',
-          '<%= folders.build %>/js/mostRecentTabValue.js', 
           '<%= folders.build %>/js/addWithDelay.js',           
           '<%= folders.build %>/js/mostRecentTabValueProgram.js',
           '<%= folders.build %>/js/updateCharacterDescription.js',
