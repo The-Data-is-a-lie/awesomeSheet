@@ -144,7 +144,6 @@ module.exports = function(grunt) {
           '<%= folders.build %>/js/addWithDelay.js',           
           '<%= folders.build %>/js/mostRecentTabValueProgram.js',
           '<%= folders.build %>/js/updateCharacterDescription.js',
-          '<%= folders.build %>/js/prep_for_export.js', 
           '<%= folders.build %>/js/display_functions.js', 
           '<%= folders.build %>/js/skill_ranks.js', 
           '<%= folders.build %>/js/variableMappings.js', 
