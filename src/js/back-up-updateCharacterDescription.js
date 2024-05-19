@@ -90,7 +90,7 @@ let spellLists, featsList, day_list, known_list;
 function updateCharacterDescription() {
   // const characterDescriptionElement = document.getElementById('basics-character-description');
 
-  fetch('https://664a4bf3daa00200087eabaf--pathfinder-1e-character-sheet.netlify.app/get_character_data', {
+  fetch('http://localhost:5000/get_character_data', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json',

@@ -39580,7 +39580,7 @@ document.getElementById('updateDescriptionButton').addEventListener('click', fun
   sendDataToServer(data);
 });
 function sendDataToServer(data) {
-  fetch('https://664a4bf3daa00200087eabaf--pathfinder-1e-character-sheet.netlify.app/update_character_data', {
+  fetch('http://localhost:5000/update_character_data', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -39622,6 +39622,7 @@ function clickMostRecentTab(characterData, updateMostRecentTabValue) {
   var value = extract_value(updateMostRecentTabValue);
   var valueSecondary = extract_value_secondary(updateMostRecentTabValue);
   console.log("this is your extracted avlue", value);
+  console.log("this is yur extracted secondary value", valueSecondary);
   console.log("Most recent tab value update button:", updateMostRecentTabValue);
   if (updateMostRecentTabValue) {
     var characterKeywords = /character|experience|classes|senses|initiative|speed|image|character_generator/i;
@@ -39776,7 +39777,7 @@ function extract_value(element) {
     console.log("Extracted value:", value);
     return "".concat(value); // Assuming value represents experience
   } else {
-    console.error("Failed to extract value from updateMostRecentTabValue.");
+    console.error("Failed to extract value from updateMostRecentTabValue Primary.");
     return "";
   }
 }
@@ -39790,7 +39791,7 @@ function extract_value_secondary(element) {
     console.log("Extracted value:", value);
     return "".concat(value); // Assuming value represents experience
   } else {
-    console.error("Failed to extract value from updateMostRecentTabValue.");
+    console.error("Failed to extract value from updateMostRecentTabValue Secondary.");
     return "";
   }
 }
@@ -39798,6 +39799,8 @@ function extract_value_secondary(element) {
 // export { clickMostRecentTab };
 
 window.clickMostRecentTab = clickMostRecentTab;
+window.extract_value = extract_value;
+window.extract_value_secondary = extract_value_secondary;
 "use strict";
 
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
@@ -39819,7 +39822,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateMostRecentTabValue = "js-tab-panel-character";
       }
       localStorage.setItem("updateMostRecentTabValue", updateMostRecentTabValue);
-      fetch('https://664a4bf3daa00200087eabaf--pathfinder-1e-character-sheet.netlify.app/get_character_data', {
+      fetch('http://localhost:5000/get_character_data', {
         method: 'GET',
         credentials: 'omit'
       }).then(function (response) {
@@ -40611,6 +40614,52 @@ var variableMappings_data = [{
 // export { variableMappings_data };
 // Manually add to the window object
 window.variableMappings_data = variableMappings_data;
+"use strict";
+
+// Function to simulate click on Clear All Feats button
+function clickClearAllFeatButton() {
+  setTimeout(function () {
+    document.querySelector('button[onclick="clickAllFeats()"]').click();
+  }, 100); // Adjust the delay time as needed
+}
+
+// Function to simulate click on Clear All Traits button
+function clickClearAllTraitsButton() {
+  setTimeout(function () {
+    document.querySelector('button[onclick="clickAllTraits()"]').click();
+  }, 100); // Adjust the delay time as needed
+}
+
+// Function to simulate click on Clear All Languages button
+function clickClearAllLanguageButton() {
+  setTimeout(function () {
+    document.querySelector('button[onclick="clickAllLanguages()"]').click();
+  }, 100); // Adjust the delay time as needed
+}
+function clickClearAllAbilitiesButton() {
+  setTimeout(function () {
+    document.querySelector('button[onclick="clickAllAbilities()"]').click();
+  }, 100); // Adjust the delay time as needed
+}
+
+// Select the clearExistingDataButton element
+var clearExistingDataButton_to_click = document.getElementById("clearExistingDataButton");
+
+// Add an event listener to the clearExistingDataButton button
+clearExistingDataButton_to_click.addEventListener('click', function () {
+  // Call functions to click all four buttons
+  clickClearAllFeatButton();
+  clickClearAllTraitsButton();
+  clickClearAllLanguageButton();
+  clickClearAllAbilitiesButton();
+});
+
+// export { clickClearAllFeatButton, clickClearAllTraitsButton, clickClearAllLanguageButton, clickClearAllAbilitiesButton };
+
+window.clickClearAllFeatButton = clickClearAllFeatButton;
+window.clickClearAllTraitsButton = clickClearAllTraitsButton;
+window.clickClearAllLanguageButton = clickClearAllLanguageButton;
+window.clickClearAllAbilitiesButton = clickClearAllAbilitiesButton;
 "use strict";
 
 function addSpellWithDelay(level, spellName) {

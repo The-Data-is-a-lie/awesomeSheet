@@ -1,20 +1,21 @@
 function clickMostRecentTab(characterData, updateMostRecentTabValue) {
-    const value = extract_value(updateMostRecentTabValue);
-    const valueSecondary = extract_value_secondary(updateMostRecentTabValue);
+    var value = extract_value(updateMostRecentTabValue);
+    var valueSecondary = extract_value_secondary(updateMostRecentTabValue);
     console.log("this is your extracted avlue", value);
+    console.log("this is yur extracted secondary value", valueSecondary);
     
     console.log("Most recent tab value update button:", updateMostRecentTabValue);
     if (updateMostRecentTabValue) {
-      const characterKeywords = /character|experience|classes|senses|initiative|speed|image|character_generator/i;
-      const statsKeywords = /stats|abilities|archetypes|feats|traits|languages|power/i;
-      const possessionsKeywords = /possessions|armor|body_slots|descriptions|item|encumbrance|consumable|wealth/i;
-      const hpKeywords = /hp|cmd|saves|dr|sr|resistance/i;
-      const acKeywords = /\bac\b/i;
-      const offenseKeywords = /cmb|attack/i;
-      const spellKeywords = /level_0|level_1|level_2|level_3|level_4|level_5|level_6|level_7|level_8|level_9|spell-stats/i;
+      var characterKeywords = /character|experience|classes|senses|initiative|speed|image|character_generator/i;
+      var statsKeywords = /stats|abilities|archetypes|feats|traits|languages|power/i;
+      var possessionsKeywords = /possessions|armor|body_slots|descriptions|item|encumbrance|consumable|wealth/i;
+      var hpKeywords = /hp|cmd|saves|dr|sr|resistance/i;
+      var acKeywords = /\bac\b/i;
+      var offenseKeywords = /cmb|attack/i;
+      var spellKeywords = /level_0|level_1|level_2|level_3|level_4|level_5|level_6|level_7|level_8|level_9|spell-stats/i;
   
       if (characterKeywords.test(updateMostRecentTabValue)) {
-        const characterSecondValues = {
+        var characterSecondValues = {
           character: "character",
           experience: "experience", 
           classes: "classes", 
@@ -26,8 +27,8 @@ function clickMostRecentTab(characterData, updateMostRecentTabValue) {
           
         };
         if (characterKeywords.test(updateMostRecentTabValue)) {
-          const second_value = characterSecondValues[value] || value; // Use default value if not found
-          const hpButton = document.querySelector(`button[data-tab-options='tabGroup:basics,tab:${value},target:js-tab-panel-${second_value}']`);
+          var second_value = characterSecondValues[value] || value; // Use default value if not found
+          var hpButton = document.querySelector(`button[data-tab-options='tabGroup:basics,tab:${value},target:js-tab-panel-${second_value}']`);
           if (hpButton) {
             hpButton.click();
             setTimeout(() => {
@@ -41,7 +42,7 @@ function clickMostRecentTab(characterData, updateMostRecentTabValue) {
       }
 
       } else if (statsKeywords.test(updateMostRecentTabValue)) {
-        const statsButton = document.querySelector(`button[data-tab-options='tabGroup:statistics,tab:${value},target:js-tab-panel-${value}']`);
+        var statsButton = document.querySelector(`button[data-tab-options='tabGroup:statistics,tab:${value},target:js-tab-panel-${value}']`);
         if (statsButton) {
             statsButton.click();
             setTimeout(() => {
@@ -175,7 +176,7 @@ function clickMostRecentTab(characterData, updateMostRecentTabValue) {
         console.log("Extracted value:", value);
         return `${value}`; // Assuming value represents experience
       } else {
-        console.error("Failed to extract value from updateMostRecentTabValue.");
+        console.error("Failed to extract value from updateMostRecentTabValue Primary.");
         return "";
       }
     }
@@ -189,7 +190,7 @@ function clickMostRecentTab(characterData, updateMostRecentTabValue) {
         console.log("Extracted value:", value);
         return `${value}`; // Assuming value represents experience
       } else {
-        console.error("Failed to extract value from updateMostRecentTabValue.");
+        console.error("Failed to extract value from updateMostRecentTabValue Secondary.");
         return "";
       }
     }
@@ -197,4 +198,5 @@ function clickMostRecentTab(characterData, updateMostRecentTabValue) {
     // export { clickMostRecentTab };
 
     window.clickMostRecentTab = clickMostRecentTab
-  
+    window.extract_value = extract_value
+    window.extract_value_secondary = extract_value_secondary

@@ -22,7 +22,7 @@ document.getElementById('updateDescriptionButton').addEventListener('click', fun
 });
 
 function sendDataToServer(data) {
-    fetch('https://664a4bf3daa00200087eabaf--pathfinder-1e-character-sheet.netlify.app/update_character_data', {
+    fetch('http://localhost:5000/update_character_data', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
