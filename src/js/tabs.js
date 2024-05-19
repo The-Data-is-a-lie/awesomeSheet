@@ -1,6 +1,7 @@
-var tabs = (function() {
+"use strict";
 
-  var state = (function() {
+var tabs = function () {
+  var state = function () {
     var tabState = {
       basics: {
         character: true,
@@ -65,7 +66,7 @@ var tabs = (function() {
         story: false
       }
     };
-    var get = function(options) {
+    var get = function get(options) {
       var defaultOptions = {
         section: null,
         tab: null,
@@ -73,121 +74,128 @@ var tabs = (function() {
       };
       if (options) {
         defaultOptions = helper.applyOptions(defaultOptions, options);
-      };
+      }
+      ;
       if (defaultOptions.all) {
         return tabState;
       } else if (defaultOptions.section != null && defaultOptions.tab == null) {
         return tabState[defaultOptions.section];
       } else if (defaultOptions.section != null && defaultOptions.tab != null) {
         return tabState[defaultOptions.section][defaultOptions.tab];
-      };
+      }
+      ;
     };
-    var set = function(options) {
+    var set = function set(options) {
       var defaultOptions = {
         section: null,
         tab: null,
-        boolean: null
+        "boolean": null
       };
       if (options) {
         defaultOptions = helper.applyOptions(defaultOptions, options);
-      };
-      if (defaultOptions.boolean != null) {
+      }
+      ;
+      if (defaultOptions["boolean"] != null) {
         if (defaultOptions.section != null && defaultOptions.tab != null) {
-          tabState[defaultOptions.section][defaultOptions.tab] = defaultOptions.boolean;
-        };
+          tabState[defaultOptions.section][defaultOptions.tab] = defaultOptions["boolean"];
+        }
+        ;
       } else {
         if (defaultOptions.section != null && defaultOptions.tab != null) {
           for (var key in tabState[defaultOptions.section]) {
             tabState[defaultOptions.section][key] = false;
-          };
+          }
+          ;
           if (tabState[defaultOptions.section][defaultOptions.tab]) {
             tabState[defaultOptions.section][defaultOptions.tab] = false;
           } else {
             tabState[defaultOptions.section][defaultOptions.tab] = true;
-          };
-        };
-      };
+          }
+          ;
+        }
+        ;
+      }
+      ;
     };
     // exposed methods
     return {
       set: set,
       get: get
     };
-  })();
+  }();
 
   // updated to hold a previous tabState, so we can easily determine the
   function _store() {
     // Get the current tab state
-    const currentTabState = JSON.stringify(state.get({ all: true }));
+    var currentTabState = JSON.stringify(state.get({
+      all: true
+    }));
     // Get the previous tab state from localStorage
-    const previousTabState = localStorage.getItem('tabState');
+    var previousTabState = localStorage.getItem('tabState');
     // Store the previous tab state (which is the current one before updating)
     localStorage.setItem('previousTabState', previousTabState);
     // Store the current tab state
     localStorage.setItem('tabState', currentTabState);
-
-}
-
-function mostRecentTab() {
-  // Retrieve previous tab state from localStorage
-  const previousTabStateString = localStorage.getItem('previousTabState');
-  const previousTabState = JSON.parse(previousTabStateString);
-
-  // Retrieve current tab state from localStorage
-  const currentTabStateString = localStorage.getItem('tabState');
-  const currentTabState = JSON.parse(currentTabStateString);
-
-  let mostRecentTabValue; // Declare a variable to store the most recent tab
-
-  // Iterate through tab states to find the most recent tab
-  for (const section in currentTabState) {
-      for (const tab in currentTabState[section]) {
-          if (currentTabState[section][tab] && !previousTabState[section][tab]) {
-              mostRecentTabValue = `js-tab-panel-${tab}`;
-              localStorage.setItem('mostRecentTabValue', mostRecentTabValue);
-
-          }
-      }
   }
+  function mostRecentTab() {
+    // Retrieve previous tab state from localStorage
+    var previousTabStateString = localStorage.getItem('previousTabState');
+    var previousTabState = JSON.parse(previousTabStateString);
 
-  console.log("Most recent tab:", mostRecentTabValue); // Print out the most recent tab
-  return mostRecentTabValue;
-}
+    // Retrieve current tab state from localStorage
+    var currentTabStateString = localStorage.getItem('tabState');
+    var currentTabState = JSON.parse(currentTabStateString);
+    var mostRecentTabValue; // Declare a variable to store the most recent tab
 
+    // Iterate through tab states to find the most recent tab
+    for (var section in currentTabState) {
+      for (var tab in currentTabState[section]) {
+        if (currentTabState[section][tab] && !previousTabState[section][tab]) {
+          mostRecentTabValue = "js-tab-panel-".concat(tab);
+          localStorage.setItem('mostRecentTabValue', mostRecentTabValue);
+        }
+      }
+    }
+    console.log("Most recent tab:", mostRecentTabValue); // Print out the most recent tab
+    return mostRecentTabValue;
+  }
   function bind() {
     _bind_tabGroup();
     _bind_tabArrow();
-  };
-
+  }
+  ;
   function _bind_tabGroup() {
     var all_tabGroup = helper.eA(".js-tab-group");
     for (var i = 0; i < all_tabGroup.length; i++) {
       var all_tabItem = all_tabGroup[i].querySelectorAll(".js-tab-item");
       for (var j = 0; j < all_tabItem.length; j++) {
-        all_tabItem[j].addEventListener("click", function() {
+        all_tabItem[j].addEventListener("click", function () {
           _changeState(this);
           _store();
           render();
         }, false);
-      };
-    };
-  };
-
+      }
+      ;
+    }
+    ;
+  }
+  ;
   function _bind_tabArrow() {
     var all_tabArrow = helper.eA(".js-tab-arrow");
     for (var i = 0; i < all_tabArrow.length; i++) {
-      all_tabArrow[i].addEventListener("click", function() {
+      all_tabArrow[i].addEventListener("click", function () {
         _singleStepChangeState(this);
         _store();
         render();
       }, false);
-    };
-  };
-
+    }
+    ;
+  }
+  ;
   function _singleStepChangeState(arrow) {
     var tabOrder = {
       basics: ["character", "experience", "classes", "senses", "initiative", "speed", "image"],
-      statistics: ["stats", "abilities", "archetypes" , "feats", "traits", "languages", "power"],
+      statistics: ["stats", "abilities", "archetypes", "feats", "traits", "languages", "power"],
       equipment: ["possessions", "armor", "body_slots", "item", "encumbrance", "consumable", "wealth"],
       defense: ["hp", "ac", "cmd", "saves", "dr", "sr", "resistance"],
       offense: ["stats", "cmb", "attack"],
@@ -197,39 +205,44 @@ function mostRecentTab() {
     };
     var options = helper.makeObject(arrow.dataset.tabArrowOptions);
     var newIndex = 0;
-    tabOrder[options.tabGroup].forEach(function(arrayItem, index) {
+    tabOrder[options.tabGroup].forEach(function (arrayItem, index) {
       if (state.get({
-          section: options.tabGroup,
-          tab: arrayItem
-        })) {
+        section: options.tabGroup,
+        tab: arrayItem
+      })) {
         if (options.action == "right") {
           newIndex = index + 1;
-        };
+        }
+        ;
         if (options.action == "left") {
           newIndex = index - 1;
-        };
-        if (newIndex > (tabOrder[options.tabGroup].length - 1)) {
+        }
+        ;
+        if (newIndex > tabOrder[options.tabGroup].length - 1) {
           newIndex = 0;
-        };
+        }
+        ;
         if (newIndex < 0) {
-          newIndex = (tabOrder[options.tabGroup].length - 1);
-        };
-      };
+          newIndex = tabOrder[options.tabGroup].length - 1;
+        }
+        ;
+      }
+      ;
     });
     state.set({
       section: options.tabGroup,
       tab: tabOrder[options.tabGroup][newIndex]
     });
-  };
-
+  }
+  ;
   function _changeState(tab) {
     var options = helper.makeObject(tab.dataset.tabOptions);
     state.set({
       section: options.tabGroup,
       tab: options.tab
     });
-  };
-
+  }
+  ;
   function init() {
     if (helper.read("tabState")) {
       var savedState = JSON.parse(helper.read("tabState"));
@@ -238,120 +251,108 @@ function mostRecentTab() {
           state.set({
             section: section,
             tab: tab,
-            boolean: savedState[section][tab]
+            "boolean": savedState[section][tab]
           });
-        };
-      };
-    };
+        }
+        ;
+      }
+      ;
+    }
+    ;
     render();
-  };
-
+  }
+  ;
   function render() {
     _render_all_tabRow();
     _render_most_recent_tab();
-  };
-
+  }
+  ;
   function _render_all_tabRow() {
     var all_tabRow = helper.eA(".js-tab-row");
     for (var i = 0; i < all_tabRow.length; i++) {
       _render_tabIndicator(all_tabRow[i]);
       _render_tabPanel(all_tabRow[i]);
       render_scroll(all_tabRow[i]);
-
-    };
-  };
-
+    }
+    ;
+  }
+  ;
   function _render_most_recent_tab() {
     mostRecentTabValue = mostRecentTab();
     _handlemostRecentTab(mostRecentTabValue);
-
-    
   }
   function _render_tabIndicator(tabRow) {
     var tabIndicator = tabRow.querySelector(".m-tab-indicator");
     var all_tabItem = tabRow.querySelectorAll(".js-tab-item");
-    all_tabItem.forEach(function(arrayItem, index) {
+    all_tabItem.forEach(function (arrayItem, index) {
       var options = helper.makeObject(arrayItem.dataset.tabOptions);
       if (state.get({
-          section: options.tabGroup,
-          tab: options.tab
-        })) {
+        section: options.tabGroup,
+        tab: options.tab
+      })) {
         var tabArea = arrayItem.getBoundingClientRect();
         var width = (tabArea.width - 10).toFixed(0);
         var left = (arrayItem.offsetLeft + 5).toFixed(0);
         tabIndicator.setAttribute("style", "width:" + width + "px;left:" + left + "px;");
-      };
+      }
+      ;
     });
-  };
-
-
-  
+  }
+  ;
   function _render_tabPanel(tabRow) {
     var all_tabItem = tabRow.querySelectorAll(".js-tab-item");
-    all_tabItem.forEach(function(arrayItem, index) {
-        var options = helper.makeObject(arrayItem.dataset.tabOptions);
-        if (state.get({
-            section: options.tabGroup,
-            tab: options.tab
-        })) {
-            helper.addClass(arrayItem, "is-active");
-            helper.removeClass(helper.e("." + options.target), "is-hidden");
-            console.log("this tab is active", options.target);
-        } else {
-            helper.removeClass(arrayItem, "is-active");
-            helper.addClass(helper.e("." + options.target), "is-hidden");
-        }
-    });
-
-}
-  
-function _handlemostRecentTab(mostRecentTab) {
-  // Focusable elements section only for specific targets
-  if (mostRecentTab === "js-tab-panel-stats" 
-      || mostRecentTab === "js-tab-panel-character" 
-      || mostRecentTab === "js-tab-panel-classes" 
-      || mostRecentTab === "js-tab-panel-skills-all" 
-      || mostRecentTab === "js-tab-panel-archetypes"
-      || mostRecentTab === "js-tab-panel-speed"
-      || mostRecentTab === "js-tab-panel-intiative"
-      || mostRecentTab === "js-tab-panel-abilties"
-      || mostRecentTab === "js-tab-panel-archetypes"
-      || mostRecentTab === "js-tab-panel-body_slots"
-      // || mostRecentTab === "js-tab-panel-body_slots_descriptions"
-  ) {
-      const focusableElements = helper.e("." + mostRecentTab).querySelectorAll('a[href], area[href], input:not([type="hidden"]), select, textarea, button, [tabindex]:not([tabindex="-1"])');
-      if (focusableElements.length > 0) {
-          for (let i = 0; i < focusableElements.length; i++) {
-              console.log("Focusing on element:", focusableElements[i]);
-              focusableElements[i].focus();
-              // Optionally, you can perform additional actions here for each focused element
-          }
-          stats.render();
-          classes.render();
-          textBlock.render();
-          textareaBlock.render();
-          // archetypeStats.render();
+    all_tabItem.forEach(function (arrayItem, index) {
+      var options = helper.makeObject(arrayItem.dataset.tabOptions);
+      if (state.get({
+        section: options.tabGroup,
+        tab: options.tab
+      })) {
+        helper.addClass(arrayItem, "is-active");
+        helper.removeClass(helper.e("." + options.target), "is-hidden");
+        console.log("this tab is active", options.target);
+      } else {
+        helper.removeClass(arrayItem, "is-active");
+        helper.addClass(helper.e("." + options.target), "is-hidden");
       }
+    });
   }
-  // Always run this block when mostRecentTab is "js-tab-panel-character"
-  if (mostRecentTab === "js-tab-panel-character") {
-    // need to import this somehow
-    // characterSelect._render_currentCharacter();
+  function _handlemostRecentTab(mostRecentTab) {
+    // Focusable elements section only for specific targets
+    if (mostRecentTab === "js-tab-panel-stats" || mostRecentTab === "js-tab-panel-character" || mostRecentTab === "js-tab-panel-classes" || mostRecentTab === "js-tab-panel-skills-all" || mostRecentTab === "js-tab-panel-archetypes" || mostRecentTab === "js-tab-panel-speed" || mostRecentTab === "js-tab-panel-intiative" || mostRecentTab === "js-tab-panel-abilties" || mostRecentTab === "js-tab-panel-archetypes" || mostRecentTab === "js-tab-panel-body_slots"
+    // || mostRecentTab === "js-tab-panel-body_slots_descriptions"
+    ) {
+      var focusableElements = helper.e("." + mostRecentTab).querySelectorAll('a[href], area[href], input:not([type="hidden"]), select, textarea, button, [tabindex]:not([tabindex="-1"])');
+      if (focusableElements.length > 0) {
+        for (var i = 0; i < focusableElements.length; i++) {
+          console.log("Focusing on element:", focusableElements[i]);
+          focusableElements[i].focus();
+          // Optionally, you can perform additional actions here for each focused element
+        }
+
+        stats.render();
+        classes.render();
+        textBlock.render();
+        textareaBlock.render();
+        // archetypeStats.render();
+      }
+    }
+    // Always run this block when mostRecentTab is "js-tab-panel-character"
+    if (mostRecentTab === "js-tab-panel-character") {
+      // need to import this somehow
+      // characterSelect._render_currentCharacter();
+    }
   }
-}
-
-
   function render_scroll(tabRow) {
     var tabRowArea = tabRow.getBoundingClientRect();
     var all_tabItem = tabRow.querySelectorAll(".js-tab-item");
-    all_tabItem.forEach(function(arrayItem, index) {
+    all_tabItem.forEach(function (arrayItem, index) {
       var options = helper.makeObject(arrayItem.dataset.tabOptions);
       if (state.get({
-          section: options.tabGroup,
-          tab: options.tab
-        })) {
+        section: options.tabGroup,
+        tab: options.tab
+      })) {
         var tabArea = arrayItem.getBoundingClientRect();
-        var left = Math.ceil(arrayItem.offsetLeft - (tabRowArea.width / 2) + (tabArea.width / 2), 10);
+        var left = Math.ceil(arrayItem.offsetLeft - tabRowArea.width / 2 + tabArea.width / 2, 10);
         if (tabRow.scroll) {
           tabRow.scroll({
             top: 0,
@@ -365,12 +366,15 @@ function _handlemostRecentTab(mostRecentTab) {
           } else if (tabArea.right > tabRowArea.right) {
             var right = Math.ceil(arrayItem.offsetLeft - tabRowArea.width + tabArea.width, 10);
             tabRow.scrollLeft = right;
-          };
-        };
-      };
+          }
+          ;
+        }
+        ;
+      }
+      ;
     });
-  };
-
+  }
+  ;
   function toggle(options) {
     var defaultOptions = {
       section: null,
@@ -378,7 +382,8 @@ function _handlemostRecentTab(mostRecentTab) {
     };
     if (options) {
       defaultOptions = helper.applyOptions(defaultOptions, options);
-    };
+    }
+    ;
     if (options.section != null && options.tab != null) {
       state.set({
         section: options.section,
@@ -386,9 +391,10 @@ function _handlemostRecentTab(mostRecentTab) {
       });
       _store();
       render();
-    };
-  };
-
+    }
+    ;
+  }
+  ;
   function reset() {
     var defaultState = [{
       section: "basics",
@@ -415,13 +421,14 @@ function _handlemostRecentTab(mostRecentTab) {
       section: "notes",
       tab: "character"
     }];
-    defaultState.forEach(function(arrayItem) {
+    defaultState.forEach(function (arrayItem) {
       toggle({
         section: arrayItem.section,
         tab: arrayItem.tab
       });
     });
-  };
+  }
+  ;
 
   // exposed methods
   return {
@@ -433,5 +440,4 @@ function _handlemostRecentTab(mostRecentTab) {
     render: render,
     render_scroll: render_scroll
   };
-
-})();
+}();
