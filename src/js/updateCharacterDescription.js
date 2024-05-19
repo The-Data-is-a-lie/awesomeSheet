@@ -112,15 +112,15 @@ document.addEventListener('DOMContentLoaded', function () {
               })();
   
               (async () => {
-                  try {
-                      const tabValueModule = await import('./mostRecentTabValue.js');
-                      const clickMostRecentTab = tabValueModule.clickMostRecentTab;
-                      clickMostRecentTab(characterData, updateMostRecentTabValue);
-  
-                  } catch (error) {
-                      console.error('Error during dynamic import:', error);
-                  }
-              })();
+                try {
+                    const tabValueModule = await import('./mostRecentTabValue.js');
+                    const clickMostRecentTab = tabValueModule.clickMostRecentTab;
+                    clickMostRecentTab(characterData, updateMostRecentTabValue);
+
+                } catch (error) {
+                    console.error('Error during dynamic import:', error);
+                }
+            })();
   
               (async () => {
                   try {
