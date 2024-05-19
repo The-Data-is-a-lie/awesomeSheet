@@ -17,6 +17,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-assemble');
   grunt.loadNpmTasks('grunt-autoprefixer');
   grunt.loadNpmTasks('grunt-sw-precache');
+  grunt.loadNpmTasks('grunt-babel');
 
   require('time-grunt')(grunt);
 
@@ -335,7 +336,33 @@ module.exports = function(grunt) {
           'js/**/*.js'
         ],
       }
+    },
+
+    babel: {
+      options: {
+        sourceMap: true,
+        presets: ['@babel/preset-env']
+      },
+      dev: {
+        files: [{
+          expand: true,
+          cwd: '<%= folders.src %>/js',
+          src: ['**/*.js'],
+          dest: '<%= folders.dev %>/js',
+          ext: '.js'
+        }]
+      },
+      build: {
+        files: [{
+          expand: true,
+          cwd: '<%= folders.src %>/js',
+          src: ['**/*.js'],
+          dest: '<%= folders.build %>/js',
+          ext: '.js'
+        }]
+      }
     }
+
   });
 
   grunt.registerTask('dev', [
@@ -343,6 +370,7 @@ module.exports = function(grunt) {
     'clean:tmp',
     'assemble:dev',
     'copy:dev',
+    'babel:dev',
     'concat:dev',
     'sass:dev',
     'autoprefixer:dev',
@@ -365,6 +393,7 @@ module.exports = function(grunt) {
     'assemble:build',
     'copy:build',
     'copy:webapp',
+    'babel:build',
     'sass:build',
     'autoprefixer:build',
     'cssmin:build',
@@ -383,9 +412,9 @@ module.exports = function(grunt) {
     'copy:build',
     'copy:webapp',
     'concat:dev',
+    'babel:build',
     'sass:build',
     'autoprefixer:build',
     'sw-precache:default'
   ]);
-
 };
