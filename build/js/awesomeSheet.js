@@ -37579,21 +37579,25 @@ var tabs = function () {
     // Retrieve current tab state from localStorage
     var currentTabStateString = localStorage.getItem('tabState');
     var currentTabState = JSON.parse(currentTabStateString);
-    var MostRecentTabValue; // Declare a variable to store the most recent tab
-    MostRecentTabValue = "js-tab-panel-character";
 
-    // Iterate through tab states to find the most recent tab
-    var isTabValueSet = false;
-    for (var section in currentTabState) {
-      for (var tab in currentTabState[section]) {
-        if (currentTabState[section][tab] && !previousTabState[section][tab]) {
-          MostRecentTabValue = "js-tab-panel-".concat(tab);
-          localStorage.setItem('MostRecentTabValue', MostRecentTabValue);
-          isTabValueSet = true;
-          console.log("isTabValueSet", isTabValueSet);
+    // Declare a variable to store the most recent tab and set a default value
+    var MostRecentTabValue = "js-tab-panel-character";
+
+    // Check if previousTabState and currentTabState are not null
+    if (previousTabState && currentTabState) {
+      // Iterate through tab states to find the most recent tab
+      for (var section in currentTabState) {
+        for (var tab in currentTabState[section]) {
+          if (currentTabState[section][tab] && !previousTabState[section][tab]) {
+            MostRecentTabValue = "js-tab-panel-" + tab;
+            isTabValueSet = true;
+          }
         }
       }
     }
+
+    // Store the most recent tab value in localStorage
+    localStorage.setItem('MostRecentTabValue', MostRecentTabValue);
     console.log("Most recent tab:", MostRecentTabValue); // Print out the most recent tab
     return MostRecentTabValue;
   }

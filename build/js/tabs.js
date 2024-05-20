@@ -130,35 +130,36 @@ var tabs = (function() {
 
 function mostRecentTab() {
   // Retrieve previous tab state from localStorage
-  const previousTabStateString = localStorage.getItem('previousTabState');
-  const previousTabState = JSON.parse(previousTabStateString);
+  var previousTabStateString = localStorage.getItem('previousTabState');
+  var previousTabState = JSON.parse(previousTabStateString);
 
   // Retrieve current tab state from localStorage
-  const currentTabStateString = localStorage.getItem('tabState');
-  const currentTabState = JSON.parse(currentTabStateString);
+  var currentTabStateString = localStorage.getItem('tabState');
+  var currentTabState = JSON.parse(currentTabStateString);
 
-  let MostRecentTabValue; // Declare a variable to store the most recent tab
-  MostRecentTabValue = "js-tab-panel-character"
+  // Declare a variable to store the most recent tab and set a default value
+  var MostRecentTabValue = "js-tab-panel-character";
 
-  // Iterate through tab states to find the most recent tab
-  let isTabValueSet = false;
-
-  for (const section in currentTabState) {
-      for (const tab in currentTabState[section]) {
-          if (currentTabState[section][tab] && !previousTabState[section][tab]) {
-              MostRecentTabValue = `js-tab-panel-${tab}`;
-              localStorage.setItem('MostRecentTabValue', MostRecentTabValue);
-              isTabValueSet = true;
-              console.log("isTabValueSet", isTabValueSet);
-          }
-        
+  // Check if previousTabState and currentTabState are not null
+  if (previousTabState && currentTabState) {
+    // Iterate through tab states to find the most recent tab
+    for (var section in currentTabState) {
+      for (var tab in currentTabState[section]) {
+        if (currentTabState[section][tab] && !previousTabState[section][tab]) {
+          MostRecentTabValue = "js-tab-panel-" + tab;
+          isTabValueSet = true;
+        }
       }
-      
+    }
   }
-  
+
+  // Store the most recent tab value in localStorage
+  localStorage.setItem('MostRecentTabValue', MostRecentTabValue);
+
   console.log("Most recent tab:", MostRecentTabValue); // Print out the most recent tab
   return MostRecentTabValue;
 }
+
 
   function bind() {
     _bind_tabGroup();
