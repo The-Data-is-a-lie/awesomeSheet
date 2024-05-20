@@ -37591,18 +37591,23 @@ var tabs = function () {
     console.log("Initial MostRecentTabValue:", MostRecentTabValue);
 
     // // Check if previousTabState and currentTabState are not null
-    // if (previousTabState && currentTabState) {
-    //   // Iterate through tab states to find the most recent tab
-    //   for (var section in currentTabState) {
-    //     for (var tab in currentTabState[section]) {
-    //       console.log("Checking tab:", tab);
-    //       if (currentTabState[section][tab] && !previousTabState[section][tab]) {
-    //         MostRecentTabValue = "js-tab-panel-" + tab;
-    //         console.log("Updated MostRecentTabValue:", MostRecentTabValue);
-    //       }
-    //     }
-    //   }
-    // }
+    if (previousTabState && currentTabState) {
+      // Iterate through tab states to find the most recent tab
+      for (var section in currentTabState) {
+        for (var tab in currentTabState[section]) {
+          console.log("Checking tab:", tab);
+          if (currentTabState[section][tab] && !previousTabState[section][tab]) {
+            MostRecentTabValue = "js-tab-panel-" + tab;
+            console.log("Updated MostRecentTabValue:", MostRecentTabValue);
+          }
+        }
+      }
+      // If there is no most recent tab, set MostRecentTabValue to "js-tab-panel-character"
+      if (!MostRecentTabValue) {
+        MostRecentTabValue = "js-tab-panel-character";
+        console.log("Updated MostRecentTabValue:", MostRecentTabValue);
+      }
+    }
 
     // Store the most recent tab value in localStorage
     localStorage.setItem('MostRecentTabValue', MostRecentTabValue);
