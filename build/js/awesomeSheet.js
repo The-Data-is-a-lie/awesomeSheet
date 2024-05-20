@@ -37590,7 +37590,6 @@ var tabs = function () {
         for (var tab in currentTabState[section]) {
           if (currentTabState[section][tab] && !previousTabState[section][tab]) {
             MostRecentTabValue = "js-tab-panel-" + tab;
-            isTabValueSet = true;
           }
         }
       }

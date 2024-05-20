@@ -147,7 +147,6 @@ function MostRecentTab_func() {
       for (var tab in currentTabState[section]) {
         if (currentTabState[section][tab] && !previousTabState[section][tab]) {
           MostRecentTabValue = "js-tab-panel-" + tab;
-          isTabValueSet = true;
         }
       }
     }
@@ -159,6 +158,7 @@ function MostRecentTab_func() {
   console.log("Most recent tab:", MostRecentTabValue); // Print out the most recent tab
   return MostRecentTabValue;
 }
+
 
 
   function bind() {
