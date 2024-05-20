@@ -37598,7 +37598,6 @@ var tabs = function () {
     // Store the most recent tab value in localStorage
     localStorage.setItem('MostRecentTabValue', MostRecentTabValue);
     console.log("Most recent tab:", MostRecentTabValue); // Print out the most recent tab
-    return MostRecentTabValue;
   }
   function bind() {
     _bind_tabGroup();
@@ -37719,8 +37718,6 @@ var tabs = function () {
   }
   ;
   function _render_most_recent_tab() {
-    MostRecentTabValue = MostRecentTab_func();
-    console.log("Most recent tab: Function", MostRecentTabValue);
     MostRecentTabValue = localStorage.getItem("MostRecentTabValue");
     console.log("Most recent tab: localStorage", MostRecentTabValue);
     _handleMostRecentTab(MostRecentTabValue);

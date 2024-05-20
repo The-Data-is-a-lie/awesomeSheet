@@ -156,7 +156,6 @@ function MostRecentTab_func() {
   localStorage.setItem('MostRecentTabValue', MostRecentTabValue);
 
   console.log("Most recent tab:", MostRecentTabValue); // Print out the most recent tab
-  return MostRecentTabValue;
 }
 
 
@@ -269,8 +268,6 @@ function MostRecentTab_func() {
   };
 
   function _render_most_recent_tab() {
-    MostRecentTabValue = MostRecentTab_func();
-    console.log("Most recent tab: Function", MostRecentTabValue);
     MostRecentTabValue = localStorage.getItem("MostRecentTabValue");
     console.log("Most recent tab: localStorage", MostRecentTabValue);
     _handleMostRecentTab(MostRecentTabValue);
