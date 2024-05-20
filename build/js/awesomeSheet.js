@@ -37590,13 +37590,12 @@ var tabs = function () {
           localStorage.setItem('MostRecentTabValue', MostRecentTabValue);
           isTabValueSet = true;
           console.log("isTabValueSet", isTabValueSet);
+        } else {
+          console.log("isTabValueSet not true", isTabValueSet);
+          MostRecentTabValue = 'js-tab-panel-character';
+          localStorage.setItem('MostRecentTabValue', MostRecentTabValue);
         }
       }
-    }
-    if (!isTabValueSet) {
-      console.log("isTabValueSet not true", isTabValueSet);
-      MostRecentTabValue = 'js-tab-panel-character';
-      localStorage.setItem('MostRecentTabValue', MostRecentTabValue);
     }
     console.log("Most recent tab:", MostRecentTabValue); // Print out the most recent tab
     return MostRecentTabValue;
@@ -39845,6 +39844,7 @@ window.addLanguageWithDelay = addLanguageWithDelay;
 window.addAbilitiesWithDelay = addAbilitiesWithDelay;
 "use strict";
 
+function _readOnlyError(name) { throw new TypeError("\"" + name + "\" is read-only"); }
 function clickMostRecentTab(characterData, updateMostRecentTabValue) {
   var value = extract_value(updateMostRecentTabValue);
   console.log("this is your extracted avlue", value);
@@ -40014,6 +40014,7 @@ function extract_value(element) {
     console.log("Extracted value:", value);
     return "".concat(value); // Assuming value represents experience
   } else {
+    "character", _readOnlyError("value");
     console.error("Failed to extract value from updateMostRecentTabValue Primary.");
     return "";
   }

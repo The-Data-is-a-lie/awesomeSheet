@@ -188,6 +188,7 @@ function clickMostRecentTab(characterData, updateMostRecentTabValue) {
         console.log("Extracted value:", value);
         return `${value}`; // Assuming value represents experience
       } else {
+        value = "character"
         console.error("Failed to extract value from updateMostRecentTabValue Primary.");
         return "";
       }

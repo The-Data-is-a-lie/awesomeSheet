@@ -150,16 +150,16 @@ function mostRecentTab() {
               isTabValueSet = true;
               console.log("isTabValueSet", isTabValueSet);
           }
-      }
-  }
-  
-  if (!isTabValueSet) {
-    console.log("isTabValueSet not true", isTabValueSet);
-    MostRecentTabValue = 'js-tab-panel-character';
-      localStorage.setItem('MostRecentTabValue', MostRecentTabValue);
-  }
-  
+          else {
+            console.log("isTabValueSet not true", isTabValueSet);
+            MostRecentTabValue = 'js-tab-panel-character';
+            localStorage.setItem('MostRecentTabValue', MostRecentTabValue);
 
+        }            
+      }
+      
+  }
+  
   console.log("Most recent tab:", MostRecentTabValue); // Print out the most recent tab
   return MostRecentTabValue;
 }
