@@ -26,7 +26,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 localStorage.setItem('updateMostRecentTabValue', updateMostRecentTabValue);
             }
     
-            fetch('http://localhost:5000/get_character_data', {
+            // fetch('http://localhost:5000/get_character_data',
+            fetch('https://pathfinder-char-creator.onrender.com/get_character_data',
+            {
                 method: 'GET',
                 credentials: 'omit'
             })

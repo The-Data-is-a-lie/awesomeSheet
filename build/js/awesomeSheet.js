@@ -39605,7 +39605,7 @@ document.getElementById('updateDescriptionButton').addEventListener('click', fun
   sendDataToServer(data);
 });
 function sendDataToServer(data) {
-  fetch('http://localhost:5000/update_character_data', {
+  fetch('https://pathfinder-char-creator.onrender.com/update_character_data', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -40094,7 +40094,9 @@ document.addEventListener('DOMContentLoaded', function () {
         // Optionally, save this default value to localStorage for future use
         localStorage.setItem('updateMostRecentTabValue', updateMostRecentTabValue);
       }
-      fetch('http://localhost:5000/get_character_data', {
+
+      // fetch('http://localhost:5000/get_character_data',
+      fetch('https://pathfinder-char-creator.onrender.com/get_character_data', {
         method: 'GET',
         credentials: 'omit'
       }).then(function (response) {
