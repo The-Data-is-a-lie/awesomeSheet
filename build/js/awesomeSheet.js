@@ -37729,7 +37729,7 @@ var tabs = function () {
   }
   ;
   function _render_most_recent_tab() {
-    MostRecentTabValue = MostRecentTab_func();
+    var MostRecentTabValue = MostRecentTab_func();
     console.log("Most recent tab: Function", MostRecentTabValue);
     MostRecentTabValue = localStorage.getItem("MostRecentTabValue");
     console.log("Most recent tab: localStorage", MostRecentTabValue);
