@@ -138,6 +138,7 @@ function mostRecentTab() {
   const currentTabState = JSON.parse(currentTabStateString);
 
   let MostRecentTabValue; // Declare a variable to store the most recent tab
+  MostRecentTabValue = "js-tab-panel-character"
 
   // Iterate through tab states to find the most recent tab
   let isTabValueSet = false;
@@ -150,12 +151,7 @@ function mostRecentTab() {
               isTabValueSet = true;
               console.log("isTabValueSet", isTabValueSet);
           }
-          else {
-            console.log("isTabValueSet not true", isTabValueSet);
-            MostRecentTabValue = 'js-tab-panel-character';
-            localStorage.setItem('MostRecentTabValue', MostRecentTabValue);
-
-        }            
+        
       }
       
   }

@@ -37580,6 +37580,7 @@ var tabs = function () {
     var currentTabStateString = localStorage.getItem('tabState');
     var currentTabState = JSON.parse(currentTabStateString);
     var MostRecentTabValue; // Declare a variable to store the most recent tab
+    MostRecentTabValue = "js-tab-panel-character";
 
     // Iterate through tab states to find the most recent tab
     var isTabValueSet = false;
@@ -37590,10 +37591,6 @@ var tabs = function () {
           localStorage.setItem('MostRecentTabValue', MostRecentTabValue);
           isTabValueSet = true;
           console.log("isTabValueSet", isTabValueSet);
-        } else {
-          console.log("isTabValueSet not true", isTabValueSet);
-          MostRecentTabValue = 'js-tab-panel-character';
-          localStorage.setItem('MostRecentTabValue', MostRecentTabValue);
         }
       }
     }
