@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
                 (async () => {
                   try {
-                    //   const tabValueModule = await import('./mostRecentTabValue.js');
+                    //   const tabValueModule = await import('./MostRecentTabValue.js');
                       window.clickMostRecentTab = clickMostRecentTab;
                       clickMostRecentTab(characterData, updateMostRecentTabValue);
   

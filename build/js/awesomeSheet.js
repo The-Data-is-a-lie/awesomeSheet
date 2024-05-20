@@ -37574,46 +37574,32 @@ var tabs = function () {
   function mostRecentTab() {
     // Retrieve previous tab state from localStorage
     var previousTabStateString = localStorage.getItem('previousTabState');
-    var previousTabState;
-    try {
-      previousTabState = JSON.parse(previousTabStateString);
-    } catch (e) {
-      previousTabState = null;
-    }
-
-    // Set default value if previousTabState is null
-    if (!previousTabState) {
-      previousTabState = "js-tab-panel-character";
-    }
+    var previousTabState = JSON.parse(previousTabStateString);
 
     // Retrieve current tab state from localStorage
     var currentTabStateString = localStorage.getItem('tabState');
-    var currentTabState;
-    try {
-      currentTabState = JSON.parse(currentTabStateString);
-    } catch (e) {
-      currentTabState = null;
-    }
-
-    // Set default value if currentTabState is null
-    if (!currentTabState) {
-      currentTabState = "js-tab-panel-character";
-    }
-    console.log('Previous Tab State:', previousTabState);
-    console.log('Current Tab State:', currentTabState);
-    var mostRecentTabValue; // Declare a variable to store the most recent tab
+    var currentTabState = JSON.parse(currentTabStateString);
+    var MostRecentTabValue; // Declare a variable to store the most recent tab
 
     // Iterate through tab states to find the most recent tab
+    var isTabValueSet = false;
     for (var section in currentTabState) {
       for (var tab in currentTabState[section]) {
         if (currentTabState[section][tab] && !previousTabState[section][tab]) {
-          mostRecentTabValue = "js-tab-panel-".concat(tab);
-          localStorage.setItem('mostRecentTabValue', mostRecentTabValue);
+          MostRecentTabValue = "js-tab-panel-".concat(tab);
+          localStorage.setItem('MostRecentTabValue', MostRecentTabValue);
+          isTabValueSet = true;
+          console.log("isTabValueSet", isTabValueSet);
         }
       }
     }
-    console.log("Most recent tab:", mostRecentTabValue); // Print out the most recent tab
-    return mostRecentTabValue;
+    if (!isTabValueSet) {
+      console.log("isTabValueSet not true", isTabValueSet);
+      MostRecentTabValue = 'js-tab-panel-character';
+      localStorage.setItem('MostRecentTabValue', MostRecentTabValue);
+    }
+    console.log("Most recent tab:", MostRecentTabValue); // Print out the most recent tab
+    return MostRecentTabValue;
   }
   function bind() {
     _bind_tabGroup();
@@ -37734,8 +37720,8 @@ var tabs = function () {
   }
   ;
   function _render_most_recent_tab() {
-    mostRecentTabValue = mostRecentTab();
-    _handlemostRecentTab(mostRecentTabValue);
+    MostRecentTabValue = mostRecentTab();
+    _handlemostRecentTab(MostRecentTabValue);
   }
   function _render_tabIndicator(tabRow) {
     var tabIndicator = tabRow.querySelector(".m-tab-indicator");
@@ -40215,7 +40201,7 @@ document.addEventListener('DOMContentLoaded', function () {
             while (1) switch (_context3.prev = _context3.next) {
               case 0:
                 try {
-                  //   const tabValueModule = await import('./mostRecentTabValue.js');
+                  //   const tabValueModule = await import('./MostRecentTabValue.js');
                   window.clickMostRecentTab = clickMostRecentTab;
                   clickMostRecentTab(characterData, updateMostRecentTabValue);
                 } catch (error) {
