@@ -37571,7 +37571,7 @@ var tabs = function () {
     // Store the current tab state
     localStorage.setItem('tabState', currentTabState);
   }
-  function mostRecentTab() {
+  function MostRecentTab_func() {
     // Retrieve previous tab state from localStorage
     var previousTabStateString = localStorage.getItem('previousTabState');
     var previousTabState = JSON.parse(previousTabStateString);
@@ -37720,8 +37720,11 @@ var tabs = function () {
   }
   ;
   function _render_most_recent_tab() {
-    MostRecentTabValue = mostRecentTab();
-    _handlemostRecentTab(MostRecentTabValue);
+    MostRecentTabValue = MostRecentTab_func();
+    console.log("Most recent tab: Function", MostRecentTabValue);
+    MostRecentTabValue = localStorage.getItem("MostRecentTabValue");
+    console.log("Most recent tab: localStorage", MostRecentTabValue);
+    _handleMostRecentTab(MostRecentTabValue);
   }
   function _render_tabIndicator(tabRow) {
     var tabIndicator = tabRow.querySelector(".m-tab-indicator");
@@ -37758,12 +37761,12 @@ var tabs = function () {
       }
     });
   }
-  function _handlemostRecentTab(mostRecentTab) {
+  function _handleMostRecentTab(MostRecentTab) {
     // Focusable elements section only for specific targets
-    if (mostRecentTab === "js-tab-panel-stats" || mostRecentTab === "js-tab-panel-character" || mostRecentTab === "js-tab-panel-classes" || mostRecentTab === "js-tab-panel-skills-all" || mostRecentTab === "js-tab-panel-archetypes" || mostRecentTab === "js-tab-panel-speed" || mostRecentTab === "js-tab-panel-intiative" || mostRecentTab === "js-tab-panel-abilties" || mostRecentTab === "js-tab-panel-archetypes" || mostRecentTab === "js-tab-panel-body_slots"
-    // || mostRecentTab === "js-tab-panel-body_slots_descriptions"
+    if (MostRecentTab === "js-tab-panel-stats" || MostRecentTab === "js-tab-panel-character" || MostRecentTab === "js-tab-panel-classes" || MostRecentTab === "js-tab-panel-skills-all" || MostRecentTab === "js-tab-panel-archetypes" || MostRecentTab === "js-tab-panel-speed" || MostRecentTab === "js-tab-panel-intiative" || MostRecentTab === "js-tab-panel-abilties" || MostRecentTab === "js-tab-panel-archetypes" || MostRecentTab === "js-tab-panel-body_slots"
+    // || MostRecentTab === "js-tab-panel-body_slots_descriptions"
     ) {
-      var focusableElements = helper.e("." + mostRecentTab).querySelectorAll('a[href], area[href], input:not([type="hidden"]), select, textarea, button, [tabindex]:not([tabindex="-1"])');
+      var focusableElements = helper.e("." + MostRecentTab).querySelectorAll('a[href], area[href], input:not([type="hidden"]), select, textarea, button, [tabindex]:not([tabindex="-1"])');
       if (focusableElements.length > 0) {
         for (var i = 0; i < focusableElements.length; i++) {
           console.log("Focusing on element:", focusableElements[i]);
@@ -37777,8 +37780,8 @@ var tabs = function () {
         // archetypeStats.render();
       }
     }
-    // Always run this block when mostRecentTab is "js-tab-panel-character"
-    if (mostRecentTab === "js-tab-panel-character") {
+    // Always run this block when MostRecentTab is "js-tab-panel-character"
+    if (MostRecentTab === "js-tab-panel-character") {
       // need to import this somehow
       // characterSelect._render_currentCharacter();
     }
